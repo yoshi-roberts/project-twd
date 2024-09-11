@@ -2,6 +2,18 @@
 #include "../lib/raylib/src/raylib.h"
 
 int main(int argc, char** argv) {
-    printf("hello world!\n");
+
+	InitWindow(1280, 720, "Project Tower Defense");
+	SetTargetFPS(60);
+
+	while (!WindowShouldClose()) {
+	
+		BeginDrawing();
+			ClearBackground(WHITE);
+		EndDrawing();
+	}
+
+	CloseWindow();
+
     return 0;
 }
