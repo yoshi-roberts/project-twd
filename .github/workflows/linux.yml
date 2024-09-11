@@ -14,7 +14,7 @@ jobs:
     - name: xmake
       run: curl -fsSL https://xmake.io/shget.text | bash
     - name: deps
-      run: sudo apt install cmake libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
+      run: sudo apt install cmake pkg-config libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
     - name: build
       run: xmake -y
 
