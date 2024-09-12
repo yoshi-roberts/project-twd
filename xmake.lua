@@ -9,9 +9,6 @@ on_install(function(package)
 	table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
 	import("package.tools.cmake").install(package, configs)
 end)
--- on_test(function (package)
---     assert(package:has_cfuncs("add", {includes = "foo.h"}))
--- end)
 package_end()
 
 add_requires("raylib")
@@ -20,6 +17,10 @@ target("twd")
 set_kind("binary")
 add_files("src/*.c")
 add_packages("raylib")
+if is_plat("windows") then
+	add_links("gdi32")
+	add_links("winmm")
+end
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

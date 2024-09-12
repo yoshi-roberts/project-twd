@@ -1,0 +1,19 @@
+name: windows
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Update submodules
+      run: git submodule update --init --recursive
+    - name: Install xmake
+      run: Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
+    - name: Build
+      run: xmake -y
