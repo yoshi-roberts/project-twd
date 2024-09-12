@@ -17,9 +17,9 @@ target("twd")
 set_kind("binary")
 add_files("src/*.c")
 add_packages("raylib")
+
 if is_plat("windows") then
-	add_links("gdi32")
-	add_links("winmm")
+	add_links("gdi32", "winmm")
 end
 
 --
