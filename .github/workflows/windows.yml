@@ -11,9 +11,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Update submodules
       run: git submodule update --init --recursive
+
     - name: Install xmake
-      run: winget install xmake
+      run: Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
+      shell: powershell
+
     - name: Build
-      run: xmake -y
+      run: |
+        $env:Path += ";C:\Users\runneradmin\xmake"
+        xmake -y
+      shell: powershell
