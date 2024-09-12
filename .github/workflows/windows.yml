@@ -22,5 +22,5 @@ jobs:
     - name: Build
       run: |
         $env:Path += ";C:\Users\runneradmin\xmake"
-        xmake -y
+        xmake -y f -p mingw
       shell: powershell
