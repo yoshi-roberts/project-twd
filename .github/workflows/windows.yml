@@ -15,5 +15,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Install xmake
       run: Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
+    - name: Reload profile
+      run: . $profile
     - name: Build
       run: xmake -y
