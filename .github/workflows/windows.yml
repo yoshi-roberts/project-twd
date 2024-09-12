@@ -15,12 +15,6 @@ jobs:
     - name: Update submodules
       run: git submodule update --init --recursive
 
-    - name: Install xmake
-      run: Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
-      shell: powershell
-
     - name: Build
-      run: |
-        $env:Path += ";C:\Users\runneradmin\xmake"
-        xmake -y f -p mingw
+      run: mingw32-make all
       shell: powershell

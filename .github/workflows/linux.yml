@@ -11,12 +11,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Update submodules
       run: git submodule update --init --recursive
-    - name: Install xmake
-      run: curl -fsSL https://xmake.io/shget.text | bash
-    - name: deps
-      run: sudo apt install cmake pkg-config libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
-    - name: build
-      run: xmake -y
+
+    - name: Install dependencies
+      run: sudo apt install libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev libwayland-dev libxkbcommon-dev
+
+    - name: Build
+      run: make all
 
