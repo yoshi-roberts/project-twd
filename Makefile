@@ -3,7 +3,7 @@ OPT = -O1
 CFLAGS = -Wall -Wextra -std=c99 $(OPT) -I include/
 
 ifeq ($(OS), Windows_NT)
-	BUILD_RAYLIB = mingw32-make PLATFORM=PLATFORM_DESKTOP
+	BUILD_RAYLIB = cd lib/raylib/src/ && mingw32-make PLATFORM=PLATFORM_DESKTOP
 	MKDIR = @mkdir
 	RM = @rmdir /s /q
 	LIBS = -L lib/raylib/src/ -lraylib -lgdi32 -lwinmm
