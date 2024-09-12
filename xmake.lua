@@ -2,11 +2,12 @@ add_rules("mode.debug", "mode.release")
 
 package("raylib")
 add_deps("cmake")
-set_sourcedir(path.join(os.scriptdir(), "lib/raylib"))
+set_sourcedir(path.join(os.scriptdir(), "lib/raylib/src"))
 on_install(function(package)
 	local configs = {
-		"-DBUILD_SHARED_LIBS=OFF",
-		"-DPLATFORM=Desktop",
+		-- "-DBUILD_SHARED_LIBS=OFF",
+		"CMAKE_BUILD_TYPE=Release",
+		"PLATFORM=Dekstop",
 	}
 	-- table.insert(configs, "-DCMAKE_BUILD_TYPE=" .. (package:debug() and "Debug" or "Release"))
 	-- table.insert(configs, "-DBUILD_SHARED_LIBS=" .. (package:config("shared") and "ON" or "OFF"))
