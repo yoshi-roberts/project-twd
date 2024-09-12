@@ -19,7 +19,7 @@ add_files("src/*.c")
 add_packages("raylib")
 
 if is_plat("windows") then
-	add_links("gdi32", "winmm")
+	add_links("user32", "shell32", "gdi32", "winmm")
 end
 
 --
