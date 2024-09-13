@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
 		EndDrawing();
 	}
 
+	assets_destory();
 	CloseWindow();
 
     return 0;

@@ -2,10 +2,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "assets.h"
 
-void assets_init() {
+static Assets assets = {};
+static bool initialized = false;
+
+Assets assets_init() {
+	assets.texture_last = 0;
+
 	_dir_recurse("assets/");
+
+	return assets;
+}
+
+void assets_destory() {
+	for (int i = 0; i <= assets.texture_last; i++) {
+		UnloadTexture(assets.textures[i]);
+	}
+}
+
+void assets_add_image(const char *path) {
+	assets.textures[assets.texture_last] = LoadTexture(path);
+	assets.texture_last++;
 }
 
 void _dir_recurse(const char *path) {
@@ -33,8 +52,23 @@ void _dir_recurse(const char *path) {
         if (ent->d_type == 4) {
             _dir_recurse(full_path); // recursive call
         } else {
-            printf("%s\n", full_path); // process file
+			const char* ext = _get_file_ext(full_path);
+			if (strcmp(ext, "png") == 0) {
+				// printf("%s\n", ext); // process file
+				// printf("PNG!");
+				assets_add_image(full_path);
+			}
         }
     }
     closedir(dp);
+}
+
+const char* _get_file_ext(const char *path) {
+    const char *dot = strrchr(path, '.');
+
+    if (!dot || dot == path) {
+		return "";
+	} 
+
+    return dot + 1;
 }
