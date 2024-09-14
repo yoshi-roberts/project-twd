@@ -12,7 +12,7 @@ static bool initialized = false;
 Assets assets_init() {
 
 	map_init(&assets.map);
-	_dir_recurse("assets/");
+	_dir_recurse("assets");
 
 	return assets;
 }
@@ -41,6 +41,11 @@ void assets_add_image(char *path) {
 	asset.data.texture = LoadTexture(path);
 
 	map_set(&assets.map, path, asset);
+}
+
+Asset* assets_get(const char *path) {
+	Asset *asset = map_get(&assets.map, path);
+	return asset;
 }
 
 void _dir_recurse(const char *path) {
@@ -72,6 +77,7 @@ void _dir_recurse(const char *path) {
 			const char* ext = _get_file_ext(full_path);
 
 			if (strcmp(ext, "png") == 0) {
+				printf("%s\n", full_path);
 				assets_add_image(full_path);
 			}
         }

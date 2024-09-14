@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 	while (!WindowShouldClose()) {
 	
 		BeginDrawing();
-			ClearBackground(WHITE);
+		ClearBackground(WHITE);
 		EndDrawing();
 	}
 

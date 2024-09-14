@@ -29,6 +29,7 @@ typedef struct {
 Assets assets_init();
 void assets_destory();
 void assets_add_image(char *path);
+Asset* assets_get(const char *path);
 void _dir_recurse(const char *path);
 const char* _get_file_ext(const char *path);
 
