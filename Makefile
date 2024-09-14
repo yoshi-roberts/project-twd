@@ -19,7 +19,7 @@ endif
 BIN_DIR = bin
 OBJ_DIR = obj
 
-OBJS = main.o assets.o
+OBJS = main.o map.o assets.o
 
 all: build_raylib create_dir $(BIN_DIR)/$(BIN)
 

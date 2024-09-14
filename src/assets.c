@@ -9,22 +9,25 @@ static Assets assets = {};
 static bool initialized = false;
 
 Assets assets_init() {
-	assets.texture_last = 0;
 
+	map_init(&assets.map);
 	_dir_recurse("assets/");
 
 	return assets;
 }
 
 void assets_destory() {
-	for (int i = 0; i <= assets.texture_last; i++) {
-		UnloadTexture(assets.textures[i]);
-	}
+
+	map_deinit(&assets.map);
 }
 
-void assets_add_image(const char *path) {
-	assets.textures[assets.texture_last] = LoadTexture(path);
-	assets.texture_last++;
+void assets_add_image(char *path) {
+
+	Asset asset;
+	asset.type = ASSET_IMAGE;
+	asset.data.texture = LoadTexture(path);
+
+	map_set(&assets.map, path, asset);
 }
 
 void _dir_recurse(const char *path) {
@@ -38,7 +41,7 @@ void _dir_recurse(const char *path) {
 
     while ((ent = readdir(dp)) != NULL) {
         if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0) {
-            continue; // skip current dir and parent dir
+            continue;
         }
 
 		// Skip hidden files.
@@ -50,12 +53,12 @@ void _dir_recurse(const char *path) {
         snprintf(full_path, ASSET_PATH_MAX, "%s/%s", path, ent->d_name);
 
         if (ent->d_type == 4) {
-            _dir_recurse(full_path); // recursive call
+            _dir_recurse(full_path);
         } else {
+
 			const char* ext = _get_file_ext(full_path);
+
 			if (strcmp(ext, "png") == 0) {
-				// printf("%s\n", ext); // process file
-				// printf("PNG!");
 				assets_add_image(full_path);
 			}
         }
