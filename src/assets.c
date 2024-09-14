@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "assets.h"
+#include "map.h"
 
 static Assets assets = {};
 static bool initialized = false;
@@ -17,6 +18,18 @@ Assets assets_init() {
 }
 
 void assets_destory() {
+
+	const char *key;
+	map_iter_t iter = map_iter(&assets.map);
+
+	while ((key = map_next(&assets.map, &iter))) {
+
+		Asset *asset = map_get(&assets.map, key);
+
+		if (asset->type == ASSET_IMAGE) {
+			UnloadTexture(asset->data.texture);
+		}
+	}
 
 	map_deinit(&assets.map);
 }
