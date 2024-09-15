@@ -9,12 +9,10 @@
 static Assets assets = {};
 static bool initialized = false;
 
-Assets assets_init() {
+void assets_init() {
 
 	map_init(&assets.map);
 	_dir_recurse("assets");
-
-	return assets;
 }
 
 void assets_destory() {
@@ -71,19 +69,21 @@ Asset* assets_get(const char *path) {
 
 void _dir_recurse(const char *path) {
 
-	DIR *dp;
+	DIR *dir;
     struct dirent *ent;
-    if ((dp = opendir(path)) == NULL) {
+
+    if ((dir = opendir(path)) == NULL) {
         perror(path);
         return;
     }
 
-    while ((ent = readdir(dp)) != NULL) {
+    while ((ent = readdir(dir)) != NULL) {
+
+		// Skip hidden files and dirs we do not care about.
         if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0) {
             continue;
         }
 
-		// Skip hidden files.
 		if (ent->d_name[0] == '.') {
 			continue;
 		}
@@ -94,17 +94,11 @@ void _dir_recurse(const char *path) {
         if (ent->d_type == 4) {
             _dir_recurse(full_path);
         } else {
-
-			const char* ext = _get_file_ext(full_path);
 			assets_add(full_path);
-
-			// if (strcmp(ext, "png") == 0) {
-			// 	printf("%s\n", full_path);
-			// 	assets_add_image(full_path);
-			// }
         }
     }
-    closedir(dp);
+
+    closedir(dir);
 }
 
 const char* _get_file_ext(const char *path) {
@@ -115,4 +109,11 @@ const char* _get_file_ext(const char *path) {
 	} 
 
     return dot + 1;
+}
+
+void assets_image_example() {
+
+	Asset *knight = assets_get("assets/Factions/Knights/Troops/Warrior/Purple/Warrior_Purple.png");
+
+	DrawTexture(knight->data.texture, 0, 0, WHITE);
 }
