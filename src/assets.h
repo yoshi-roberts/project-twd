@@ -16,8 +16,9 @@ typedef union {
 } AssetData;
 
 typedef struct Asset {
-	AssetData data;
+	bool resource_loaded;
 	AssetType type;
+	AssetData data;
 } Asset;
 
 typedef map_t(Asset) asset_map_t;
@@ -28,7 +29,8 @@ typedef struct {
 
 Assets assets_init();
 void assets_destory();
-void assets_add_image(char *path);
+void assets_load_resource(Asset *asset, const char *path);
+void assets_add(const char *path);
 Asset* assets_get(const char *path);
 void _dir_recurse(const char *path);
 const char* _get_file_ext(const char *path);

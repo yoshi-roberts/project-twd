@@ -34,17 +34,38 @@ void assets_destory() {
 	map_deinit(&assets.map);
 }
 
-void assets_add_image(char *path) {
+void assets_load_resource(Asset *asset, const char *path) {
+
+	if (asset->type == ASSET_IMAGE) {
+		asset->data.texture = LoadTexture(path);
+	} else if (asset->type == ASSET_AUDIO) {
+		// Load audio data.
+	}
+	
+	asset->resource_loaded = true;
+}
+
+void assets_add(const char *path) {
+
+	const char* ext = _get_file_ext(path);
 
 	Asset asset;
-	asset.type = ASSET_IMAGE;
-	asset.data.texture = LoadTexture(path);
+	asset.resource_loaded = false;
+
+	if (strcmp(ext, "png") == 0) {
+		asset.type = ASSET_IMAGE;
+	}
 
 	map_set(&assets.map, path, asset);
 }
 
 Asset* assets_get(const char *path) {
 	Asset *asset = map_get(&assets.map, path);
+
+	if (!asset->resource_loaded) {
+		assets_load_resource(asset, path);
+	}
+
 	return asset;
 }
 
@@ -75,11 +96,12 @@ void _dir_recurse(const char *path) {
         } else {
 
 			const char* ext = _get_file_ext(full_path);
+			assets_add(full_path);
 
-			if (strcmp(ext, "png") == 0) {
-				printf("%s\n", full_path);
-				assets_add_image(full_path);
-			}
+			// if (strcmp(ext, "png") == 0) {
+			// 	printf("%s\n", full_path);
+			// 	assets_add_image(full_path);
+			// }
         }
     }
     closedir(dp);
