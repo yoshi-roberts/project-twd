@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/stat.h>
 #include "assets.h"
 #include "map.h"
 
@@ -74,6 +75,7 @@ void _dir_recurse(const char *path) {
 
 	DIR *dir;
     struct dirent *ent;
+	struct stat sb;
 
 	// Check that the directory can be opened.
     if ((dir = opendir(path)) == NULL) {
@@ -89,20 +91,22 @@ void _dir_recurse(const char *path) {
             continue;
         }
 
-		if (ent->d_name[0] == '.') {
-			continue;
-		}
+		// if (ent->d_name[0] == '.') {
+		// 	continue;
+		// }
 
 		// Full path of entry from the root asset directory.
         char full_path[ASSET_PATH_MAX];
         snprintf(full_path, ASSET_PATH_MAX, "%s/%s", path, ent->d_name);
 
+		stat(full_path, &sb);
+
 		// Type 4 means entry is a directory.
-        if (ent->d_type == 4) {
+        if (S_ISDIR(sb.st_mode)) {
             _dir_recurse(full_path);
-        } else { // File.
+        } else if (S_ISREG(sb.st_mode)) { // File.
 			assets_add(full_path);
-        }
+        } 
     }
 
     closedir(dir);
