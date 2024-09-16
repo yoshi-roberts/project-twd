@@ -91,9 +91,9 @@ void _dir_recurse(const char *path) {
             continue;
         }
 
-		// if (ent->d_name[0] == '.') {
-		// 	continue;
-		// }
+		if (ent->d_name[0] == '.') {
+			continue;
+		}
 
 		// Full path of entry from the root asset directory.
         char full_path[ASSET_PATH_MAX];
