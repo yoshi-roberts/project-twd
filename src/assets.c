@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include "assets.h"
 #include "map.h"
+#include "log.h"
 
 static Assets assets = {};
 static bool initialized = false;
@@ -14,6 +15,8 @@ void assets_init() {
 
 	map_init(&assets.map);
 	_dir_recurse("assets");
+
+	log_info("Asset system initialized.");
 }
 
 void assets_destory() {

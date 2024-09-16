@@ -1,6 +1,6 @@
 CC = gcc
 OPT = -O1
-CFLAGS = -Wall -Wextra -std=c99 $(OPT) -I include/
+CFLAGS = -Wall -Wextra -std=c99 $(OPT) -I include/ -DLOG_USE_COLOR
 
 ifeq ($(OS), Windows_NT)
 	BUILD_RAYLIB = cd lib/raylib/src/ && mingw32-make PLATFORM=PLATFORM_DESKTOP
@@ -19,7 +19,7 @@ endif
 BIN_DIR = bin
 OBJ_DIR = obj
 
-OBJS = main.o map.o assets.o
+OBJS = main.o log.o map.o assets.o
 
 all: build_raylib create_dir $(BIN_DIR)/$(BIN)
 
