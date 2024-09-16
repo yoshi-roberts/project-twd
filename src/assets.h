@@ -21,16 +21,22 @@ typedef struct Asset {
 	AssetData data;
 } Asset;
 
+// Custom map type that stores elements of type Asset.
 typedef map_t(Asset) asset_map_t;
 
 typedef struct {
 	asset_map_t map;
 } Assets;
 
+// Initialize the asset system.
 void assets_init();
+// Deinitialize the asset system and free any allocated memeory.
 void assets_destory();
+// Load an assets required resource into memory.
 void assets_load_resource(Asset *asset, const char *path);
+// Create a new asset entry.
 void assets_add(const char *path);
+// Retrieve an asset by its filepath.
 Asset* assets_get(const char *path);
 void _dir_recurse(const char *path);
 const char* _get_file_ext(const char *path);

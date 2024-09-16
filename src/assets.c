@@ -20,6 +20,7 @@ void assets_destory() {
 	const char *key;
 	map_iter_t iter = map_iter(&assets.map);
 
+	// Loop through all assets and unload any resource data.
 	while ((key = map_next(&assets.map, &iter))) {
 
 		Asset *asset = map_get(&assets.map, key);
@@ -50,6 +51,7 @@ void assets_add(const char *path) {
 	Asset asset;
 	asset.resource_loaded = false;
 
+	// Check the asset type based on the file extension.
 	if (strcmp(ext, "png") == 0) {
 		asset.type = ASSET_IMAGE;
 	}
@@ -60,6 +62,7 @@ void assets_add(const char *path) {
 Asset* assets_get(const char *path) {
 	Asset *asset = map_get(&assets.map, path);
 
+	// If it does not exits, load in the assets resource data.
 	if (!asset->resource_loaded) {
 		assets_load_resource(asset, path);
 	}
@@ -72,11 +75,13 @@ void _dir_recurse(const char *path) {
 	DIR *dir;
     struct dirent *ent;
 
+	// Check that the directory can be opened.
     if ((dir = opendir(path)) == NULL) {
         perror(path);
         return;
     }
 
+	// Kepp looping so long as there are more entries.
     while ((ent = readdir(dir)) != NULL) {
 
 		// Skip hidden files and dirs we do not care about.
@@ -88,12 +93,14 @@ void _dir_recurse(const char *path) {
 			continue;
 		}
 
+		// Full path of entry from the root asset directory.
         char full_path[ASSET_PATH_MAX];
         snprintf(full_path, ASSET_PATH_MAX, "%s/%s", path, ent->d_name);
 
+		// Type 4 means entry is a directory.
         if (ent->d_type == 4) {
             _dir_recurse(full_path);
-        } else {
+        } else { // File.
 			assets_add(full_path);
         }
     }
