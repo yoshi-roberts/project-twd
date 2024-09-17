@@ -12,7 +12,6 @@ int main(int argc, char** argv) {
 	
 		BeginDrawing();
 		ClearBackground(WHITE);
-		assets_image_example();
 		EndDrawing();
 	}
 
