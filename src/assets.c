@@ -18,10 +18,11 @@ void assets_init() {
 		return;
 	}
 
+	initialized = true;
+
 	map_init(&assets.map);
 	_dir_recurse("assets");
 
-	initialized = true;
 	log_info("Asset system initialized.");
 }
 
@@ -47,6 +48,8 @@ void assets_destory() {
 
 	map_deinit(&assets.map);
 	initialized = false;
+
+	log_info("Asset system shutdown.");
 }
 
 void assets_load_resource(Asset *asset, const char *path) {
