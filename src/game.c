@@ -3,9 +3,12 @@
 #include "game.h"
 #include "assets.h"
 #include "log.h"
+#include "canvas.h"
 
 static Game game = {};
 static bool initialized = false;
+
+static Canvas canvas;
 
 void game_init() {
 
@@ -14,12 +17,14 @@ void game_init() {
 		return;
 	}
 
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(1280, 720, "Project Tower Defense");
 	SetTargetFPS(60);
 
 	assets_init();
-	initialized = true;
+	canvas = canvas_init(480, 270);
 
+	initialized = true;
 	log_info("Game initialized.");
 }
 
@@ -30,6 +35,7 @@ void game_shutdown() {
 		return;
 	}
 
+	canvas_destroy(&canvas);
 	assets_destory();
 	CloseWindow();
 
@@ -46,6 +52,7 @@ void game_update() {
 
 	while (!WindowShouldClose()) {
 		game.dt = GetFrameTime();	// Update delta time.
+		canvas_update(&canvas);
 		game_draw();
 	}
 
@@ -60,5 +67,8 @@ void game_draw() {
 
 	BeginDrawing();
 	ClearBackground(WHITE);
+	canvas_begin(&canvas);
+	canvas_end(&canvas);
+	canvas_draw(&canvas);
 	EndDrawing();
 }
