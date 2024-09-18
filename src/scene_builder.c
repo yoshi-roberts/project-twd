@@ -13,9 +13,18 @@ typedef struct {
 	Tilemap tilemap;
 } Scene;
 
-struct scene_initialize(int difficulty, int waves) {
-	struct newScene;
+void scene_initialize(int difficulty, int waves) {
+	Scene newScene;
 	newScene.difficulty = difficulty;
 	newScene.waves = waves;
-	return newScene;
+
+}
+
+void scene_populate()
+{
+
+
+
+
+
 }
