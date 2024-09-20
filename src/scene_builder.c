@@ -1,4 +1,8 @@
+#include <stdbool.h>
+#include "../lib/raylib/src/raylib.h"
+#include "game.h"
 #include "assets.h"
+#include "log.h"
 
 #define MAXWIDTH 128
 #define MAXHEIGHT 128
@@ -64,8 +68,10 @@ for(int i=0; i < MAXHEIGHT; i++)
 	{
 	for(int j=0; j < MAXWIDTH; j++)
 		{
+		BeginDrawing();
 		newScene.tilemap.AssetPtr = assets_get(getTilePath(newScene.tilemap.tiles[i][j]));
 		DrawTexture(newScene.tilemap.AssetPtr->data.texture, i, j, WHITE);
+		EndDrawing();
 		}
 	}
 }
