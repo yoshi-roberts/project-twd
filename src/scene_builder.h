@@ -3,7 +3,6 @@
 
 #ifndef SCENE_BUILDER_H
 #define SCENE_BUILDER_H
-#endif
 
 enum TileTypes {
     GROUND_FLAT = 1,
@@ -28,3 +27,5 @@ typedef struct {
 	int waves;
 	Tilemap tilemap;
 } Scene;
+
+#endif
