@@ -1,12 +1,15 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "canvas.h"
+
 #define GAME_MAX_SCENES 128
 
 typedef struct {
 	// Scene scenes[GAME_MAX_SCENES];
 	// Scene *current_scene;
 	float dt;	// Delta Time.
+	Canvas canvas;
 } Game;
 
 // Initializes the game struct.

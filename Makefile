@@ -41,3 +41,6 @@ $(addprefix $(OBJ_DIR),/%.o):src/%.c
 clean:
 	$(RM) bin
 	$(RM) obj
+
+run:
+	./bin/out
