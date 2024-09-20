@@ -20,7 +20,8 @@ enum tileTypes {
     WATER_ROCK1 = 5,
     WATER_ROCK2 = 6,
     WATER_ROCK3 = 7,
-	WATER_ROCK4 = 8
+	WATER_ROCK4 = 8,
+	BRIDGE = 9;
 };
 
 
@@ -34,6 +35,7 @@ const char* tilePaths[] = {
     "assets/Terrain/Water/Rocks/Rocks_02.png",
     "assets/Terrain/Water/Rocks/Rocks_03.png",
 	"assets/Terrain/Water/Rocks/Rocks_04.png"
+	"assets/Terrain/Bridge/Bridge_All.png"
 };
 
 typedef struct {
@@ -48,13 +50,18 @@ typedef struct {
 } Scene;
 
 //================================================================================
-
-const char[] getTilePath(int tileType) {
+const char[] getTileFilePath(int tileType) {
     return tilePaths[tileType];
 }
-
 //================================================================================
+void pull_scene_tiles(){
 
+
+
+
+
+}
+//================================================================================
 void scene_initialize(int difficulty, int waves) {
 	Scene newScene;
 	newScene.difficulty = difficulty;
@@ -69,7 +76,7 @@ for(int i=0; i < MAXHEIGHT; i++)
 	for(int j=0; j < MAXWIDTH; j++)
 		{
 		BeginDrawing();
-		newScene.tilemap.AssetPtr = assets_get(getTilePath(newScene.tilemap.tiles[i][j]));
+		newScene.tilemap.AssetPtr = assets_get(getTileFilePath(newScene.tilemap.tiles[i][j]));
 		DrawTexture(newScene.tilemap.AssetPtr->data.texture, i, j, WHITE);
 		EndDrawing();
 		}
