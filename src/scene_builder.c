@@ -19,7 +19,7 @@ const char* TilePaths[] = {
 };
 
 
-const char* Get_Tile_File_Path(int TileType) {
+const char* get_tile_file_path(int TileType) {
     return TilePaths[TileType];
 }
 
@@ -38,8 +38,8 @@ for(int i=0; i < MAXHEIGHT; i++)
 	for(int j=0; j < MAXWIDTH; j++)
 		{
 		BeginDrawing();
-		NewScene.tilemap.AssetPtr = assets_get(Get_Tile_File_Path(NewScene.tilemap.tiles[i][j]));
-		DrawTexture(NewScene.tilemap.AssetPtr->data.texture, i, j, WHITE);
+		NewScene.tilemap.asset_ptr = assets_get(get_tile_file_path(NewScene.tilemap.tiles[i][j]));
+		DrawTexture(NewScene.tilemap.asset_ptr->data.texture, i, j, WHITE);
 		EndDrawing();
 		}
 	}

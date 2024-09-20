@@ -17,7 +17,7 @@ enum TileTypes {
 };
 
 typedef struct {
-	int *AssetPtr;
+	int *asset_ptr;
 	int tiles[128][128];
 } Tilemap;
 
