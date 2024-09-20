@@ -1,18 +1,10 @@
-#include "../lib/raylib/src/raylib.h"
+#include "game.h"
 
 int main(int argc, char** argv) {
 
-	InitWindow(1280, 720, "Project Tower Defense");
-	SetTargetFPS(60);
-
-	while (!WindowShouldClose()) {
-	
-		BeginDrawing();
-			ClearBackground(WHITE);
-		EndDrawing();
-	}
-
-	CloseWindow();
+	game_init();
+	game_update();
+	game_shutdown();
 
     return 0;
 }
