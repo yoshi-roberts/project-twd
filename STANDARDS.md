@@ -1,27 +1,29 @@
-# Types
+# Types/Variales
 
-All custom types will be camel case.<br>
-e.g.
+Variables should always be snake case.<br>
 ```c
-    typedef struct {
+int some_num = 12;
+```
 
-    } Entity;
+All custom types should be camel case.<br>
+```c
+typedef struct {
+
+} Entity;
 ```
 
 # Functions
 
-All functions will be snake case.<br>
-e.g.
+All functions should be snake case.<br>
 ```c
-    void some_func() {
+void some_func() {
 
-    }
+}
 ```
 
 Any function that operates on a certain type will have its name prefixed with that type name.<br>
-e.g.
 ```c
-    void entity_update(Entity *entity) {
+void entity_update(Entity *entity) {
 
-    }
+}
 ```
