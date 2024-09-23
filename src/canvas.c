@@ -31,7 +31,7 @@ void canvas_update(Canvas *canvas) {
 	);
 
 	canvas->source.width = (float)canvas->width;
-	canvas->source.height = (float)canvas->height;
+	canvas->source.height = -(float)canvas->height;
 
 	canvas->dest.x = (GetScreenWidth() - ((float)canvas->width*scale)) * 0.5f;
 	canvas->dest.y = (GetScreenHeight() - ((float)canvas->height*scale)) * 0.5f;
