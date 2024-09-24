@@ -69,7 +69,8 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	// Draw to canvas.
-	canvas_end(&game.canvas);
+	assets_image_example();
+	canvas_end();
 
 	canvas_draw(&game.canvas);
 	EndDrawing();
