@@ -3,9 +3,14 @@
 #include "assets.h"
 #include "log.h"
 #include "canvas.h"
+#include "wordlist.h"
+#include "text_input.h"
 
 static Game game = {};
 static bool initialized = false;
+
+static WordList list;
+static TextInput input;
 
 void game_init() {
 
@@ -22,6 +27,9 @@ void game_init() {
 	game.canvas = canvas_init(480, 270);
 
 	assets_init();
+
+	list = wordlist_init();
+	input = text_input_init(list.easy[GetRandomValue(0, WORDLIST_MAX_WORDS)]);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -51,6 +59,7 @@ void game_update() {
 
 	while (!WindowShouldClose()) {
 		game.dt = GetFrameTime();	// Update delta time.
+		text_input_update(&input);
 		canvas_update(&game.canvas);
 		game_draw();
 	}
@@ -69,7 +78,8 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	// Draw to canvas.
-	assets_image_example();
+	// assets_image_example();
+	text_input_draw(&input);
 	canvas_end();
 
 	canvas_draw(&game.canvas);
