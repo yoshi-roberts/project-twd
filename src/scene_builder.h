@@ -5,6 +5,7 @@
 
 #define MAXWIDTH 30
 #define MAXHEIGHT 17
+#define TILESIZE 16
 
 enum TileTypes {
     GROUND_FLAT = 1,

@@ -24,7 +24,7 @@ void game_init() {
 	game.canvas = canvas_init(480, 270);
 
 	assets_init();
-	scene = scene_initialize(1, "assets/Terrain/Ground/Tilemap_Flat.png");
+	scene = scene_initialize(1, "assets/tiles.png");
 
 	initialized = true;
 	log_info("Game initialized.");

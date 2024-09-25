@@ -27,8 +27,9 @@ void scene_draw(Scene *scene)
 {
 Vector2 tile_tex_coords[6] = {
 	(Vector2){0,0},
+	(Vector2){16,0},
 	(Vector2){32,0},
-	(Vector2){64,0},
+	(Vector2){48,0},
 };
 
 	for(int y=0; y<MAXHEIGHT; y++)
@@ -36,12 +37,12 @@ Vector2 tile_tex_coords[6] = {
 	for(int x=0; x<MAXWIDTH; x++)
 		{
 		int tile = scene->tilemap.tiles[y][x];
-		int xp = x * 32;
-		int yp = y * 32;
+		int xp = x * TILESIZE;
+		int yp = y * TILESIZE;
 		Vector2 tex_coords = tile_tex_coords[tile];
 			DrawTextureRec(
 			scene->tilemap.asset_ptr->data.texture,
-			(Rectangle){tex_coords.x, tex_coords.y,32,32},
+			(Rectangle){tex_coords.x, tex_coords.y,TILESIZE,TILESIZE},
 			(Vector2){xp, yp},
 			WHITE
 			);
@@ -60,7 +61,7 @@ Scene scene_initialize(int difficulty, const char* path) {
 	{
 	for(int x=0; x<MAXWIDTH; x++)
 		{
-		NewScene.tilemap.tiles[y][x] = GetRandomValue(0,8);
+		NewScene.tilemap.tiles[y][x] = GetRandomValue(0,3);
 		}
 	}
 	NewScene.tilemap.asset_ptr = assets_get(path);
