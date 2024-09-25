@@ -64,7 +64,8 @@ void assets_load_resource(Asset *asset, const char *path) {
 	if (asset->type == ASSET_IMAGE) {
 		asset->data.texture = LoadTexture(path);
 	} else if (asset->type == ASSET_FONT) {
-		asset->data.font = LoadFontEx(path, 16, NULL, 0);
+		asset->data.font = LoadFontEx(path, 96, NULL, 0);
+		SetTextureFilter(asset->data.font.texture, TEXTURE_FILTER_BILINEAR);
 	} else if (asset->type == ASSET_AUDIO) {
 		// Load audio data.
 	}

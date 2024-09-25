@@ -11,6 +11,7 @@ typedef struct {
 } WordList;
 
 WordList wordlist_init();
-void _get_words(char (*list)[WORD_MAX_LEN], const char *path);
+char* wordlist_get(char (*list)[WORD_MAX_LEN]);
+void _read_file(char (*list)[WORD_MAX_LEN], const char *path);
 
 #endif // WORDLIST_H

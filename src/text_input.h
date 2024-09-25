@@ -9,7 +9,7 @@ typedef struct {
 	int count;
 } TextInput ;
 
-TextInput text_input_init(char target[WORD_MAX_LEN]);
+TextInput text_input_init(char (*list)[WORD_MAX_LEN]);
 void text_input_update(TextInput *text_input);
 void text_input_draw(TextInput *text_input);
 

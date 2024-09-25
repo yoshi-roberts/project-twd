@@ -24,12 +24,13 @@ void game_init() {
 	SetTargetFPS(60);
 
 	game.dt = 0.0f;
-	game.canvas = canvas_init(480, 270);
+	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
+	game.ui_canvas = canvas_init(1920, 1080, TEXTURE_FILTER_BILINEAR);
 
 	assets_init();
 
 	list = wordlist_init();
-	input = text_input_init(list.easy[GetRandomValue(0, WORDLIST_MAX_WORDS)]);
+	input = text_input_init(list.easy);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -61,6 +62,7 @@ void game_update() {
 		game.dt = GetFrameTime();	// Update delta time.
 		text_input_update(&input);
 		canvas_update(&game.canvas);
+		canvas_update(&game.ui_canvas);
 		game_draw();
 	}
 
@@ -78,9 +80,14 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	// Draw to canvas.
+	canvas_end();
+
+	canvas_begin(&game.ui_canvas);
+	// Draw to canvas.
 	text_input_draw(&input);
 	canvas_end();
 
 	canvas_draw(&game.canvas);
+	canvas_draw(&game.ui_canvas);
 	EndDrawing();
 }

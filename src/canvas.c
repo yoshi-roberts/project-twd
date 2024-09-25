@@ -1,7 +1,7 @@
 #include "canvas.h"
 #include "log.h"
 
-Canvas canvas_init(int width, int height) {
+Canvas canvas_init(int width, int height, int filter) {
 
 	Canvas canvas;
 
@@ -11,7 +11,7 @@ Canvas canvas_init(int width, int height) {
 	canvas.source.x = 0.0f;
 	canvas.source.y = 0.0f;
 
-	SetTextureFilter(canvas.target.texture, TEXTURE_FILTER_POINT);
+	SetTextureFilter(canvas.target.texture, filter);
 
 	log_info("Initialized canvas.");
 

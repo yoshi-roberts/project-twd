@@ -1,13 +1,16 @@
+#include <stdio.h>
 #include <string.h>
 #include "text_input.h"
 #include "../lib/raylib/src/raylib.h"
+#include "assets.h"
+#include "wordlist.h"
 
-TextInput text_input_init(char target[WORD_MAX_LEN]) {
+TextInput text_input_init(char (*list)[WORD_MAX_LEN]) {
 
 	TextInput text_input;
 	memset(text_input.buff, 0, sizeof(char) * WORD_MAX_LEN);
 
-	text_input.target = target;
+	text_input.target = wordlist_get(list);
 	text_input.buff[WORD_MAX_LEN] = '\0';
 	text_input.count = 0;
 
@@ -43,6 +46,22 @@ void text_input_update(TextInput *text_input) {
 
 void text_input_draw(TextInput *text_input) {
 
-	DrawText(text_input->target, 0, 0, 10, GRAY);
-	DrawText(text_input->buff, 0, 0, 10, BLACK);
+	Asset *fnt = assets_get("assets/fonts/Beholden-Regular.ttf");
+
+	DrawTextEx(
+		fnt->data.font,
+		text_input->target,
+		(Vector2){0.0f,0.0f},
+		fnt->data.font.baseSize,
+		2,
+		GRAY
+	);
+	DrawTextEx(
+		fnt->data.font,
+		text_input->buff,
+		(Vector2){0.0f,0.0f},
+		fnt->data.font.baseSize,
+		2,
+		BLACK
+	);
 }
