@@ -31,10 +31,7 @@ typedef struct {
 	Tilemap tilemap;
 } Scene;
 
-
-void scene_populate(Scene NewScene);
 Scene scene_initialize(int difficulty, const char* path);
-const char* get_tile_file_path(int TileType);
 void scene_draw(Scene *scene);
 
 

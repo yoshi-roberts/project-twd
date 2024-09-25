@@ -3,25 +3,7 @@
 #include "scene_builder.h"
 #include "game.h"
 #include "assets.h"
-#include "log.h"
-
-const char* TilePaths[] = {
-    "assets/Terrain/Ground/Tilemap_Flat.png",
-    "assets/Terrain/Ground/Tilemap_Elevation.png",
-    "assets/Terrain/Ground/Shadows.png",
-    "assets/Terrain/Water/Water.png",
-    "assets/Terrain/Water/Rocks/Rocks_01.png",
-    "assets/Terrain/Water/Rocks/Rocks_02.png",
-    "assets/Terrain/Water/Rocks/Rocks_03.png",
-	"assets/Terrain/Water/Rocks/Rocks_04.png",
-	"assets/Terrain/Bridge/Bridge_All.png"
-};
-
-
-const char* get_tile_file_path(int TileType) 
-{
-	return TilePaths[TileType];
-}		
+#include "log.h"	
 
 void scene_draw(Scene *scene)
 {
