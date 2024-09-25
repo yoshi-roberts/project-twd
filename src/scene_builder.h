@@ -1,10 +1,10 @@
 #ifndef SCENE_BUILDER_H
 #define SCENE_BUILDER_H
 
-#define MAXWIDTH  17
-#define MAXHEIGHT  9
-
 #include "assets.h"
+
+#define MAXWIDTH 30
+#define MAXHEIGHT 17
 
 enum TileTypes {
     GROUND_FLAT = 1,
@@ -30,9 +30,11 @@ typedef struct {
 	Tilemap tilemap;
 } Scene;
 
-void scene_initialize(int difficulty);
+
 void scene_populate(Scene NewScene);
+Scene scene_initialize(int difficulty, const char* path);
 const char* get_tile_file_path(int TileType);
+void scene_draw(Scene *scene);
 
 
 
