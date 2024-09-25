@@ -78,7 +78,6 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	// Draw to canvas.
-	// assets_image_example();
 	text_input_draw(&input);
 	canvas_end();
 

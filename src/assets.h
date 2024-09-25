@@ -8,11 +8,13 @@
 
 typedef enum {
 	ASSET_IMAGE,
+	ASSET_FONT,
 	ASSET_AUDIO,
 } AssetType;
 
 typedef union {
 	Texture2D texture;
+	Font font;
 } AssetData;
 
 typedef struct Asset {
