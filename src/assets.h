@@ -41,6 +41,4 @@ Asset* assets_get(const char *path);
 void _dir_recurse(const char *path);
 const char* _get_file_ext(const char *path);
 
-void assets_image_example();
-
 #endif //ASSETS_H
