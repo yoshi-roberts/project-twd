@@ -5,6 +5,7 @@
 
 #define MAXWIDTH 30
 #define MAXHEIGHT 17
+#define MAXTILES (MAXWIDTH * MAXHEIGHT)
 #define TILESIZE 16
 
 enum TileTypes {
@@ -21,7 +22,7 @@ enum TileTypes {
 
 typedef struct {
 	Asset *asset_ptr;
-	int tiles[128][128];
+	int tiles[MAXHEIGHT][MAXWIDTH];
 } Tilemap;
 
 
@@ -33,6 +34,7 @@ typedef struct {
 
 Scene scene_initialize(int difficulty, const char* path);
 void scene_draw(Scene *scene);
+void tileval_from_file(const char *filename, int (*arr)[MAXWIDTH]);
 
 
 
