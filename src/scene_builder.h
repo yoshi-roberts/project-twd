@@ -1,8 +1,12 @@
-#define MAXWIDTH 128
-#define MAXHEIGHT 128
-
 #ifndef SCENE_BUILDER_H
 #define SCENE_BUILDER_H
+
+#include "assets.h"
+
+#define MAXWIDTH 30
+#define MAXHEIGHT 17
+#define MAXTILES (MAXWIDTH * MAXHEIGHT)
+#define TILESIZE 16
 
 enum TileTypes {
     GROUND_FLAT = 1,
@@ -17,8 +21,8 @@ enum TileTypes {
 };
 
 typedef struct {
-	int *asset_ptr;
-	int tiles[128][128];
+	Asset *asset_ptr;
+	int tiles[MAXHEIGHT][MAXWIDTH];
 } Tilemap;
 
 
@@ -27,5 +31,11 @@ typedef struct {
 	int waves;
 	Tilemap tilemap;
 } Scene;
+
+Scene scene_initialize(int difficulty, const char* path);
+void scene_draw(Scene *scene);
+void tileval_from_file(const char *filename, int (*arr)[MAXWIDTH]);
+
+
 
 #endif

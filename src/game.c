@@ -3,9 +3,11 @@
 #include "assets.h"
 #include "log.h"
 #include "canvas.h"
+#include "scene_builder.h"
 
 static Game game = {};
 static bool initialized = false;
+static Scene scene;
 
 void game_init() {
 
@@ -22,6 +24,7 @@ void game_init() {
 	game.canvas = canvas_init(480, 270);
 
 	assets_init();
+	scene = scene_initialize(1, "assets/tiles.png");
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -69,6 +72,7 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	// Draw to canvas.
+	scene_draw(&scene);
 	canvas_end();
 
 	canvas_draw(&game.canvas);
