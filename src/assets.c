@@ -43,6 +43,8 @@ void assets_destory() {
 
 		if (asset->type == ASSET_IMAGE) {
 			UnloadTexture(asset->data.texture);
+		} else if (asset->type == ASSET_IMAGE) {
+			UnloadFont(asset->data.font);
 		}
 	}
 
@@ -61,6 +63,9 @@ void assets_load_resource(Asset *asset, const char *path) {
 
 	if (asset->type == ASSET_IMAGE) {
 		asset->data.texture = LoadTexture(path);
+	} else if (asset->type == ASSET_FONT) {
+		asset->data.font = LoadFontEx(path, 96, NULL, 0);
+		SetTextureFilter(asset->data.font.texture, TEXTURE_FILTER_BILINEAR);
 	} else if (asset->type == ASSET_AUDIO) {
 		// Load audio data.
 	}
@@ -83,6 +88,8 @@ void assets_add(const char *path) {
 	// Check the asset type based on the file extension.
 	if (strcmp(ext, "png") == 0) {
 		asset.type = ASSET_IMAGE;
+	} else if (strcmp(ext, "ttf") == 0) {
+		asset.type = ASSET_FONT;
 	}
 
 	map_set(&assets.map, path, asset);

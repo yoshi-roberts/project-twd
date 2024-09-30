@@ -10,6 +10,7 @@ typedef struct {
 	// Scene *current_scene;
 	float dt;	// Delta Time.
 	Canvas canvas;
+	Canvas ui_canvas;
 } Game;
 
 // Initializes the game struct.

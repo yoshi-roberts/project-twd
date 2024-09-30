@@ -18,7 +18,7 @@ typedef struct {
 } Canvas ;
 
 // Create and initialize a new Canvas.
-Canvas canvas_init(int width, int height);
+Canvas canvas_init(int width, int height, int filter);
 // Destroy a canvas and any allocated memory.
 void canvas_destroy(Canvas *canvas);
 // Update a canvas and calculate its position and scale.
