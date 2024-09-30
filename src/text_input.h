@@ -12,5 +12,6 @@ typedef struct {
 TextInput text_input_init(char (*list)[WORD_MAX_LEN]);
 void text_input_update(TextInput *text_input);
 void text_input_draw(TextInput *text_input);
+void text_input_reset(TextInput *text_input);
 
 #endif // TEXT_INPUT_H

@@ -41,7 +41,6 @@ void canvas_update(Canvas *canvas) {
 
 void canvas_begin(Canvas *canvas) {
 	BeginTextureMode(canvas->target);
-	ClearBackground(WHITE);
 }
 
 void canvas_end() {
@@ -50,7 +49,7 @@ void canvas_end() {
 
 void canvas_draw(Canvas *canvas) {
 
-	ClearBackground(BLACK);
+	// ClearBackground(BLACK);
 	DrawTexturePro(
 		canvas->target.texture,
 		canvas->source,	

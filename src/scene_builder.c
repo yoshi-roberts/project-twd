@@ -36,6 +36,8 @@ Vector2 tile_tex_coords[6] = {
 	(Vector2){16,0},
 	(Vector2){32,0},
 	(Vector2){48,0},
+	(Vector2){64,0},
+	(Vector2){80,0},
 };
 
 	for(int y=0; y<TILEMAP_HEIGHT; y++)
@@ -74,16 +76,22 @@ void _scene_randomize(Scene *scene) {
 	for (int y = 0; y < TILEMAP_HEIGHT; y++) {
 		for (int x = 0; x < TILEMAP_WIDTH; x++) {
 
-			int r = GetRandomValue(0, 10);
-			if (r <= 4) {
-				scene->tilemap.tiles[y][x] = 0;
-			} else if (r > 4 && r <= 8) {
-				scene->tilemap.tiles[y][x] = 1;
-			} else if (r > 8 && r <= 9) {
-				scene->tilemap.tiles[y][x] = 2;
-			} else if (r == 10) {
-				scene->tilemap.tiles[y][x] = 3;
+			if (y == 8) {
+				scene->tilemap.tiles[y][x] = 5;
+			} else {
+
+				int r = GetRandomValue(0, 10);
+				if (r <= 4) {
+					scene->tilemap.tiles[y][x] = 0;
+				} else if (r > 4 && r <= 8) {
+					scene->tilemap.tiles[y][x] = 1;
+				} else if (r > 8 && r <= 9) {
+					scene->tilemap.tiles[y][x] = 2;
+				} else if (r == 10) {
+					scene->tilemap.tiles[y][x] = 3;
+				}
 			}
+
 		}
 	}
 }
