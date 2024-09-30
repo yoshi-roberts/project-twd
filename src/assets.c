@@ -166,15 +166,3 @@ const char* _get_file_ext(const char *path) {
 
     return dot + 1;
 }
-
-void assets_image_example() {
-
-	if (!initialized) {
-		log_error("Asset system not initialized.");
-		return;
-	}
-
-	Asset *knight = assets_get("assets/Factions/Knights/Troops/Warrior/Purple/Warrior_Purple.png");
-
-	DrawTexture(knight->data.texture, 0, 0, WHITE);
-}

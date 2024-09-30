@@ -5,9 +5,11 @@
 #include "canvas.h"
 #include "wordlist.h"
 #include "text_input.h"
+#include "scene_builder.h"
 
 static Game game = {};
 static bool initialized = false;
+static Scene scene;
 
 static WordList list;
 static TextInput input;
@@ -28,6 +30,7 @@ void game_init() {
 	game.ui_canvas = canvas_init(1920, 1080, TEXTURE_FILTER_BILINEAR);
 
 	assets_init();
+	scene = scene_initialize(1, "assets/tiles.png");
 
 	list = wordlist_init();
 	input = text_input_init(list.easy);
@@ -77,13 +80,10 @@ void game_draw() {
 
 	BeginDrawing();
 	ClearBackground(WHITE);
-
-	canvas_begin(&game.canvas);
-	// Draw to canvas.
-	canvas_end();
-
+ 
 	canvas_begin(&game.ui_canvas);
 	// Draw to canvas.
+  scene_draw(&scene);
 	text_input_draw(&input);
 	canvas_end();
 
