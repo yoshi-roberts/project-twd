@@ -9,16 +9,16 @@
 
 
 
-void tileval_from_file(const char *filename, int (*tiles)[MAXWIDTH]) {
+void tileval_from_file(const char *filename, int (*tiles)[TILEMAP_WIDTH]) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         printf("Error opening file.\n");
     }
 
 	int num;
-	for(int y=0; y<MAXHEIGHT; y++)
+	for(int y=0; y<TILEMAP_HEIGHT; y++)
 	{
-	for(int x=0; x<MAXWIDTH; x++)
+	for(int x=0; x<TILEMAP_WIDTH; x++)
 		{
 		fscanf(file, "%d,", &num);
 		tiles[y][x] = num;
@@ -38,9 +38,9 @@ Vector2 tile_tex_coords[6] = {
 	(Vector2){48,0},
 };
 
-	for(int y=0; y<MAXHEIGHT; y++)
+	for(int y=0; y<TILEMAP_HEIGHT; y++)
 	{
-	for(int x=0; x<MAXWIDTH; x++)
+	for(int x=0; x<TILEMAP_WIDTH; x++)
 		{
 		int tile = scene->tilemap.tiles[y][x];
 		int xp = x * TILESIZE;
@@ -58,10 +58,32 @@ Vector2 tile_tex_coords[6] = {
 
 
 Scene scene_initialize(int difficulty, const char* path) {
-	Scene NewScene;
-	NewScene.difficulty = difficulty;
+	Scene scene;
+	scene.difficulty = difficulty;
 	//NewScene.tilemap.tiles[y][x] = GetRandomValue(0,3); // If you want to randomize
-	tileval_from_file("src/numbers.txt", NewScene.tilemap.tiles);
-	NewScene.tilemap.asset_ptr = assets_get(path);
-	return NewScene;
+	// tileval_from_file("src/numbers.txt", NewScene.tilemap.tiles);
+	
+	_scene_randomize(&scene);
+
+	scene.tilemap.asset_ptr = assets_get(path);
+	return scene;
+}
+
+void _scene_randomize(Scene *scene) {
+
+	for (int y = 0; y < TILEMAP_HEIGHT; y++) {
+		for (int x = 0; x < TILEMAP_WIDTH; x++) {
+
+			int r = GetRandomValue(0, 10);
+			if (r <= 4) {
+				scene->tilemap.tiles[y][x] = 0;
+			} else if (r > 4 && r <= 8) {
+				scene->tilemap.tiles[y][x] = 1;
+			} else if (r > 8 && r <= 9) {
+				scene->tilemap.tiles[y][x] = 2;
+			} else if (r == 10) {
+				scene->tilemap.tiles[y][x] = 3;
+			}
+		}
+	}
 }

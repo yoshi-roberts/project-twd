@@ -55,6 +55,11 @@ void game_update() {
 	while (!WindowShouldClose()) {
 		game.dt = GetFrameTime();	// Update delta time.
 		canvas_update(&game.canvas);
+
+		if (IsKeyPressed(KEY_R)) {
+			_scene_randomize(&scene);
+		}
+
 		game_draw();
 	}
 
