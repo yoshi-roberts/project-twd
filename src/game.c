@@ -27,7 +27,6 @@ void game_init() {
 
 	game.dt = 0.0f;
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
-	game.ui_canvas = canvas_init(1920, 1080, TEXTURE_FILTER_BILINEAR);
 
 	assets_init();
 	scene = scene_initialize(1, "assets/tiles.png");
@@ -47,6 +46,7 @@ void game_shutdown() {
 	}
 
 	canvas_destroy(&game.canvas);
+
 	assets_destory();
 	CloseWindow();
 
@@ -63,9 +63,17 @@ void game_update() {
 
 	while (!WindowShouldClose()) {
 		game.dt = GetFrameTime();	// Update delta time.
+		
 		text_input_update(&input);
+
+		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
+			text_input_reset(&input);
+			input.target = wordlist_get(list.easy);
+			_scene_randomize(&scene);
+		}
+
 		canvas_update(&game.canvas);
-		canvas_update(&game.ui_canvas);
+
 		game_draw();
 	}
 
@@ -79,15 +87,13 @@ void game_draw() {
 	}
 
 	BeginDrawing();
-	ClearBackground(WHITE);
- 
-	canvas_begin(&game.ui_canvas);
-	// Draw to canvas.
-  scene_draw(&scene);
+	ClearBackground(BLACK);
+
+	canvas_begin(&game.canvas);
+	scene_draw(&scene);
 	text_input_draw(&input);
 	canvas_end();
 
 	canvas_draw(&game.canvas);
-	canvas_draw(&game.ui_canvas);
 	EndDrawing();
 }

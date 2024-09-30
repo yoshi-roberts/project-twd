@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include "text_input.h"
 #include "../lib/raylib/src/raylib.h"
 #include "assets.h"
@@ -15,6 +16,12 @@ TextInput text_input_init(char (*list)[WORD_MAX_LEN]) {
 	text_input.count = 0;
 
 	return text_input;
+}
+
+void text_input_reset(TextInput *text_input) {
+	memset(text_input->buff, 0, sizeof(char) * WORD_MAX_LEN);
+	text_input->buff[WORD_MAX_LEN] = '\0';
+	text_input->count = 0;
 }
 
 void text_input_update(TextInput *text_input) {
@@ -46,22 +53,29 @@ void text_input_update(TextInput *text_input) {
 
 void text_input_draw(TextInput *text_input) {
 
-	Asset *fnt = assets_get("assets/fonts/Beholden-Regular.ttf");
+	Asset *fnt = assets_get("assets/fonts/monogram.ttf");
+
+	Vector2 size = MeasureTextEx(fnt->data.font, text_input->target, 12, 2);
+	Vector2 pos = {
+   		floor((480 / 2.0f) - (size.x / 2)),
+		floor((270 / 3.0f) - (size.y / 2)),
+	};
+	
 
 	DrawTextEx(
 		fnt->data.font,
 		text_input->target,
-		(Vector2){0.0f,0.0f},
-		fnt->data.font.baseSize,
+		pos,
+		12,
 		2,
-		GRAY
+		WHITE
 	);
 	DrawTextEx(
 		fnt->data.font,
 		text_input->buff,
-		(Vector2){0.0f,0.0f},
-		fnt->data.font.baseSize,
+		pos,
+		12,
 		2,
-		BLACK
+		DARKPURPLE
 	);
 }
