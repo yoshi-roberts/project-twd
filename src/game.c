@@ -29,7 +29,7 @@ void game_init() {
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
 	assets_init();
-	scene = scene_initialize(1, "assets/tiles.png");
+	scene = scene_init(1, "assets/images/tiles.png");
 
 	list = wordlist_init();
 	input = text_input_init(list.easy);
@@ -95,5 +95,7 @@ void game_draw() {
 	canvas_end();
 
 	canvas_draw(&game.canvas);
+	DrawRectangle(4, 4, 128, 26, WHITE);
+	DrawFPS(8, 8);
 	EndDrawing();
 }

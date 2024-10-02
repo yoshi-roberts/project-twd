@@ -28,16 +28,7 @@ void tileval_from_file(const char *filename, int (*tiles)[TILEMAP_WIDTH]) {
 
 
 
-void scene_draw(Scene *scene)
-{
-	Vector2 tile_tex_coords[6] = {
-		(Vector2){0,0},
-		(Vector2){16,0},
-		(Vector2){32,0},
-		(Vector2){48,0},
-		(Vector2){64,0},
-		(Vector2){80,0},
-	};
+void scene_draw(Scene *scene) {
 
 	for(int y=0; y<TILEMAP_HEIGHT; y++) {
 
@@ -47,19 +38,12 @@ void scene_draw(Scene *scene)
 			int xp = x * TILESIZE;
 			int yp = y * TILESIZE;
 
-			Vector2 tex_coords = tile_tex_coords[tile];
-
-			DrawTextureRec(
-				scene->tilemap.asset_ptr->data.texture,
-				(Rectangle){tex_coords.x, tex_coords.y,TILESIZE,TILESIZE},
-				(Vector2){xp, yp},
-				WHITE
-			);
+			asset_draw_tile(scene->tilemap.asset_ptr, tile, xp, yp);
 		}
 	}
 }
 
-Scene scene_initialize(int difficulty, const char* path) {
+Scene scene_init(int difficulty, const char* path) {
 
 	Scene scene;
 	scene.difficulty = difficulty;

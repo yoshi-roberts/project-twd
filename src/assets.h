@@ -5,6 +5,7 @@
 #include "map.h"
 
 #define ASSET_PATH_MAX 4096
+#define ATLAS_MAX_SIZE 64
 
 typedef enum {
 	ASSET_IMAGE,
@@ -17,10 +18,15 @@ typedef union {
 	Font font;
 } AssetData;
 
+typedef struct {
+	Rectangle rects[ATLAS_MAX_SIZE];
+} Atlas;
+
 typedef struct Asset {
 	bool resource_loaded;
 	AssetType type;
 	AssetData data;
+	Atlas atlas;
 } Asset;
 
 // Custom map type that stores elements of type Asset.
@@ -40,6 +46,8 @@ void assets_load_resource(Asset *asset, const char *path);
 void assets_add(const char *path);
 // Retrieve an asset by its filepath.
 Asset* assets_get(const char *path);
+void asset_draw_tile(Asset *asset, int index, int x, int y);
+void _generate_atlas(Asset *asset);
 void _dir_recurse(const char *path);
 const char* _get_file_ext(const char *path);
 
