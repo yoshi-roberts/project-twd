@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "../lib/raylib/src/raylib.h"
 #include "scene_builder.h"
+#include "scene_path.h"
 #include "assets.h"
 
 void tileval_from_file(const char *filename, int (*tiles)[TILEMAP_WIDTH]) {
@@ -65,20 +66,21 @@ Scene scene_initialize(int difficulty, const char* path) {
 	scene.difficulty = difficulty;
 	// tileval_from_file("src/numbers.txt", NewScene.tilemap.tiles);
 
-	_scene_randomize(&scene);
+	scene_randomize(&scene);
+	gen_random_path(&scene, 1);
 
 	scene.tilemap.asset_ptr = assets_get(path);
 	return scene;
 }
 
-void _scene_randomize(Scene *scene) {
+void scene_randomize(Scene *scene) {
 
 	for (int y = 0; y < TILEMAP_HEIGHT; y++) {
 		for (int x = 0; x < TILEMAP_WIDTH; x++) {
 
-			if (y == 8) {
-				scene->tilemap.tiles[y][x] = 5;
-			} else {
+			//if (y == 8) {
+				//scene->tilemap.tiles[y][x] = 5;
+			//} else {
 
 				int r = GetRandomValue(0, 10);
 				if (r <= 4) {
@@ -90,7 +92,7 @@ void _scene_randomize(Scene *scene) {
 				} else if (r == 10) {
 					scene->tilemap.tiles[y][x] = 3;
 				}
-			}
+			//}
 
 		}
 	}
