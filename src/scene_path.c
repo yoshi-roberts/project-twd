@@ -19,7 +19,7 @@ void gen_random_path(Scene *scene) {
     {
     gen_section(scene, anchor, &last, &new);
     }
-
+    printf("=================================");
     // path_right(scene, anchor, distance, &last, &new);
     // path_up(scene, anchor, distance, &last, &new);
     // path_right(scene, anchor, distance, &last, &new);
@@ -83,6 +83,7 @@ int check_for_edge(int *anchor, int distance, int UpOrDown) {
 //==================================================================================================================================
 void path_right(Scene *scene, int *anchor, int distance, char *last, char *new) {
     *new = 'S'; // S = Sideways, D = Down, U = Up
+    printf("Path right Last New = %c %c\n", *last, *new);
     scene->tilemap.tiles[anchor[0]][anchor[1]] = anchor_turn(last, new); 
 
     for (int i = 0; i < distance; i++) {
@@ -91,33 +92,33 @@ void path_right(Scene *scene, int *anchor, int distance, char *last, char *new) 
     }
 
     set_last(last, new);
-    printf("right_last_final = %c\n", *last);
 }
 //==================================================================================================================================
 void path_up(Scene *scene, int *anchor, int distance, char *last, char *new) {
-    *new = 'U'; // S = Sideways, D = Down, U = Up
+    if (distance == 0){*new = 'S';}
+    else{*new = 'U';} // S = Sideways, D = Down, U = Up
+    printf("Path up Last New = %c %c\n", *last, *new);
     scene->tilemap.tiles[anchor[0]][anchor[1]] = anchor_turn(last, new);
 
     for (int i = 0; i < distance; i++) {
         anchor[0]--;
         scene->tilemap.tiles[anchor[0]][anchor[1]] = 7;
     }
-
     set_last(last, new);
-     printf("up_last_final = %c\n", *last);
 }
 //==================================================================================================================================
 void path_down(Scene *scene, int *anchor, int distance, char *last, char *new) {
-    *new = 'D'; // S = Sideways, D = Down, U = Up
+    if (distance == 0){*new = 'S';}
+    else{*new = 'D';} // S = Sideways, D = Down, U = Up
+    printf("Path down Last New = %c %c\n", *last, *new);
+
     scene->tilemap.tiles[anchor[0]][anchor[1]] = anchor_turn(last, new);
 
     for (int i = 0; i < distance; i++) { 
         anchor[0]++;
         scene->tilemap.tiles[anchor[0]][anchor[1]] = 7;
     }
-
     set_last(last, new);
-    printf("down_last_final = %c\n", *last);
 }
 //==================================================================================================================================
 int anchor_turn(char *last, char *new) {
