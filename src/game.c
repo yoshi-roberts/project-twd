@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include "game.h"
 #include "assets.h"
+#include "animation.h"
 #include "log.h"
 #include "canvas.h"
 #include "wordlist.h"
@@ -13,6 +14,8 @@ static Scene scene;
 
 static WordList list;
 static TextInput input;
+
+static Animation anim;
 
 void game_init() {
 
@@ -30,6 +33,8 @@ void game_init() {
 
 	assets_init();
 	scene = scene_init(1, "assets/images/tiles.png");
+
+	anim = animation_new("assets/animations/test-anim.png", 6);
 
 	list = wordlist_init();
 	input = text_input_init(list.easy);
@@ -66,6 +71,8 @@ void game_update() {
 		
 		text_input_update(&input);
 
+		animation_update(&anim);
+
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			text_input_reset(&input);
 			input.target = wordlist_get(list.easy);
@@ -92,6 +99,9 @@ void game_draw() {
 	canvas_begin(&game.canvas);
 	scene_draw(&scene);
 	text_input_draw(&input);
+
+	animation_draw(&anim, 64, 64);
+
 	canvas_end();
 
 	canvas_draw(&game.canvas);

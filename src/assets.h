@@ -13,20 +13,25 @@ typedef enum {
 	ASSET_AUDIO,
 } AssetType;
 
-typedef union {
-	Texture2D texture;
-	Font font;
-} AssetData;
-
 typedef struct {
 	Rectangle rects[ATLAS_MAX_SIZE];
+	int width;
 } Atlas;
+
+typedef struct {
+	Texture2D texture;
+	Atlas atlas;
+} Sprite;
+
+typedef union {
+	Sprite sprite;
+	Font font;
+} AssetData;
 
 typedef struct Asset {
 	bool resource_loaded;
 	AssetType type;
 	AssetData data;
-	Atlas atlas;
 } Asset;
 
 // Custom map type that stores elements of type Asset.
