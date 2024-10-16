@@ -5,26 +5,19 @@
 #include "scene_builder.h"
 #include "scene_path.h"
 #include "assets.h"
-
 #include <stdio.h>
 
 
 //==================================================================================================================================
 void gen_random_path(Scene *scene) {
     int anchor[2] = {8, 1};  // Initial anchor position
-    char last = 'S'; // S = Sideways, D = Down, U = Up
+    char last; // S = Sideways, D = Down, U = Up
     char new;
     scene->tilemap.tiles[anchor[0]][anchor[1]] = 5; //Always set first tile to be sideways path
     while(anchor[1]+2 < TILEMAP_WIDTH)
     {
     gen_section(scene, anchor, &last, &new);
     }
-    printf("=================================");
-    // path_right(scene, anchor, distance, &last, &new);
-    // path_up(scene, anchor, distance, &last, &new);
-    // path_right(scene, anchor, distance, &last, &new);
-    // path_down(scene, anchor, distance, &last, &new);
-    // path_right(scene, anchor, distance, &last, &new);
 }
 //==================================================================================================================================
 void gen_section(Scene *scene, int *anchor, char *last, char *new) {
@@ -33,18 +26,18 @@ void gen_section(Scene *scene, int *anchor, char *last, char *new) {
     int UpOrDown = GetRandomValue(1,2);
     char last_val = *last;
 
-        if (last_val == 'S'){
-            if (UpOrDown == 1){
+        if (last_val == 'S'){ //PATH WAS GOING SIDE
+            if (UpOrDown == 1){ //PATH IS GOING UP
             distance = check_for_edge(anchor, distance, UpOrDown);
             path_up(scene, anchor, distance, last, new);
             }
-            if (UpOrDown == 2){
+            if (UpOrDown == 2){ //PATH IS GOING DOWN
             distance = check_for_edge(anchor, distance, UpOrDown);
             path_down(scene, anchor, distance, last, new);
             }
         }
         else{
-            UpOrDown = 0;
+            UpOrDown = 0; //PATH IS GOING RIGHT
             distance = check_for_edge(anchor, distance, UpOrDown);
             path_right(scene, anchor, distance, last, new);
             }
@@ -55,7 +48,7 @@ int check_for_edge(int *anchor, int distance, int UpOrDown) {
         switch(UpOrDown) {
             case 0: //PATH IS GOING RIGHT
                 for(int i=0; i<distance; i++){
-                    if (anchor[1]+i < TILEMAP_WIDTH-1){
+                    if (anchor[1]+i < TILEMAP_WIDTH-2){
                     NewDistance++;
                     }
                 }
@@ -83,7 +76,6 @@ int check_for_edge(int *anchor, int distance, int UpOrDown) {
 //==================================================================================================================================
 void path_right(Scene *scene, int *anchor, int distance, char *last, char *new) {
     *new = 'S'; // S = Sideways, D = Down, U = Up
-    printf("Path right Last New = %c %c\n", *last, *new);
     scene->tilemap.tiles[anchor[0]][anchor[1]] = anchor_turn(last, new); 
 
     for (int i = 0; i < distance; i++) {
@@ -97,7 +89,6 @@ void path_right(Scene *scene, int *anchor, int distance, char *last, char *new) 
 void path_up(Scene *scene, int *anchor, int distance, char *last, char *new) {
     if (distance == 0){*new = 'S';}
     else{*new = 'U';} // S = Sideways, D = Down, U = Up
-    printf("Path up Last New = %c %c\n", *last, *new);
     scene->tilemap.tiles[anchor[0]][anchor[1]] = anchor_turn(last, new);
 
     for (int i = 0; i < distance; i++) {
@@ -110,7 +101,6 @@ void path_up(Scene *scene, int *anchor, int distance, char *last, char *new) {
 void path_down(Scene *scene, int *anchor, int distance, char *last, char *new) {
     if (distance == 0){*new = 'S';}
     else{*new = 'D';} // S = Sideways, D = Down, U = Up
-    printf("Path down Last New = %c %c\n", *last, *new);
 
     scene->tilemap.tiles[anchor[0]][anchor[1]] = anchor_turn(last, new);
 
