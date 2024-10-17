@@ -7,6 +7,7 @@
 #include "wordlist.h"
 #include "text_input.h"
 #include "scene_builder.h"
+#include "placement.h"
 
 static Game game = {};
 static bool initialized = false;
@@ -16,6 +17,7 @@ static WordList list;
 static TextInput input;
 
 static Animation anim;
+static Placement placement;
 
 void game_init() {
 
@@ -35,6 +37,7 @@ void game_init() {
 	scene = scene_init(1, "assets/images/tiles.png");
 
 	anim = animation_new("assets/animations/test-anim.png", 6);
+	placement = placement_init();
 
 	list = wordlist_init();
 	input = text_input_init(list.easy);
@@ -72,6 +75,7 @@ void game_update() {
 		text_input_update(&input);
 
 		animation_update(&anim);
+		placement_update(&placement, game.canvas.mouse.x, game.canvas.mouse.y);
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			text_input_reset(&input);
@@ -98,6 +102,7 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	scene_draw(&scene);
+	placement_draw(&placement);
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);

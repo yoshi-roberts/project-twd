@@ -10,6 +10,7 @@ Canvas canvas_init(int width, int height, int filter) {
 	canvas.target = LoadRenderTexture(width, height);
 	canvas.source.x = 0.0f;
 	canvas.source.y = 0.0f;
+	canvas.mouse = (Vector2){0, 0};
 
 	SetTextureFilter(canvas.target.texture, filter);
 
@@ -37,6 +38,11 @@ void canvas_update(Canvas *canvas) {
 	canvas->dest.y = (GetScreenHeight() - ((float)canvas->height*scale)) * 0.5f;
 	canvas->dest.width = (float)canvas->width * scale;
 	canvas->dest.height= (float)canvas->height * scale;
+
+	Vector2 mouse = GetMousePosition();
+	canvas->mouse.x = (mouse.x - (GetScreenWidth() - (canvas->width*scale))*0.5f)/scale;
+	canvas->mouse.y = (mouse.y - (GetScreenHeight() - (canvas->height*scale))*0.5f)/scale;
+	canvas->mouse = Vector2Clamp(canvas->mouse, (Vector2){ 0, 0 }, (Vector2){ (float)canvas->width, (float)canvas->height});
 }
 
 void canvas_begin(Canvas *canvas) {

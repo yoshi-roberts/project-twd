@@ -15,6 +15,7 @@ typedef struct {
 	RenderTexture2D target;
 	Rectangle source;
 	Rectangle dest;
+	Vector2 mouse;
 } Canvas ;
 
 // Create and initialize a new Canvas.
