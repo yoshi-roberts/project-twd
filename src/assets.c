@@ -42,7 +42,7 @@ void assets_destory() {
 		Asset *asset = map_get(&assets.map, key);
 
 		if (asset->type == ASSET_IMAGE) {
-			UnloadTexture(asset->data.texture);
+			UnloadTexture(asset->data.sprite.texture);
 		} else if (asset->type == ASSET_IMAGE) {
 			UnloadFont(asset->data.font);
 		}
@@ -62,11 +62,12 @@ void assets_load_resource(Asset *asset, const char *path) {
 	}
 
 	if (asset->type == ASSET_IMAGE) {
-		asset->data.texture = LoadTexture(path);
-		SetTextureFilter(asset->data.texture, TEXTURE_FILTER_POINT);
+		asset->data.sprite.texture = LoadTexture(path);
+		SetTextureFilter(asset->data.sprite.texture, TEXTURE_FILTER_POINT);
+		_generate_atlas(asset);
 	} else if (asset->type == ASSET_FONT) {
 		asset->data.font = LoadFontEx(path, 12 * 4, NULL, 0);
-		// SetTextureFilter(asset->data.font.texture, TEXTURE_FILTER_POINT);
+		SetTextureFilter(asset->data.font.texture, TEXTURE_FILTER_POINT);
 	} else if (asset->type == ASSET_AUDIO) {
 		// Load audio data.
 	}
@@ -116,6 +117,34 @@ Asset* assets_get(const char *path) {
 	}
 
 	return asset;
+}
+
+void asset_draw_tile(Asset *asset, int index, int x, int y) {
+
+	Texture2D texture = asset->data.sprite.texture;
+	Rectangle rect = asset->data.sprite.atlas.rects[index];
+
+	DrawTextureRec(texture, rect, (Vector2){x, y}, WHITE);
+}
+
+void _generate_atlas(Asset *asset) {
+
+	int xtiles = asset->data.sprite.texture.width / 16;
+	int ytiles = asset->data.sprite.texture.height / 16;
+	int i = 0;
+
+	for (int y = 0; y < ytiles; y++) {
+		for (int x = 0; x < xtiles; x++) {
+
+			asset->data.sprite.atlas.rects[i] = (Rectangle){
+				16 * x, 16 * y,
+				16,     16
+			};
+
+			asset->data.sprite.atlas.width = x;
+			i++;
+		}
+	}
 }
 
 void _dir_recurse(const char *path) {

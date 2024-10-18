@@ -1,11 +1,13 @@
 #include <stdbool.h>
 #include "game.h"
 #include "assets.h"
+#include "animation.h"
 #include "log.h"
 #include "canvas.h"
 #include "wordlist.h"
 #include "text_input.h"
 #include "scene_builder.h"
+#include "placement.h"
 
 static Game game = {};
 static bool initialized = false;
@@ -13,6 +15,9 @@ static Scene scene;
 
 static WordList list;
 static TextInput input;
+
+static Animation anim;
+static Placement placement;
 
 void game_init() {
 
@@ -29,7 +34,10 @@ void game_init() {
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
 	assets_init();
-	scene = scene_initialize(1, "assets/tiles.png");
+	scene = scene_init(1, "assets/images/tiles.png");
+
+	anim = animation_new("assets/animations/test-anim.png", 6);
+	placement = placement_init();
 
 	list = wordlist_init();
 	input = text_input_init(list.easy);
@@ -66,6 +74,9 @@ void game_update() {
 		
 		text_input_update(&input);
 
+		animation_update(&anim);
+		placement_update(&placement, game.canvas.mouse.x, game.canvas.mouse.y);
+
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			text_input_reset(&input);
 			input.target = wordlist_get(list.easy);
@@ -91,9 +102,15 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	scene_draw(&scene);
+	placement_draw(&placement);
 	text_input_draw(&input);
+
+	animation_draw(&anim, 64, 64);
+
 	canvas_end();
 
 	canvas_draw(&game.canvas);
+	DrawRectangle(4, 4, 128, 26, WHITE);
+	DrawFPS(8, 8);
 	EndDrawing();
 }
