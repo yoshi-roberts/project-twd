@@ -8,6 +8,7 @@
 #include "text_input.h"
 #include "scene_builder.h"
 #include "placement.h"
+#include "scene_builder.h"
 
 static Game game = {};
 static bool initialized = false;
