@@ -80,7 +80,7 @@ void game_update() {
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			text_input_reset(&input);
 			input.target = wordlist_get(list.easy);
-			_scene_randomize(&scene);
+			scene_randomize(&scene);
 		}
 
 		canvas_update(&game.canvas);

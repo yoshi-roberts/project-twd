@@ -19,7 +19,7 @@ endif
 BIN_DIR = bin
 OBJ_DIR = obj
 
-OBJS = main.o log.o game.o canvas.o map.o assets.o animation.o scene_builder.o wordlist.o text_input.o placement.o
+OBJS = main.o log.o game.o canvas.o map.o assets.o animation.o scene_builder.o scene_path.o wordlist.o text_input.o placement.o
 
 all: build_raylib create_dir $(BIN_DIR)/$(BIN)
 

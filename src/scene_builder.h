@@ -27,9 +27,9 @@ typedef struct {
 	Tilemap tilemap;
 } Scene;
 
-Scene scene_init(int difficulty, const char* path);
+Scene scene_initialize(int difficulty, const char* path);
 void scene_draw(Scene *scene);
 void tileval_from_file(const char *filename, int (*arr)[TILEMAP_WIDTH]);
-void _scene_randomize(Scene *scene);
+void scene_randomize(Scene *scene);
 
 #endif
