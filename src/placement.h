@@ -8,6 +8,7 @@
 typedef struct {
 	int x; int y;
 	int gx; int gy;
+	int current_tile;
 	Color normal;
 	Color blocked;
 	Asset *border;

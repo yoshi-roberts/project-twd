@@ -13,6 +13,12 @@ enum TileTypes {
 	TILE_GRASS_TALL = 1,
 	TILE_GRASS_ROCK = 2,
 	TILE_ROCK = 3,
+	TILE_PATH_UP_RIGHT = 4,
+	TILE_PATH_H = 5,
+	TILE_PATH_RIGHT_DOWN = 6,
+	TILE_PATH_V = 7,
+	TILE_PATH_DOWN_RIGHT = 8,
+	TILE_PATH_RIGHT_UP = 9,
 };
 
 typedef struct {

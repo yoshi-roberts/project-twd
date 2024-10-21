@@ -84,6 +84,8 @@ void game_update() {
 			scene_randomize(&scene);
 		}
 
+		int pt = placement_get_tile(&placement, &scene);
+
 		canvas_update(&game.canvas);
 
 		game_draw();
