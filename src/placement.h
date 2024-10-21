@@ -15,8 +15,8 @@ typedef struct {
 } Placement;
 
 Placement placement_init();
-void placement_update(Placement *placement, float mx, float my);
-void placement_draw(Placement *placement);
-int placement_get_tile(Placement *placement, Scene *scene);
+void placement_update(float mx, float my);
+void placement_draw();
+int placement_get_tile(Scene *scene);
 
 #endif

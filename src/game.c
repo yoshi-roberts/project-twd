@@ -17,7 +17,6 @@ static WordList list;
 static TextInput input;
 
 static Animation anim;
-static Placement placement;
 
 void game_init() {
 
@@ -38,7 +37,7 @@ void game_init() {
 	game.scene = scene_init(1, "assets/images/tiles.png");
 
 	anim = animation_new("assets/animations/test-anim.png", 6);
-	placement = placement_init();
+	placement_init();
 
 	list = wordlist_init();
 	input = text_input_init(list.easy);
@@ -76,15 +75,13 @@ void game_update() {
 		text_input_update(&input);
 
 		animation_update(&anim);
-		placement_update(&placement, game.canvas.mouse.x, game.canvas.mouse.y);
+		placement_update(game.canvas.mouse.x, game.canvas.mouse.y);
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			text_input_reset(&input);
 			input.target = wordlist_get(list.easy);
 			scene_randomize(&game.scene);
 		}
-
-		int pt = placement_get_tile(&placement, &scene);
 
 		canvas_update(&game.canvas);
 
@@ -105,7 +102,7 @@ void game_draw() {
 
 	canvas_begin(&game.canvas);
 	scene_draw(&game.scene);
-	placement_draw(&placement);
+	placement_draw();
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);

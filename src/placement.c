@@ -1,8 +1,15 @@
 #include "placement.h"
-#include <stdio.h>
+#include "log.h"
+#include "game.h"
+
+static Placement placement = {};
+static bool initialized = false;
 
 Placement placement_init() {
-	Placement placement = {};
+
+	if (initialized) {
+		log_error("Placement system already initialized.");
+	}
 
 	placement.x = 0;
 	placement.y = 0;
@@ -13,27 +20,28 @@ Placement placement_init() {
 	placement.normal = (Color){255, 255, 255, 102};
 	placement.border = assets_get("assets/images/placement-border.png");
 
-	return  placement;
+	initialized = true;
+	return placement;
 }
 
-void placement_update(Placement *placement, float mx, float my) {
+void placement_update(float mx, float my) {
 
-	placement->x = (int)(mx / 16) * 16;	
-	placement->y = (int)(my / 16) * 16;	
-	placement->gx = (int)placement->x / 16;
-	placement->gy = (int)placement->y / 16;
+	placement.x = (int)(mx / 16) * 16;	
+	placement.y = (int)(my / 16) * 16;	
+	placement.gx = (int)placement.x / 16;
+	placement.gy = (int)placement.y / 16;
 }
 
-void placement_draw(Placement *placement) {
+void placement_draw() {
 
-	if (placement->current_tile >= 4 && placement->current_tile <= 9) {
-		DrawRectangle(placement->x, placement->y, 16, 16, (Color){255, 0, 0, 75});
+	int ct = placement_get_tile(game_get_scene());
+	if (ct >= 4 && ct <= 9) {
+		DrawRectangle(placement.x, placement.y, 16, 16, (Color){255, 0, 0, 75});
 	}
 
-	DrawTexture(placement->border->data.sprite.texture, placement->x, placement->y, WHITE);
+	DrawTexture(placement.border->data.sprite.texture, placement.x, placement.y, WHITE);
 }
 
-int placement_get_tile(Placement *placement, Scene *scene) {
-	placement->current_tile = scene->tilemap.tiles[placement->gy][placement->gx];
-	return placement->current_tile;
+int placement_get_tile(Scene *scene) {
+	return scene->tilemap.tiles[placement.gy][placement.gx];
 }
