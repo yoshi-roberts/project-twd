@@ -28,20 +28,7 @@ void tileval_from_file(const char *filename, int (*tiles)[TILEMAP_WIDTH]) {
 }
 
 
-void scene_draw(Scene *scene)
-{
-	Vector2 tile_tex_coords[10] = {
-		(Vector2){0,0},
-		(Vector2){16,0},
-		(Vector2){32,0},
-		(Vector2){48,0},
-		(Vector2){64,0},
-		(Vector2){80,0},
-		(Vector2){96,0},
-		(Vector2){112,0},
-		(Vector2){0,16},
-		(Vector2){16,16}
-	};
+void scene_draw(Scene *scene) {
 
 	for(int y=0; y<TILEMAP_HEIGHT; y++) {
 
