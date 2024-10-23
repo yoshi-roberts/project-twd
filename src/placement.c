@@ -35,6 +35,14 @@ void placement_update(float mx, float my) {
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place()) {
 		Scene *scn = game_get_scene();
+
+		if (scn->unit_index != 0) {
+			Unit *last = &scn->units[scn->unit_index - 1];
+			if (last->x == placement.gx && last->y == placement.gy) {
+				return;
+			}
+		}
+
 		scn->units[scn->unit_index] = unit_new(UNIT_KNIGHT, placement.gx, placement.gy);
 		scn->unit_index++;
 		printf("Added Unit!\n");

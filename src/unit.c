@@ -12,7 +12,9 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 	switch (type) {
 		case UNIT_KNIGHT:
-			unit.range = 2; break;	
+			unit.range = 2;
+			unit.hp = 100;
+			break;
 	}
 
 	unit.range = unit.range * 16;

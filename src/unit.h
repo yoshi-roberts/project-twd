@@ -12,6 +12,7 @@ typedef struct {
 	Asset *asset;
 	int x; int y;
 	int range;
+	int hp;
 } Unit;
 
 Unit unit_new(UNIT_TYPE type, int x, int y);
