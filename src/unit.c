@@ -8,10 +8,20 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.x = x;
 	unit.y = y;
 	unit.asset = assets_get("assets/images/units.png");
+	unit.range = 32;
+
+	switch (type) {
+		case UNIT_KNIGHT:
+			unit.range = 2; break;	
+	}
+
+	unit.range = unit.range * 16;
 
 	return unit;
 }
 
 void unit_draw(Unit *unit) {
+	Color color = (Color){255, 75, 75, 128};
+	DrawCircle((unit->x * 16) + 8, (unit->y * 16) + 8, unit->range, color);
 	asset_draw_tile(unit->asset, 0, unit->x * 16, unit->y * 16);
 }

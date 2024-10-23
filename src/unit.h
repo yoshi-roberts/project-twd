@@ -11,6 +11,7 @@ typedef struct {
 	UNIT_TYPE type;
 	Asset *asset;
 	int x; int y;
+	int range;
 } Unit;
 
 Unit unit_new(UNIT_TYPE type, int x, int y);
