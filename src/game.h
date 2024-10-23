@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "canvas.h"
+#include "wordlist.h"
 #include "scene_builder.h"
 
 #define GAME_MAX_SCENES 128
@@ -9,9 +10,10 @@
 typedef struct {
 	Scene scene;
 	float dt;	// Delta Time.
+	int difficulty;
 	Canvas canvas;
 	Canvas ui_canvas;
-	int difficulty;
+	WordList list;
 } Game;
 
 // Initializes the game struct.
