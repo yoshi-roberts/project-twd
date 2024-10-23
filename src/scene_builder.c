@@ -5,6 +5,7 @@
 #include "scene_builder.h"
 #include "scene_path.h"
 #include "assets.h"
+#include "unit.h"
 
 void tileval_from_file(const char *filename, int (*tiles)[TILEMAP_WIDTH]) {
 
@@ -41,12 +42,18 @@ void scene_draw(Scene *scene) {
 			asset_draw_tile(scene->tilemap.asset_ptr, tile, xp, yp);
 		}
 	}
+
+	for (int i = 0; i < scene->unit_index; i++) {
+		Unit *unit = &scene->units[i];
+		unit_draw(unit);
+	}
 }
 
 Scene scene_init(int difficulty, const char* path) {
 
 	Scene scene;
 	scene.difficulty = difficulty;
+	scene.unit_index = 0;
 	// tileval_from_file("src/numbers.txt", NewScene.tilemap.tiles);
 
 	scene_randomize(&scene);

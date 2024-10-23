@@ -2,6 +2,7 @@
 #define SCENE_BUILDER_H
 
 #include "assets.h"
+#include "unit.h"
 
 #define TILEMAP_WIDTH 30
 #define TILEMAP_HEIGHT 17
@@ -31,6 +32,8 @@ typedef struct {
 	int difficulty;
 	int waves;
 	Tilemap tilemap;
+	Unit units[128];
+	int unit_index;
 } Scene;
 
 Scene scene_init(int difficulty, const char* path);

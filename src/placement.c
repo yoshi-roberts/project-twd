@@ -1,11 +1,13 @@
 #include "placement.h"
 #include "log.h"
 #include "game.h"
+#include "unit.h"
+#include <stdio.h>
 
 static Placement placement = {};
 static bool initialized = false;
 
-Placement placement_init() {
+void placement_init() {
 
 	if (initialized) {
 		log_error("Placement system already initialized.");
@@ -21,7 +23,7 @@ Placement placement_init() {
 	placement.border = assets_get("assets/images/placement-border.png");
 
 	initialized = true;
-	return placement;
+	log_info("Placement System Initialized.");
 }
 
 void placement_update(float mx, float my) {
@@ -30,12 +32,19 @@ void placement_update(float mx, float my) {
 	placement.y = (int)(my / 16) * 16;	
 	placement.gx = (int)placement.x / 16;
 	placement.gy = (int)placement.y / 16;
+
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+		Scene *scn = game_get_scene();
+		scn->units[scn->unit_index] = unit_new(UNIT_KNIGHT, placement.gx, placement.gy);
+		scn->unit_index++;
+		printf("Added Unit!\n");
+	}
 }
 
 void placement_draw() {
 
-	int ct = placement_get_tile(game_get_scene());
-	if (ct >= 4 && ct <= 9) {
+	int tile = placement_get_tile(game_get_scene());
+	if (tile >= TILE_PATH_UP_RIGHT && tile <= TILE_PATH_RIGHT_UP) {
 		DrawRectangle(placement.x, placement.y, 16, 16, (Color){255, 0, 0, 75});
 	}
 

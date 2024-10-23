@@ -14,7 +14,7 @@ typedef struct {
 	Asset *border;
 } Placement;
 
-Placement placement_init();
+void placement_init();
 void placement_update(float mx, float my);
 void placement_draw();
 int placement_get_tile(Scene *scene);
