@@ -3,8 +3,6 @@
 #include "assets.h"
 #include "animation.h"
 #include "log.h"
-#include "canvas.h"
-#include "wordlist.h"
 #include "text_input.h"
 #include "scene_builder.h"
 #include "placement.h"
@@ -13,7 +11,6 @@
 static Game game = {};
 static bool initialized = false;
 
-static WordList list;
 static TextInput input;
 
 static Animation anim;
@@ -39,8 +36,8 @@ void game_init() {
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	placement_init();
 
-	list = wordlist_init();
-	input = text_input_init(list.easy);
+	game.list = wordlist_init();
+	input = text_input_init(game.list.easy);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -79,7 +76,7 @@ void game_update() {
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			text_input_reset(&input);
-			input.target = wordlist_get(list.easy);
+			input.target = wordlist_get(game.list.easy);
 			scene_randomize(&game.scene);
 		}
 
