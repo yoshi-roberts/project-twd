@@ -5,6 +5,7 @@
 
 typedef enum {
 	UNIT_KNIGHT,
+	UNIT_VILLAGER,
 } UNIT_TYPE;
 
 typedef struct {

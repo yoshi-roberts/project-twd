@@ -43,7 +43,8 @@ void placement_update(float mx, float my) {
 			}
 		}
 
-		scn->units[scn->unit_index] = unit_new(UNIT_KNIGHT, placement.gx, placement.gy);
+		int type = GetRandomValue(UNIT_KNIGHT, UNIT_VILLAGER);
+		scn->units[scn->unit_index] = unit_new(type, placement.gx, placement.gy);
 		scn->unit_index++;
 		printf("Added Unit!\n");
 	}
