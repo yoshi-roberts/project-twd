@@ -34,7 +34,6 @@ void placement_update(float mx, float my) {
 	placement.gy = (int)placement.y / 16;
 
 	Scene *scn = game_get_scene();
-
 	Unit *unit = &scn->units[placement.gy][placement.gx];
 
 	if (unit->asset) {
@@ -46,7 +45,7 @@ void placement_update(float mx, float my) {
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place()) {
 
-		int type = GetRandomValue(UNIT_KNIGHT, UNIT_VILLAGER);
+		int type = GetRandomValue(UNIT_VILLAGER, UNIT_KNIGHT);
 		scn->units[placement.gy][placement.gx] = unit_new(type, placement.gx, placement.gy);
 		printf("Added Unit!\n");
 	}
@@ -69,6 +68,13 @@ int placement_get_tile(Scene *scene) {
 bool placement_can_place() {
 	int tile = placement_get_tile(game_get_scene());
 	if (tile >= TILE_PATH_UP_RIGHT && tile <= TILE_PATH_RIGHT_UP) {
+		return false;
+	}
+
+	Scene *scn = game_get_scene();
+	Unit *unit = &scn->units[placement.gy][placement.gx];
+
+	if (unit->asset) {
 		return false;
 	}
 

@@ -4,8 +4,8 @@
 #include "assets.h"
 
 typedef enum {
-	UNIT_KNIGHT,
 	UNIT_VILLAGER,
+	UNIT_KNIGHT,
 } UNIT_TYPE;
 
 typedef struct {
