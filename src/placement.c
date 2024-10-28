@@ -33,8 +33,18 @@ void placement_update(float mx, float my) {
 	placement.gx = (int)placement.x / 16;
 	placement.gy = (int)placement.y / 16;
 
+	Scene *scn = game_get_scene();
+
+	Unit *unit = &scn->units[placement.gy][placement.gx];
+
+	if (unit->asset) {
+		placement.selected_unit = unit;
+		if (unit->x == placement.gx && unit->y == placement.gy) {
+			unit->selected = true;
+		} 
+	}
+
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place()) {
-		Scene *scn = game_get_scene();
 
 		int type = GetRandomValue(UNIT_KNIGHT, UNIT_VILLAGER);
 		scn->units[placement.gy][placement.gx] = unit_new(type, placement.gx, placement.gy);

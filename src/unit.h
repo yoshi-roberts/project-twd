@@ -14,6 +14,7 @@ typedef struct {
 	int x; int y;
 	int range;
 	int hp;
+	bool selected;
 } Unit;
 
 Unit unit_new(UNIT_TYPE type, int x, int y);
