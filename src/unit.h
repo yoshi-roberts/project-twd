@@ -14,6 +14,7 @@ typedef struct {
 	int x; int y;
 	int range;
 	int hp;
+	int defense;
 	bool selected;
 } Unit;
 

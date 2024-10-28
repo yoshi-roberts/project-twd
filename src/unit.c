@@ -12,15 +12,16 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.y = y;
 	unit.asset = assets_get("assets/images/units.png");
 	unit.range = 32;
+	unit.hp = 100;
 
 	switch (type) {
 		case UNIT_KNIGHT:
 			unit.range = 2;
-			unit.hp = 100;
+			unit.defense = 10;
 			break;
 		case UNIT_VILLAGER:
 			unit.range = 1;
-			unit.hp = 70;
+			unit.defense = 5;
 			break;
 	}
 
@@ -38,15 +39,25 @@ void unit_draw(Unit *unit) {
 		DrawCircleLines((unit->x * 16) + 8, (unit->y * 16) + 8, (unit->range * 16) + 8, color);
 
 		char hp[128];
+		char defense[128];
+	
 		sprintf(hp, "HP: %d", unit->hp);
+		sprintf(defense, "Defense: %d", unit->defense);
 
-		int size = MeasureText(hp, 10);
-		Vector2 pos = {
-			floor(((unit->x * 16) + 8) - (size / 2)),
+		int hp_size = MeasureText(hp, 10);
+		int defense_size = MeasureText(defense, 10);
+
+		Vector2 hp_pos = {
+			floor(((unit->x * 16) + 8) - ((float)hp_size / 2)),
+			floor((unit->y * 16) - 16) - 10,
+		};
+		Vector2 defense_pos = {
+			floor(((unit->x * 16) + 8) - ((float)defense_size / 2)),
 			floor((unit->y * 16) - 16),
 		};
 
-		DrawText(hp, pos.x, pos.y, 10, WHITE);
+		DrawText(hp, hp_pos.x, hp_pos.y, 10, WHITE);
+		DrawText(defense, defense_pos.x, defense_pos.y, 10, WHITE);
 	}
 
 	unit->selected = false;
