@@ -53,29 +53,24 @@ void text_input_update(TextInput *text_input) {
 
 void text_input_draw(TextInput *text_input) {
 
-	Asset *fnt = assets_get("assets/fonts/monogram.ttf");
-
-	Vector2 size = MeasureTextEx(fnt->data.font, text_input->target, 12, 2);
+	int size = MeasureText(text_input->target, 10);
 	Vector2 pos = {
-   		floor((480 / 2.0f) - (size.x / 2)),
-		floor((270 / 3.0f) - (size.y / 2)),
+   		floor((480 / 2.0f) - (size / 2)),
+		floor((270 / 3.0f) - (10 / 2)),
 	};
-	
 
-	DrawTextEx(
-		fnt->data.font,
+	DrawText(
 		text_input->target,
-		pos,
-		12,
-		2,
+		pos.x,
+		pos.y,
+		10,
 		WHITE
 	);
-	DrawTextEx(
-		fnt->data.font,
+	DrawText(
 		text_input->buff,
-		pos,
-		12,
-		2,
+		pos.x,
+		pos.y,
+		10,
 		DARKPURPLE
 	);
 }

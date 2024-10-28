@@ -71,6 +71,8 @@ Scene scene_init(int difficulty, const char* path) {
 
 void scene_randomize(Scene *scene) {
 
+	memset(scene->units, 0, sizeof(scene->units));
+
 	for (int y = 0; y < TILEMAP_HEIGHT; y++) {
 		for (int x = 0; x < TILEMAP_WIDTH; x++) {
 
