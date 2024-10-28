@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../lib/raylib/src/raylib.h"
 #include "scene_builder.h"
 #include "scene_path.h"
@@ -43,9 +44,15 @@ void scene_draw(Scene *scene) {
 		}
 	}
 
-	for (int i = 0; i < scene->unit_index; i++) {
-		Unit *unit = &scene->units[i];
-		unit_draw(unit);
+	for(int y=0; y<TILEMAP_HEIGHT; y++) {
+		for(int x=0; x<TILEMAP_WIDTH; x++) {
+
+			Unit *unit = &scene->units[y][x];
+
+			if (unit->asset != NULL) {
+				unit_draw(unit);
+			}
+		}
 	}
 }
 
@@ -53,10 +60,10 @@ Scene scene_init(int difficulty, const char* path) {
 
 	Scene scene;
 	scene.difficulty = difficulty;
-	scene.unit_index = 0;
 	// tileval_from_file("src/numbers.txt", NewScene.tilemap.tiles);
 
 	scene_randomize(&scene);
+	memset(scene.units, 0, sizeof(scene.units));
 
 	scene.tilemap.asset_ptr = assets_get(path);
 	return scene;

@@ -32,8 +32,7 @@ typedef struct {
 	int difficulty;
 	int waves;
 	Tilemap tilemap;
-	Unit units[128];
-	int unit_index;
+	Unit units[TILEMAP_HEIGHT][TILEMAP_WIDTH];
 } Scene;
 
 Scene scene_init(int difficulty, const char* path);

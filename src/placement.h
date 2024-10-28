@@ -3,12 +3,14 @@
 
 #include "../lib/raylib/src/raylib.h"
 #include "assets.h"
+#include "unit.h"
 #include "scene_builder.h"
 
 typedef struct {
 	int x; int y;
 	int gx; int gy;
 	int current_tile;
+	Unit *selected_unit;
 	Color normal;
 	Color blocked;
 	Asset *border;
