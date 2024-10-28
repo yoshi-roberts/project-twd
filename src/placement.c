@@ -46,8 +46,22 @@ void placement_update(float mx, float my) {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place()) {
 
 		int type = GetRandomValue(UNIT_VILLAGER, UNIT_KNIGHT);
-		scn->units[placement.gy][placement.gx] = unit_new(type, placement.gx, placement.gy);
-		printf("Added Unit!\n");
+
+		int money = game_get_money();
+		int cost = 0;
+		switch (type) {
+			case UNIT_VILLAGER:
+				cost = 20; break;	
+			case UNIT_KNIGHT:
+				cost = 50; break;
+		}
+
+		if (money > cost) {
+			scn->units[placement.gy][placement.gx] = unit_new(type, placement.gx, placement.gy);
+			game_set_money(money - cost);
+			printf("Added Unit!\n");
+		}
+
 	}
 }
 

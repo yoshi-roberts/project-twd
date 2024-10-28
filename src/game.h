@@ -10,10 +10,11 @@
 typedef struct {
 	Scene scene;
 	float dt;	// Delta Time.
-	int difficulty;
 	Canvas canvas;
 	Canvas ui_canvas;
 	WordList list;
+	int difficulty;
+	int money;
 } Game;
 
 // Initializes the game struct.
@@ -25,5 +26,8 @@ void game_draw();
 
 Scene* game_get_scene();
 int game_get_difficulty();
+int game_get_money();
+
+void game_set_money(int amount);
 
 #endif // GAME_H

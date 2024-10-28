@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 #include "game.h"
 #include "assets.h"
 #include "animation.h"
@@ -28,6 +29,7 @@ void game_init() {
 
 	game.dt = 0.0f;
 	game.difficulty = 0;
+	game.money = 1000;
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
 	assets_init();
@@ -98,8 +100,13 @@ void game_draw() {
 	ClearBackground(BLACK);
 
 	canvas_begin(&game.canvas);
+
 	scene_draw(&game.scene);
 	placement_draw();
+
+	char money_str[128];
+	sprintf(money_str, "Money: $%d", game.money);
+	DrawText(money_str, 4, 4, 10, WHITE);
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
@@ -107,8 +114,6 @@ void game_draw() {
 	canvas_end();
 
 	canvas_draw(&game.canvas);
-	DrawRectangle(4, 4, 128, 26, WHITE);
-	DrawFPS(8, 8);
 	EndDrawing();
 }
 
@@ -118,4 +123,12 @@ Scene* game_get_scene() {
 
 int game_get_difficulty() {
 	return game.difficulty;
+}
+
+int game_get_money() {
+	return game.money;
+}
+
+void game_set_money(int amount) {
+	game.money = amount;
 }
