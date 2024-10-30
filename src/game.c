@@ -10,9 +10,9 @@
 #include "placement.h"
 #include "scene_builder.h"
 
+
 static Game game = {};
 static bool initialized = false;
-static Scene scene;
 
 static WordList list;
 static TextInput input;
@@ -32,10 +32,11 @@ void game_init() {
 	SetTargetFPS(60);
 
 	game.dt = 0.0f;
+	game.difficulty = 0;
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
 	assets_init();
-	scene = scene_init(1, "assets/images/tiles.png");
+	game.scene = scene_init(1, "assets/images/tiles.png");
 
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	placement = placement_init();
@@ -81,7 +82,12 @@ void game_update() {
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			text_input_reset(&input);
 			input.target = wordlist_get(list.easy);
-			scene_randomize(&scene);
+			scene_randomize(&game.scene);
+			printf("Difficulty: %d\n",game.difficulty);
+			// if (game.difficulty < 10)
+			// {
+			// game.difficulty++;
+			// }
 		}
 
 		canvas_update(&game.canvas);
@@ -102,7 +108,7 @@ void game_draw() {
 	ClearBackground(BLACK);
 
 	canvas_begin(&game.canvas);
-	scene_draw(&scene);
+	scene_draw(&game.scene);
 	placement_draw(&placement);
 	text_input_draw(&input);
 
@@ -114,4 +120,12 @@ void game_draw() {
 	DrawRectangle(4, 4, 128, 26, WHITE);
 	DrawFPS(8, 8);
 	EndDrawing();
+}
+
+Scene* game_get_scene() {
+	return &game.scene;
+}
+
+int game_get_difficulty() {
+	return game.difficulty;
 }
