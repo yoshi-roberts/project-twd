@@ -35,7 +35,6 @@ void game_init() {
 
 	assets_init();
 	game.scene = scene_init(1, "assets/images/tiles.png");
-	//scene_randomize(&game.scene);
 
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	placement_init();

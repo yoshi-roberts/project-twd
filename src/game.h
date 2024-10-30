@@ -16,7 +16,6 @@ typedef struct {
 	WordList list;
 	int difficulty;
 	int money;
-	int difficulty;
 } Game;
 
 // Initializes the game struct.

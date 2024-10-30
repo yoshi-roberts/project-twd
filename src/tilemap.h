@@ -33,12 +33,4 @@ typedef struct {
 	Vector2 waypoints[30];
 } Tilemap;
 
-typedef struct {
-	int difficulty;
-	int waves;
-	Tilemap tilemap_layer1;
-    Tilemap tilemap_layer2;
-} Scene;
-
-
 #endif

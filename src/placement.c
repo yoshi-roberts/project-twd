@@ -76,7 +76,7 @@ void placement_draw() {
 }
 
 int placement_get_tile(Scene *scene) {
-	return scene->tilemap.tiles[placement.gy][placement.gx];
+	return scene->tilemap_layer1.tiles[placement.gy][placement.gx];
 }
 
 bool placement_can_place() {
