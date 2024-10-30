@@ -4,6 +4,7 @@
 #include "canvas.h"
 #include "wordlist.h"
 #include "scene_builder.h"
+#include "tilemap.h"
 
 #define GAME_MAX_SCENES 128
 
@@ -15,6 +16,7 @@ typedef struct {
 	WordList list;
 	int difficulty;
 	int money;
+	int difficulty;
 } Game;
 
 // Initializes the game struct.

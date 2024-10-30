@@ -9,6 +9,7 @@
 #include "placement.h"
 #include "scene_builder.h"
 
+
 static Game game = {};
 static bool initialized = false;
 
@@ -34,6 +35,7 @@ void game_init() {
 
 	assets_init();
 	game.scene = scene_init(1, "assets/images/tiles.png");
+	//scene_randomize(&game.scene);
 
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	placement_init();
@@ -107,6 +109,7 @@ void game_draw() {
 	char money_str[128];
 	sprintf(money_str, "Money: $%d", game.money);
 	DrawText(money_str, 4, 4, 10, WHITE);
+
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);

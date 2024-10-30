@@ -1,6 +1,7 @@
 #ifndef SCENE_BUILDER_H
 #define SCENE_BUILDER_H
 
+#include "tilemap.h"
 #include "assets.h"
 #include "unit.h"
 
@@ -37,7 +38,8 @@ typedef struct {
 
 Scene scene_init(int difficulty, const char* path);
 void scene_draw(Scene *scene);
-void tileval_from_file(const char *filename, int (*arr)[TILEMAP_WIDTH]);
 void scene_randomize(Scene *scene);
+void gen_treeline(Scene *scene);
+void build_tree(Scene *scene, int anchor[]);
 
 #endif
