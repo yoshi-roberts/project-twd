@@ -12,12 +12,20 @@
 //==================================================================================================================================
 void gen_random_path(Scene *scene) {
     int anchor[2] = {8, 1};  // Initial anchor position
-    char last; // S = Sideways, D = Down, U = Up
-    char new;
-    scene->tilemap_layer1.tiles[anchor[0]][anchor[1]] = TILE_PATH_H; //Always set first tile to be sideways path
-    while(anchor[1]+2 < TILEMAP_WIDTH)
-    {
-    gen_section(scene, anchor, &last, &new);
+    char last = 'S'; // S = Sideways, D = Down, U = Up
+    char new_direction;
+
+    scene->tilemap_layer1.tiles[anchor[0]][anchor[1]] = TILE_PATH_H;  // Start with a horizontal path
+
+    // Generate random sections until reaching the right edge
+    while (anchor[1] < TILEMAP_WIDTH - 1) {
+        gen_section(scene, anchor, &last, &new_direction);
+    }
+
+    // Ensure it reaches the right edge by filling any remaining gap
+    if (anchor[1] < TILEMAP_WIDTH - 1) {
+        int remaining_distance = TILEMAP_WIDTH - 1 - anchor[1];
+        path_right(scene, anchor, remaining_distance, &last, &new_direction);
     }
 }
 //==================================================================================================================================

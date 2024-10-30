@@ -61,8 +61,8 @@ void scene_randomize(Scene *scene) {
 
 		}
 	}
+    gen_treeline(scene);
 	gen_random_path(scene);
-	gen_treeline(scene);
 }
 
 void gen_treeline(Scene *scene) {
@@ -71,7 +71,7 @@ void gen_treeline(Scene *scene) {
     // Generate trees across the top of the screen
     for (int i = 1; i < TILEMAP_WIDTH; i += 2) {  // Increment by 2 to avoid overlapping trees
         if (scene->tilemap_layer1.tiles[0][i] != TILE_TREE_6) {  // Check if no tree already exists
-            anchor[0] = -1;  // Set to 0 to start tree height from the top row
+            anchor[0] = -1;  // Set to -1 so the tree is partially out of the map
             anchor[1] = i;
             build_tree(scene, anchor);
         }
@@ -79,7 +79,7 @@ void gen_treeline(Scene *scene) {
 
     // Generate trees across the bottom of the screen
     for (int i = 1; i < TILEMAP_WIDTH; i += 2) {  // Increment by 2 to avoid overlapping trees
-        int bottom_row = TILEMAP_HEIGHT - 2;  // Adjust based on tree height (tree occupies three rows)
+        int bottom_row = TILEMAP_HEIGHT - 2;  // Set to -2 so the tree is partially out of the map
         if (scene->tilemap_layer1.tiles[bottom_row][i] != TILE_TREE_6) {  // Check if no tree already exists
             anchor[0] = bottom_row;
             anchor[1] = i;
