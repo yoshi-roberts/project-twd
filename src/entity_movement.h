@@ -1,15 +1,12 @@
-#ifndef ENTITY_MOVEMENT_H
-#define ENTITY_MOVEMENT_H
+// enemies.c
+#include "enemies.h"
+#include <stdio.h>
 
-#include "ecs.h"
-#include <stdbool.h>
+void add_enemy_component(Entity entity, int health, int attack) {
+    // Add an enemy component to an entity
+}
 
-// Function to determine if current path segment is a turn
-bool is_on_turn(const GameEntity *entity);
-
-// Function declarations for entity movement
-void update_movement_system(float deltaTime);
-void apply_damage(GameEntity *entity, int incomingDamage); // Apply damage, considering resistance
-
-#endif
+void update_enemy_system() {
+    // Update enemies
+}
 
