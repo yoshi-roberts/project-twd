@@ -1,18 +1,24 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
+#include "assets.h"
 
-#include "ecs.h"
+typedef enum {
+	ENEMY_VILLAGER,
+	ENEMY_KNIGHT,
+} ENEMY_TYPE;
 
-// Enemy-specific components
 typedef struct {
-    int damage;
-    int speed;
-} EnemyComponent;
+	ENEMY_TYPE type;
+	Asset *asset;
+	int x; int y;
+	int range;
+	int hp;
+	int defense;
+	bool selected;
+} Enemy;
 
-// Function declarations
-GameEntity *create_enemy(Vector2 position, int speed, int damage);
-void update_enemy_system(float deltaTime);
-void render_enemy_system(void);
+void enemy_new(ENEMY_TYPE type, int x, int y);
+void enemy_update(Enemy *unit);
+void enemy_draw(Enemy *unit);
 
-#endif
-
+#endif // UNIT_H

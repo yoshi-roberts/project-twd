@@ -8,6 +8,7 @@
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
+#include "enemies.h"
 
 
 static Game game = {};
@@ -16,6 +17,8 @@ static bool initialized = false;
 static TextInput input;
 
 static Animation anim;
+
+//static Enemy enemy;
 
 void game_init() {
 
@@ -33,7 +36,10 @@ void game_init() {
 	game.money = 1000;
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
+
 	assets_init();
+	enemy_new(ENEMY_KNIGHT,10,10);
+
 	game.scene = scene_init(1, "assets/images/tiles.png");
 
 	anim = animation_new("assets/animations/test-anim.png", 6);

@@ -4,11 +4,13 @@
 #include "tilemap.h"
 #include "assets.h"
 #include "unit.h"
+#include "enemies.h"
 
 typedef struct {
 	int difficulty;
 	int waves;
 	Unit units[TILEMAP_HEIGHT][TILEMAP_WIDTH];
+	Enemy enemy[TILEMAP_HEIGHT][TILEMAP_WIDTH];
 	Tilemap tilemap_layer1;
     Tilemap tilemap_layer2;
 } Scene;

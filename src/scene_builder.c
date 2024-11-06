@@ -28,6 +28,17 @@ void scene_draw(Scene *scene) {
 	for(int y=0; y<TILEMAP_HEIGHT; y++) {
 		for(int x=0; x<TILEMAP_WIDTH; x++) {
 
+			Enemy *enemy = &scene->enemy[y][x];
+
+			if (enemy->asset != NULL) {
+				enemy_draw(enemy);
+			}
+		}
+	}
+
+    for(int y=0; y<TILEMAP_HEIGHT; y++) {
+		for(int x=0; x<TILEMAP_WIDTH; x++) {
+
 			Unit *unit = &scene->units[y][x];
 
 			if (unit->asset != NULL) {
@@ -35,6 +46,7 @@ void scene_draw(Scene *scene) {
 			}
 		}
 	}
+
 }
 
 Scene scene_init(int difficulty, const char* path) {
@@ -43,6 +55,7 @@ Scene scene_init(int difficulty, const char* path) {
 	scene.difficulty = difficulty;
 
 	memset(scene.units, 0, sizeof(scene.units));
+    memset(scene.enemy, 0, sizeof(scene.enemy));
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);
     scene.tilemap_layer2.asset_ptr = assets_get(path);
