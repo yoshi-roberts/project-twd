@@ -1,6 +1,5 @@
 #include "ui.h"
 #include "../lib/raylib/src/raylib.h"
-#include <stdio.h>
 
 UI_Panel ui_panel_new(int x, int y) {
 
@@ -26,6 +25,7 @@ void ui_panel_add_label(UI_Panel *panel, char *text) {
 
 void ui_panel_draw(UI_Panel *panel) {
 
+	DrawRectangle(panel->x - 1, panel->y - 1, panel->w + 2, panel->h + 2, BLACK);
 	DrawRectangle(panel->x, panel->y, panel->w, panel->h, GRAY);
 
 	for (int i = 0; i < panel->label_count; i++) {
