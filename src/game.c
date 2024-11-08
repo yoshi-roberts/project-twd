@@ -83,6 +83,10 @@ void game_update() {
 			scene_randomize(&game.scene);
 		}
 
+		if (IsKeyDown(KEY_SPACE)) {
+			scene_state_set(game->scene, 2);
+		}
+
 		canvas_update(&game.canvas);
 
 		game_draw();
