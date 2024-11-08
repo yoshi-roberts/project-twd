@@ -43,8 +43,9 @@ void game_init() {
 	input = text_input_init(game.list.easy);
 
 	panel = ui_panel_new(64, 64);
-	ui_panel_add_label(&panel, "Hello, World!");
-	ui_panel_add_label(&panel, "More text.");
+	ui_panel_add_element(&panel, "Hello, World!", false);
+	ui_panel_add_element(&panel, "More text.", false);
+	ui_panel_add_element(&panel, "Button", true);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -139,4 +140,12 @@ int game_get_money() {
 
 void game_set_money(int amount) {
 	game.money = amount;
+}
+
+int game_get_mouse_x() {
+	return game.canvas.mouse.x;
+}
+
+int game_get_mouse_y() {
+	return game.canvas.mouse.y;
 }
