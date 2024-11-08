@@ -83,6 +83,13 @@ void game_update() {
 			scene_randomize(&game.scene);
 		}
 
+		if (IsKeyReleased(KEY_SPACE)) {
+			printf("The state was: %d\n", game.scene.scene_state);
+			Scene *ptr = &game.scene;
+			scene_state_set(ptr, game.scene.scene_state+1);
+			printf("The state is now: %d\n\n", game.scene.scene_state);
+		}
+
 		canvas_update(&game.canvas);
 
 		game_draw();

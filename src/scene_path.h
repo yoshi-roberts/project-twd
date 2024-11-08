@@ -11,6 +11,8 @@ void path_right(Scene *scene, int *anchor, int distance, char *last, char *new);
 void path_up(Scene *scene, int *anchor, int distance, char *last, char *new);
 void path_down(Scene *scene, int *anchor, int distance, char *last, char *new);
 int anchor_turn(char *last, char *new);
+int get_waypoint_x(Scene *scene, int index);
+int get_waypoint_y(Scene *scene, int index);
 char set_last(char *last, char *new);
 
 #endif
