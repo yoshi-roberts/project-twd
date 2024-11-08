@@ -154,6 +154,19 @@ int save_waypoint(Scene *scene, int *anchor, int index) {
     return index;
 }
 
+int get_waypoint_x(Scene *scene, int index)
+{
+int value = scene->tilemap_layer1.waypoints[index].x;
+return value;
+}
+
+int get_waypoint_y(Scene *scene, int index)
+{
+int value = scene->tilemap_layer1.waypoints[index].y;
+return value;
+}
+
+
 char set_last(char *last, char *new) {
     *last = *new;
     return *last;
