@@ -29,6 +29,9 @@ void placement_init();
 void placement_update(float mx, float my);
 void placement_draw();
 int placement_get_tile(Scene *scene);
+void placement_place_cancel();
+void placement_place_villager();
+void placement_place_knight();
 bool placement_can_place();
 
 #endif
