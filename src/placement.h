@@ -4,7 +4,13 @@
 #include "../lib/raylib/src/raylib.h"
 #include "assets.h"
 #include "unit.h"
+#include "ui.h"
 #include "scene_builder.h"
+
+typedef enum {
+	PLACEMENT_IDLE,
+	PLACEMENT_BUILD,
+} PlacementState;
 
 typedef struct {
 	int x; int y;
@@ -14,6 +20,9 @@ typedef struct {
 	Color normal;
 	Color blocked;
 	Asset *border;
+
+	PlacementState state;
+	UI_Panel build_menu;
 } Placement;
 
 void placement_init();

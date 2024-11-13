@@ -1,6 +1,7 @@
 #include "placement.h"
 #include "log.h"
 #include "game.h"
+#include "ui.h"
 #include "unit.h"
 #include <stdio.h>
 
@@ -13,6 +14,8 @@ void placement_init() {
 		log_error("Placement system already initialized.");
 	}
 
+	placement.state = PLACEMENT_IDLE;
+
 	placement.x = 0;
 	placement.y = 0;
 	placement.gx = 0;
@@ -21,6 +24,9 @@ void placement_init() {
 
 	placement.normal = (Color){255, 255, 255, 102};
 	placement.border = assets_get("assets/images/placement-border.png");
+
+	placement.build_menu = ui_panel_new(0, 0);
+	ui_panel_add_label(&placement.build_menu, "Build Unit");
 
 	initialized = true;
 	log_info("Placement System Initialized.");
@@ -36,33 +42,44 @@ void placement_update(float mx, float my) {
 	Scene *scn = game_get_scene();
 	Unit *unit = &scn->units[placement.gy][placement.gx];
 
-	if (unit->asset) {
-		placement.selected_unit = unit;
-		if (unit->x == placement.gx && unit->y == placement.gy) {
-			unit->selected = true;
-		} 
+	switch (placement.state) {
+		case PLACEMENT_IDLE:
+
+			if (unit->asset) {
+				placement.selected_unit = unit;
+				if (unit->x == placement.gx && unit->y == placement.gy) {
+					unit->selected = true;
+				} 
+			}
+
+			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place()) {
+
+				placement.state = PLACEMENT_BUILD;
+
+				// int type = GetRandomValue(UNIT_VILLAGER, UNIT_KNIGHT);
+				//
+				// int money = game_get_money();
+				// int cost = 0;
+				// switch (type) {
+				// 	case UNIT_VILLAGER:
+				// 		cost = 20; break;	
+				// 	case UNIT_KNIGHT:
+				// 		cost = 50; break;
+				// }
+				//
+				// if (money > cost) {
+				// 	scn->units[placement.gy][placement.gx] = unit_new(type, placement.gx, placement.gy);
+				// 	game_set_money(money - cost);
+				// 	printf("Added Unit!\n");
+				// }
+
+			}
+			break;
+
+		case PLACEMENT_BUILD:
+			break;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place()) {
-
-		int type = GetRandomValue(UNIT_VILLAGER, UNIT_KNIGHT);
-
-		int money = game_get_money();
-		int cost = 0;
-		switch (type) {
-			case UNIT_VILLAGER:
-				cost = 20; break;	
-			case UNIT_KNIGHT:
-				cost = 50; break;
-		}
-
-		if (money > cost) {
-			scn->units[placement.gy][placement.gx] = unit_new(type, placement.gx, placement.gy);
-			game_set_money(money - cost);
-			printf("Added Unit!\n");
-		}
-
-	}
 }
 
 void placement_draw() {
@@ -73,6 +90,16 @@ void placement_draw() {
 	}
 
 	DrawTexture(placement.border->data.sprite.texture, placement.x, placement.y, WHITE);
+
+	switch (placement.state) {
+		case PLACEMENT_IDLE:
+			break;
+
+		case PLACEMENT_BUILD:
+			ui_panel_draw(&placement.build_menu);
+			break;
+	}
+
 }
 
 int placement_get_tile(Scene *scene) {
