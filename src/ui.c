@@ -39,12 +39,20 @@ void ui_panel_draw(UI_Panel *panel) {
 		int width = MeasureText(element->text, 10);
 		int height = GetFontDefault().baseSize;
 
+		if (element->button) {
+			width += padding * 2;
+		}
+
 		if (width > panel->w) {
 			panel->w = width + (padding * 2); 
 		}
 
 		int ex = panel->x + padding;
 		int ey = panel->y + ((i * height) + padding);
+
+		if (element->button) {
+			ex += padding;
+		}
 
 		if (i != 0) {
 			ey += ((padding) * i);
@@ -53,7 +61,6 @@ void ui_panel_draw(UI_Panel *panel) {
 		if (ey >= (panel->y + panel->h)) {
 			panel->h = (ey - panel->y) + (height + padding);
 		}
-
 
 		bool selected = false;
 		int mx = game_get_mouse_x();
@@ -69,9 +76,9 @@ void ui_panel_draw(UI_Panel *panel) {
 			}
 
 			if (selected) {
-				DrawRectangle(ex, ey, width, height, UI_LIGHTGRAY);
+				DrawRectangle(ex - padding, ey, width, height, UI_LIGHTGRAY);
 			} else {
-				DrawRectangle(ex, ey, width, height, UI_GRAY);
+				DrawRectangle(ex - padding, ey, width, height, UI_GRAY);
 			}
 		}
 
