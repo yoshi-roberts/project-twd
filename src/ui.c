@@ -27,8 +27,8 @@ void ui_panel_add_element(UI_Panel *panel, char *text, bool button) {
 
 void ui_panel_draw(UI_Panel *panel) {
 
-	DrawRectangle(panel->x - 1, panel->y - 1, panel->w + 2, panel->h + 2, BLACK);
-	DrawRectangle(panel->x, panel->y, panel->w, panel->h, DARKGRAY);
+	DrawRectangle(panel->x - 1, panel->y - 1, panel->w + 2, panel->h + 2, UI_BLACK);
+	DrawRectangle(panel->x, panel->y, panel->w, panel->h, UI_DARKGRAY);
 
 	int padding = 2;
 
@@ -68,16 +68,13 @@ void ui_panel_draw(UI_Panel *panel) {
 				}
 			}
 
-			DrawRectangle(ex, ey, width, height, GRAY);
-
 			if (selected) {
-				DrawText(element->text, ex, ey, height, WHITE);
+				DrawRectangle(ex, ey, width, height, UI_LIGHTGRAY);
 			} else {
-				DrawText(element->text, ex, ey, height, LIGHTGRAY);
+				DrawRectangle(ex, ey, width, height, UI_GRAY);
 			}
-		} else {
-
-			DrawText(element->text, ex, ey, height, WHITE);
 		}
+
+		DrawText(element->text, ex, ey, height, UI_BLACK);
 	}
 }
