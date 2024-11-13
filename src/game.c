@@ -46,6 +46,7 @@ void game_init() {
 	ui_panel_add_element(&panel, "Hello, World!", false);
 	ui_panel_add_element(&panel, "More text.", false);
 	ui_panel_add_element(&panel, "Button", true);
+	ui_panel_add_element(&panel, "Last text.", false);
 
 	initialized = true;
 	log_info("Game initialized.");

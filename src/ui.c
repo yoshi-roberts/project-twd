@@ -30,24 +30,30 @@ void ui_panel_draw(UI_Panel *panel) {
 	DrawRectangle(panel->x - 1, panel->y - 1, panel->w + 2, panel->h + 2, BLACK);
 	DrawRectangle(panel->x, panel->y, panel->w, panel->h, DARKGRAY);
 
+	int padding = 2;
+
 	for (int i = 0; i < panel->label_count; i++) {
 	
 		UI_Element *element = &panel->labels[i];
 
-		int size = MeasureText(element->text, 10);
+		int width = MeasureText(element->text, 10);
+		int height = GetFontDefault().baseSize;
 
-		if (size > panel->w) {
-			panel->w = size + 4; 
+		if (width > panel->w) {
+			panel->w = width + (padding * 2); 
 		}
 
-		int y = panel->y + (10 * i);
+		int ex = panel->x + padding;
+		int ey = panel->y + ((i * height) + padding);
 
-		if (y >= panel->y + panel->h) {
-			panel->h += 10;
+		if (i != 0) {
+			ey += ((padding) * i);
 		}
 
-		int ex = panel->x + 2;
-		int ey = panel->y + (10 * i);
+		if (ey >= (panel->y + panel->h)) {
+			panel->h = (ey - panel->y) + (height + padding);
+		}
+
 
 		bool selected = false;
 		int mx = game_get_mouse_x();
@@ -55,23 +61,23 @@ void ui_panel_draw(UI_Panel *panel) {
 
 		if (element->button) {
 
-			if (mx >= ex && mx <= ex + size) {
+			if (mx >= ex && mx <= ex + width) {
 				if (my >= ey && my <= ey + 10) {
 
 					selected = true;
 				}
 			}
 
-			DrawRectangle(ex, ey, size, 10, GRAY);
+			DrawRectangle(ex, ey, width, height, GRAY);
 
 			if (selected) {
-				DrawText(element->text, panel->x + 2, panel->y + (10 * i), 10, WHITE);
+				DrawText(element->text, ex, ey, height, WHITE);
 			} else {
-				DrawText(element->text, panel->x + 2, panel->y + (10 * i), 10, LIGHTGRAY);
+				DrawText(element->text, ex, ey, height, LIGHTGRAY);
 			}
 		} else {
 
-			DrawText(element->text, panel->x + 2, panel->y + (10 * i), 10, WHITE);
+			DrawText(element->text, ex, ey, height, WHITE);
 		}
 	}
 }
