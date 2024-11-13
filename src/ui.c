@@ -15,13 +15,23 @@ UI_Panel ui_panel_new(int x, int y) {
 	return panel;
 }
 
-void ui_panel_add_element(UI_Panel *panel, char *text, bool button) {
+void ui_panel_add_label(UI_Panel *panel, char *text) {
 
 	UI_Element label = {};
 	label.text = text;
-	label.button = button;
 
 	panel->labels[panel->label_count] = label;
+	panel->label_count++;
+}
+
+void ui_panel_add_button(UI_Panel *panel, char *text, UI_Button_Callback callback) {
+
+	UI_Element button = {};
+	button.text = text;
+	button.button = true;
+	button.callback = callback;
+
+	panel->labels[panel->label_count] = button;
 	panel->label_count++;
 }
 
@@ -70,6 +80,10 @@ void ui_panel_draw(UI_Panel *panel) {
 
 			if (mx >= ex && mx <= ex + width) {
 				if (my >= ey && my <= ey + 10) {
+
+					if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+						element->callback();
+					}
 
 					selected = true;
 				}

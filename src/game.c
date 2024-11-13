@@ -15,7 +15,6 @@ static bool initialized = false;
 
 static TextInput input;
 static Animation anim;
-static UI_Panel panel;
 
 void game_init() {
 
@@ -41,12 +40,6 @@ void game_init() {
 
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
-
-	panel = ui_panel_new(64, 64);
-	ui_panel_add_element(&panel, "Hello, World!", false);
-	ui_panel_add_element(&panel, "More text.", false);
-	ui_panel_add_element(&panel, "Button", true);
-	ui_panel_add_element(&panel, "Last text.", false);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -118,8 +111,6 @@ void game_draw() {
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
-
-	ui_panel_draw(&panel);
 
 	canvas_end();
 
