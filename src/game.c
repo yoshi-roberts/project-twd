@@ -8,6 +8,7 @@
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
+#include "projectile.h"
 
 
 static Game game = {};
@@ -16,6 +17,8 @@ static bool initialized = false;
 static TextInput input;
 
 static Animation anim;
+
+Projectile proj;
 
 void game_init() {
 
@@ -38,6 +41,7 @@ void game_init() {
 
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	placement_init();
+
 
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
@@ -84,13 +88,20 @@ void game_update() {
 		}
 
 		if (IsKeyReleased(KEY_SPACE)) {
-			printf("The state was: %d\n", game.scene.scene_state);
-			Scene *ptr = &game.scene;
-			scene_state_set(ptr, game.scene.scene_state+1);
-			printf("The state is now: %d\n\n", game.scene.scene_state);
+
+
+			Vector2 position = GetMousePosition();
+    		Vector2 end_position = {200, 200};
+   			proj = new_projectile(position, end_position, 1, 1, 1);
+
+			// printf("The state was: %d\n", game.scene.scene_state);
+			// Scene *ptr = &game.scene;
+			// scene_state_set(ptr, game.scene.scene_state+1);
+			// printf("The state is now: %d\n\n", game.scene.scene_state); 
 		}
 
 		canvas_update(&game.canvas);
+		update_projectile(&proj);
 
 		game_draw();
 	}
@@ -119,6 +130,8 @@ void game_draw() {
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
+
+	draw_projectile(&proj);
 
 	canvas_end();
 

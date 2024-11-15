@@ -166,7 +166,6 @@ int value = scene->tilemap_layer1.waypoints[index].y;
 return value;
 }
 
-
 char set_last(char *last, char *new) {
     *last = *new;
     return *last;
