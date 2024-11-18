@@ -31,6 +31,7 @@ typedef struct {
 	Asset *asset_ptr;
 	int tiles[TILEMAP_HEIGHT][TILEMAP_WIDTH];
 	Vector2 waypoints[30];
+    int last_waypoint_index;
 } Tilemap;
 
 #endif
