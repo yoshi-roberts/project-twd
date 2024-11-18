@@ -8,13 +8,15 @@
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
-#include "ui.h"
+#include "enemy.h"
 
 static Game game = {};
 static bool initialized = false;
 
 static TextInput input;
 static Animation anim;
+
+static Enemy enemy;
 
 void game_init() {
 
@@ -40,6 +42,8 @@ void game_init() {
 
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
+
+	enemy = enemy_new(ENEMY_SLIME, 12 * 16, 12 * 16);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -102,6 +106,9 @@ void game_draw() {
 	canvas_begin(&game.canvas);
 
 	scene_draw(&game.scene);
+
+	enemy_draw(&enemy);
+
 	placement_draw();
 
 	char money_str[128];
