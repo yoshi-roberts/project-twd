@@ -19,7 +19,7 @@ endif
 BIN_DIR = bin
 OBJ_DIR = obj
 
-OBJS = main.o log.o game.o canvas.o map.o assets.o animation.o scene_builder.o scene_path.o wordlist.o text_input.o placement.o unit.o ui.o
+OBJS = main.o log.o game.o canvas.o map.o assets.o animation.o scene_builder.o scene_path.o wordlist.o text_input.o placement.o unit.o ui.o projectile.o
 
 all: build_raylib create_dir $(BIN_DIR)/$(BIN)
 
@@ -39,8 +39,10 @@ $(addprefix $(OBJ_DIR),/%.o):src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
-	$(RM) bin
-	$(RM) obj
+	-$(RM) bin
+	-$(RM) obj
 
 run:
 	./bin/out
+
+dev: clean all run

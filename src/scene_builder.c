@@ -41,13 +41,13 @@ Scene scene_init(int difficulty, const char* path) {
 
 	Scene scene;
 	scene.difficulty = difficulty;
+    scene.scene_state = STATE_BUILD;
 
 	memset(scene.units, 0, sizeof(scene.units));
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);
     scene.tilemap_layer2.asset_ptr = assets_get(path);
     
-      // Initialize all tiles in layer 2 to a default empty tile, e.g., TILE_EMPTY
     for (int y = 0; y < TILEMAP_HEIGHT; y++) {
         for (int x = 0; x < TILEMAP_WIDTH; x++) {
             scene.tilemap_layer2.tiles[y][x] = -1;  // Replace TILE_EMPTY with your empty tile value
@@ -55,7 +55,6 @@ Scene scene_init(int difficulty, const char* path) {
     }
 
 	scene_randomize(&scene);
-
 	return scene;
 }
 
@@ -130,4 +129,13 @@ void build_tree(Scene *scene, int anchor[]) {
     if (base_row + 2 >= 0 && base_row + 2 < TILEMAP_HEIGHT && base_col - 1 >= 0 && base_col - 1 < TILEMAP_WIDTH) {
         scene->tilemap_layer2.tiles[base_row + 2][base_col - 1] = TILE_TREE_6;  // Bottom row, left
     }
+}
+
+void scene_state_set(Scene *scene, int state){
+    scene->scene_state = state;
+}
+
+int scene_state_get(Scene *scene){
+    int scene_state = scene->scene_state;
+    return scene_state;
 }

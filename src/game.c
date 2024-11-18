@@ -8,6 +8,7 @@
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
+#include "projectile.h"
 #include "ui.h"
 
 static Game game = {};
@@ -15,6 +16,9 @@ static bool initialized = false;
 
 static TextInput input;
 static Animation anim;
+
+static Projectile projectiles[MAX_PROJECTILES];
+static int projectile_count = 0;
 
 void game_init() {
 
@@ -38,6 +42,7 @@ void game_init() {
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	placement_init();
 
+
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
 
@@ -47,10 +52,10 @@ void game_init() {
 
 void game_shutdown() {
 
-	if (!initialized) {
-		log_error("Game not initialized.");
-		return;
-	}
+		if (!initialized) {
+			log_error("Game not initialized.");
+			return;
+		}
 
 	canvas_destroy(&game.canvas);
 
@@ -82,9 +87,19 @@ void game_update() {
 			scene_randomize(&game.scene);
 		}
 
-		canvas_update(&game.canvas);
+		if (IsKeyReleased(KEY_SPACE)) {
+			if (projectile_count < MAX_PROJECTILES) {
+				Vector2 start_position = GetMousePosition();
+				Vector2 end_position = {200, 200};
+				projectiles[projectile_count] = new_projectile(start_position, end_position, 1, 1, 1);
+				projectile_count++;
+			}
+		}
 
+		update_all_projectile(projectiles, &projectile_count);
+		canvas_update(&game.canvas);
 		game_draw();
+
 	}
 
 }
@@ -111,6 +126,10 @@ void game_draw() {
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
+
+	    for (int i = 0; i < projectile_count; i++) {
+        draw_projectile(&projectiles[i]);
+    }
 
 	canvas_end();
 
