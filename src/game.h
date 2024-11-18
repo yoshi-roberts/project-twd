@@ -28,6 +28,8 @@ void game_draw();
 Scene* game_get_scene();
 int game_get_difficulty();
 int game_get_money();
+int game_get_mouse_x();
+int game_get_mouse_y();
 
 void game_set_money(int amount);
 

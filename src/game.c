@@ -9,13 +9,12 @@
 #include "placement.h"
 #include "scene_builder.h"
 #include "projectile.h"
-
+#include "ui.h"
 
 static Game game = {};
 static bool initialized = false;
 
 static TextInput input;
-
 static Animation anim;
 
 static Projectile projectiles[MAX_PROJECTILES];
@@ -152,4 +151,12 @@ int game_get_money() {
 
 void game_set_money(int amount) {
 	game.money = amount;
+}
+
+int game_get_mouse_x() {
+	return game.canvas.mouse.x;
+}
+
+int game_get_mouse_y() {
+	return game.canvas.mouse.y;
 }
