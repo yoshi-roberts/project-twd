@@ -148,11 +148,19 @@ int save_waypoint(Scene *scene, int *anchor, int index) {
     {
     scene->tilemap_layer1.waypoints[index].x = x; //Add the x waypoint
     scene->tilemap_layer1.waypoints[index].y = y; //Add the y waypoint
-    printf("Index: %d ---- Waypoint: %f , %f\n",index,x,y);
+    //printf("Index: %d ---- Waypoint: %f , %f\n",index,x,y);
     index++;
     }
+    scene->tilemap_layer1.last_waypoint_index = index;
     return index;
 }
+
+int get_last_waypoint(Scene *scene)
+{
+int value = scene->tilemap_layer1.last_waypoint_index;
+return value;
+}
+
 
 int get_waypoint_x(Scene *scene, int index)
 {

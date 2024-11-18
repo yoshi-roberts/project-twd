@@ -53,10 +53,10 @@ void game_init() {
 
 void game_shutdown() {
 
-	if (!initialized) {
-		log_error("Game not initialized.");
-		return;
-	}
+		if (!initialized) {
+			log_error("Game not initialized.");
+			return;
+		}
 
 	canvas_destroy(&game.canvas);
 
