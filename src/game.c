@@ -18,7 +18,8 @@ static TextInput input;
 
 static Animation anim;
 
-Projectile proj;
+static Projectile projectiles[MAX_PROJECTILES];
+static int projectile_count = 0;
 
 void game_init() {
 
@@ -88,22 +89,18 @@ void game_update() {
 		}
 
 		if (IsKeyReleased(KEY_SPACE)) {
-
-
-			Vector2 position = GetMousePosition();
-    		Vector2 end_position = {200, 200};
-   			proj = new_projectile(position, end_position, 1, 1, 1);
-
-			// printf("The state was: %d\n", game.scene.scene_state);
-			// Scene *ptr = &game.scene;
-			// scene_state_set(ptr, game.scene.scene_state+1);
-			// printf("The state is now: %d\n\n", game.scene.scene_state); 
+			if (projectile_count < MAX_PROJECTILES) {
+				Vector2 start_position = GetMousePosition();
+				Vector2 end_position = {200, 200};
+				projectiles[projectile_count] = new_projectile(start_position, end_position, 1, 1, 1);
+				projectile_count++;
+			}
 		}
 
+		update_all_projectile(projectiles, &projectile_count);
 		canvas_update(&game.canvas);
-		update_projectile(&proj);
-
 		game_draw();
+
 	}
 
 }
@@ -131,7 +128,9 @@ void game_draw() {
 
 	animation_draw(&anim, 64, 64);
 
-	draw_projectile(&proj);
+	    for (int i = 0; i < projectile_count; i++) {
+        draw_projectile(&projectiles[i]);
+    }
 
 	canvas_end();
 

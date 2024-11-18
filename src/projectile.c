@@ -4,7 +4,6 @@
 
 
 Projectile new_projectile(Vector2 position, Vector2 end_position, int speed, int damage, int type) {
-
     Projectile proj;
     proj.type = type;
     proj.position = position;
@@ -18,13 +17,10 @@ Projectile new_projectile(Vector2 position, Vector2 end_position, int speed, int
 
 void update_projectile(Projectile *proj) {
     if (proj->active) {
-        // Calculate the direction vector from the current position to the end_position
         Vector2 direction = (Vector2){proj->end_position.x - proj->position.x, proj->end_position.y - proj->position.y};
 
-        // Get the length of the direction vector (distance between current and target position)
         float distance = sqrtf(direction.x * direction.x + direction.y * direction.y);
 
-        // If the distance is greater than zero, normalize the direction vector
         if (distance > 0) {
             direction.x /= distance;
             direction.y /= distance;
@@ -44,6 +40,21 @@ void update_projectile(Projectile *proj) {
         }
     }
 }
+
+void update_all_projectile(Projectile projectiles[MAX_PROJECTILES], int *projectile_count) {
+    for (int i = 0; i < *projectile_count; i++) {
+        update_projectile(&projectiles[i]);
+        if (!projectiles[i].active) {
+        
+            for (int j = i; j < *projectile_count - 1; j++) {
+                projectiles[j] = projectiles[j + 1];
+            }
+            (*projectile_count)--;
+            i--; 
+        }
+    }
+}
+
 
 void draw_projectile(Projectile *proj) {
     if (proj->active) {
