@@ -15,11 +15,13 @@ typedef struct {
 	int range;
 	int hp;
 	int defense;
+	int cost;
 	bool selected;
 } Unit;
 
 Unit unit_new(UNIT_TYPE type, int x, int y);
 void unit_update(Unit *unit);
 void unit_draw(Unit *unit);
+int unit_get_cost(UNIT_TYPE type);
 
 #endif // UNIT_H

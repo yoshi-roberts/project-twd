@@ -24,12 +24,13 @@ void ui_panel_add_label(UI_Panel *panel, char *text) {
 	panel->label_count++;
 }
 
-void ui_panel_add_button(UI_Panel *panel, char *text, UI_Button_Callback callback) {
+void ui_panel_add_button(UI_Panel *panel, char *text, UI_Button_Callback callback, void *data) {
 
 	UI_Element button = {};
 	button.text = text;
 	button.button = true;
 	button.callback = callback;
+	button.data = data;
 
 	panel->labels[panel->label_count] = button;
 	panel->label_count++;
@@ -82,7 +83,7 @@ void ui_panel_draw(UI_Panel *panel) {
 				if (my >= ey && my <= ey + 10) {
 
 					if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-						element->callback();
+						element->callback(element->data);
 					}
 
 					selected = true;

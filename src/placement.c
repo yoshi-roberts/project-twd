@@ -3,7 +3,7 @@
 #include "game.h"
 #include "ui.h"
 #include "unit.h"
-#include <stdio.h>
+#include <string.h>
 
 static Placement placement = {};
 static bool initialized = false;
@@ -28,45 +28,59 @@ void placement_init() {
 	placement.build_menu = ui_panel_new(0, 0);
 
 	ui_panel_add_label(&placement.build_menu, "Build Unit");
-	ui_panel_add_button(&placement.build_menu, "Villager", placement_place_villager);
-	ui_panel_add_button(&placement.build_menu, "Knight", placement_place_knight);
-	ui_panel_add_button(&placement.build_menu, "Cancel", placement_place_cancel);
+	ui_panel_add_button(&placement.build_menu, "Villager $20", placement_place_unit, (void*)UNIT_VILLAGER);
+	ui_panel_add_button(&placement.build_menu, "Knight $50", placement_place_unit, (void*)UNIT_KNIGHT);
+	ui_panel_add_button(&placement.build_menu, "Cancel", placement_place_cancel, 0);
+
+	placement.unit_menu = ui_panel_new(0, 0);
+
+	ui_panel_add_label(&placement.unit_menu, "Unit Menu");
+	ui_panel_add_button(&placement.unit_menu, "Upgrade", placement_place_cancel, 0);
+	ui_panel_add_button(&placement.unit_menu, "Sell", placement_unit_sell, 0);
+	ui_panel_add_button(&placement.unit_menu, "Cancel", placement_place_cancel, 0);
 
 	initialized = true;
 	log_info("Placement System Initialized.");
 }
 
-void placement_place_villager() {
-
-	Scene *scn = game_get_scene();
-
-	int money = game_get_money();
-	int cost = 20;
-
-	if (money > cost) {
-		scn->units[placement.gy][placement.gx] = unit_new(UNIT_VILLAGER, placement.gx, placement.gy);
-		game_set_money(money - cost);
-	}
-
-	placement.state = PLACEMENT_IDLE;
-}
-
-void placement_place_knight() {
-
-	Scene *scn = game_get_scene();
-
-	int money = game_get_money();
-	int cost = 50;
-
-	if (money > cost) {
-		scn->units[placement.gy][placement.gx] = unit_new(UNIT_KNIGHT, placement.gx, placement.gy);
-		game_set_money(money - cost);
-	}
-
-	placement.state = PLACEMENT_IDLE;
-}
-
 void placement_place_cancel() {
+
+	if (placement.selected_unit) {
+		placement.selected_unit->selected = false;
+	}
+
+	placement.state = PLACEMENT_IDLE;
+}
+
+void placement_place_unit(void *data) {
+
+	UNIT_TYPE type = (UNIT_TYPE)data;
+
+	Scene *scn = game_get_scene();
+
+	int money = game_get_money();
+	int cost = unit_get_cost(type);
+
+	if (money > cost) {
+		scn->units[placement.gy][placement.gx] = unit_new(type, placement.gx, placement.gy);
+		game_set_money(money - cost);
+	}
+
+	placement.state = PLACEMENT_IDLE;
+}
+
+void placement_unit_sell(void *data) {
+
+	UNIT_TYPE type = placement.selected_unit->type;
+
+	Scene *scn = game_get_scene();
+
+	int money = game_get_money();
+	int cost = unit_get_cost(type);
+
+	memset(&scn->units[placement.gy][placement.gx], 0, sizeof(Unit));
+	game_set_money(money + cost);
+
 	placement.state = PLACEMENT_IDLE;
 }
 
@@ -86,7 +100,15 @@ void placement_update(float mx, float my) {
 			if (unit->asset) {
 				placement.selected_unit = unit;
 				if (unit->x == placement.gx && unit->y == placement.gy) {
-					unit->selected = true;
+					if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+
+						placement.unit_menu.x = placement.x + 17;
+						placement.unit_menu.y = placement.y;
+						placement.state = PLACEMENT_UNIT;
+
+						unit->selected = true;
+						placement.selected_unit = unit;
+					}
 				} 
 			}
 
@@ -95,9 +117,10 @@ void placement_update(float mx, float my) {
 				placement.build_menu.x = placement.x + 17;
 				placement.build_menu.y = placement.y;
 				placement.state = PLACEMENT_BUILD;
-
-
 			}
+			break;
+
+		case PLACEMENT_UNIT:
 			break;
 
 		case PLACEMENT_BUILD:
@@ -121,6 +144,10 @@ void placement_draw() {
 
 		case PLACEMENT_BUILD:
 			ui_panel_draw(&placement.build_menu);
+			break;
+
+		case PLACEMENT_UNIT:
+			ui_panel_draw(&placement.unit_menu);
 			break;
 	}
 

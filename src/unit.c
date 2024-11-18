@@ -13,6 +13,7 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.asset = assets_get("assets/images/units.png");
 	unit.range = 32;
 	unit.hp = 100;
+	unit.cost = unit_get_cost(type);
 
 	switch (type) {
 		case UNIT_KNIGHT:
@@ -30,9 +31,7 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 void unit_draw(Unit *unit) {
 
-
 	asset_draw_tile(unit->asset, unit->type, unit->x * 16, unit->y * 16);
-
 
 	if (unit->selected) {
 		Color color = (Color){255, 75, 75, 128};
@@ -59,6 +58,16 @@ void unit_draw(Unit *unit) {
 		DrawText(hp, hp_pos.x, hp_pos.y, 10, WHITE);
 		DrawText(defense, defense_pos.x, defense_pos.y, 10, WHITE);
 	}
+}
 
-	unit->selected = false;
+int unit_get_cost(UNIT_TYPE type) {
+
+	switch (type) {
+		case UNIT_VILLAGER:
+			return 20;
+		case UNIT_KNIGHT:
+			return 50;
+		default:
+			return 0;
+	}
 }
