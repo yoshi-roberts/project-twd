@@ -4,12 +4,12 @@
 #include "assets.h"
 #include "animation.h"
 #include "log.h"
+#include "scene_path.h"
 #include "text_input.h"
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
 #include "enemy.h"
-#include "projectile.h"
 
 static Game game = {};
 static bool initialized = false;
@@ -18,9 +18,6 @@ static TextInput input;
 static Animation anim;
 
 static Enemy enemy;
-
-static Projectile projectiles[MAX_PROJECTILES];
-static int projectile_count = 0;
 
 void game_init() {
 
@@ -44,11 +41,10 @@ void game_init() {
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	placement_init();
 
-
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
 
-	enemy = enemy_new(ENEMY_SLIME, 12 * 16, 12 * 16);
+	enemy = enemy_new(ENEMY_SLIME);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -91,16 +87,11 @@ void game_update() {
 			scene_randomize(&game.scene);
 		}
 
-		if (IsKeyReleased(KEY_SPACE)) {
-			if (projectile_count < MAX_PROJECTILES) {
-				Vector2 start_position = GetMousePosition();
-				Vector2 end_position = {200, 200};
-				projectiles[projectile_count] = new_projectile(start_position, end_position, 1, 1, 1);
-				projectile_count++;
-			}
+		if (IsKeyPressed(KEY_SPACE)) {
 		}
 
-		update_all_projectile(projectiles, &projectile_count);
+		enemy_update(&enemy);
+
 		canvas_update(&game.canvas);
 		game_draw();
 
@@ -133,10 +124,6 @@ void game_draw() {
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
-
-	    for (int i = 0; i < projectile_count; i++) {
-        draw_projectile(&projectiles[i]);
-    }
 
 	canvas_end();
 

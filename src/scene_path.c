@@ -14,11 +14,13 @@ void gen_random_path(Scene *scene) {
     int anchor[2] = {8, 1};  // Initial anchor position
     char last = 'S'; // S = Sideways, D = Down, U = Up
     char new_direction;
+	int index = 0;
 
     scene->tilemap_layer1.tiles[anchor[0]][anchor[1]] = TILE_PATH_H;  // Start with a horizontal path
 
     // Generate random sections until reaching the right edge
     while (anchor[1] < TILEMAP_WIDTH - 1) {
+		index = save_waypoint(scene, anchor, index);  //Saves the waypoint and also increments the index
         gen_section(scene, anchor, &last, &new_direction);
     }
 
@@ -140,15 +142,16 @@ int anchor_turn(char *last, char *new) {
 
 
 int save_waypoint(Scene *scene, int *anchor, int index) {
-    float x = (anchor[1] * 16) + 8;
-    float y = (anchor[0] * 16) + 8;
+	printf("Save Waypoint!\n");
+    float x = (anchor[1] * 16);
+    float y = (anchor[0] * 16);
 
     if (scene->tilemap_layer1.waypoints[index-1].x != x || scene->tilemap_layer1.waypoints[index-1].y != y) 
     //So long as the waypoint previous isnt exactly the same as the new one
     {
     scene->tilemap_layer1.waypoints[index].x = x; //Add the x waypoint
     scene->tilemap_layer1.waypoints[index].y = y; //Add the y waypoint
-    //printf("Index: %d ---- Waypoint: %f , %f\n",index,x,y);
+    printf("Index: %d ---- Waypoint: %f , %f\n",index,x,y);
     index++;
     }
     scene->tilemap_layer1.last_waypoint_index = index;
