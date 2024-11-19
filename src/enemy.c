@@ -1,14 +1,16 @@
 #include "enemy.h"
+#include "assets.h"
 #include "game.h"
 #include "scene_path.h"
 
 Enemy enemy_new(ENEMY_TYPE type) {
 
-	Enemy enemy;
+	Enemy enemy = {};
 
 	enemy.type = type;
 	enemy.xdir = 0;
 	enemy.ydir = 0;
+	enemy.asset = assets_get("assets/images/enemies.png");
 
 	Scene *scn = game_get_scene();
 	enemy.next_waypoint_index = get_last_waypoint(scn);
@@ -46,7 +48,7 @@ void enemy_update(Enemy *enemy) {
 
 void enemy_draw(Enemy *enemy) {
 
-	DrawRectangle(enemy->x, enemy->y, 16, 16, RED);
+	asset_draw_tile(enemy->asset, enemy->type, enemy->x, enemy->y - 4);
 }
 
 void enemy_get_waypoint(Enemy *enemy) {

@@ -2,9 +2,12 @@
 #define ENEMIES_H
 
 #include "../lib/raylib/src/raylib.h"
+#include "assets.h"
 
 typedef enum {
 	ENEMY_SLIME,
+	ENEMY_SKELETON,
+	ENEMY_SPIDER,
 } ENEMY_TYPE;
 
 // Enemy-specific components
@@ -14,6 +17,7 @@ typedef struct {
 	int xdir; int ydir;
 	int next_waypoint_index;
 	Vector2 next_waypoint;
+	Asset *asset;
 } Enemy;
 
 Enemy enemy_new(ENEMY_TYPE type);

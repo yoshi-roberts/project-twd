@@ -89,7 +89,9 @@ void game_update() {
 
 			if (game.scene.last_enemy < 128) {
 
-				game.scene.enemies[game.scene.last_enemy] = enemy_new(ENEMY_SLIME);
+				int type = GetRandomValue(0, 2);
+
+				game.scene.enemies[game.scene.last_enemy] = enemy_new(type);
 				game.scene.last_enemy++;
 			}
 		}
