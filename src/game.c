@@ -17,8 +17,6 @@ static bool initialized = false;
 static TextInput input;
 static Animation anim;
 
-static Enemy enemy;
-
 void game_init() {
 
 	if (initialized) {
@@ -44,18 +42,16 @@ void game_init() {
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
 
-	enemy = enemy_new(ENEMY_SLIME);
-
 	initialized = true;
 	log_info("Game initialized.");
 }
 
 void game_shutdown() {
 
-		if (!initialized) {
-			log_error("Game not initialized.");
-			return;
-		}
+	if (!initialized) {
+		log_error("Game not initialized.");
+		return;
+	}
 
 	canvas_destroy(&game.canvas);
 
@@ -76,6 +72,8 @@ void game_update() {
 	while (!WindowShouldClose()) {
 		game.dt = GetFrameTime();	// Update delta time.
 		
+		scene_update(&game.scene);
+		
 		text_input_update(&input);
 
 		animation_update(&anim);
@@ -88,9 +86,13 @@ void game_update() {
 		}
 
 		if (IsKeyPressed(KEY_SPACE)) {
-		}
 
-		enemy_update(&enemy);
+			if (game.scene.last_enemy < 128) {
+
+				game.scene.enemies[game.scene.last_enemy] = enemy_new(ENEMY_SLIME);
+				game.scene.last_enemy++;
+			}
+		}
 
 		canvas_update(&game.canvas);
 		game_draw();
@@ -112,8 +114,6 @@ void game_draw() {
 	canvas_begin(&game.canvas);
 
 	scene_draw(&game.scene);
-
-	enemy_draw(&enemy);
 
 	placement_draw();
 

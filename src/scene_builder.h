@@ -1,6 +1,7 @@
 #ifndef SCENE_BUILDER_H
 #define SCENE_BUILDER_H
 
+#include "enemy.h"
 #include "tilemap.h"
 #include "assets.h"
 #include "unit.h"
@@ -17,12 +18,15 @@ typedef struct {
 	int difficulty;
 	int waves;
 	int scene_state;
+	int last_enemy;
+	Enemy enemies[128];
 	Unit units[TILEMAP_HEIGHT][TILEMAP_WIDTH];
 	Tilemap tilemap_layer1;
     Tilemap tilemap_layer2;
 } Scene;
 
 Scene scene_init(int difficulty, const char* path);
+void scene_update(Scene *scene);
 void scene_draw(Scene *scene);
 void scene_randomize(Scene *scene);
 void gen_treeline(Scene *scene);

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "../lib/raylib/src/raylib.h"
 #include "scene_builder.h"
+#include "enemy.h"
 #include "scene_path.h"
 #include "assets.h"
 #include "unit.h"
@@ -35,6 +36,19 @@ void scene_draw(Scene *scene) {
 			}
 		}
 	}
+
+	for (int i = 0; i < scene->last_enemy; i++) {
+		Enemy *enemy = &scene->enemies[i];
+		enemy_draw(enemy);
+	}
+}
+
+void scene_update(Scene *scene) {
+
+	for (int i = 0; i < scene->last_enemy; i++) {
+		Enemy *enemy = &scene->enemies[i];
+		enemy_update(enemy);
+	}
 }
 
 Scene scene_init(int difficulty, const char* path) {
@@ -42,6 +56,7 @@ Scene scene_init(int difficulty, const char* path) {
 	Scene scene;
 	scene.difficulty = difficulty;
     scene.scene_state = STATE_BUILD;
+	scene.last_enemy = 0;
 
 	memset(scene.units, 0, sizeof(scene.units));
 
