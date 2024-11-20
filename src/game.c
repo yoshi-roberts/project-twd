@@ -10,12 +10,17 @@
 #include "placement.h"
 #include "scene_builder.h"
 #include "enemy.h"
+#include "projectile.h"
+#include "healthbar.h"
 
 static Game game = {};
 static bool initialized = false;
 
 static TextInput input;
 static Animation anim;
+
+static Projectile projectiles[MAX_PROJECTILES];
+static Healthbar healthbars[MAX_HEALTHBARS];
 
 void game_init() {
 
@@ -41,6 +46,8 @@ void game_init() {
 
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
+
+	// healthbar = create_healthbar((Vector2){50, 50}, 200, 20, 100);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -96,6 +103,10 @@ void game_update() {
 			}
 		}
 
+		// if (IsKeyPressed(KEY_R)) {
+        //     remove_health(&healthbar, 10);
+        // }
+
 		canvas_update(&game.canvas);
 		game_draw();
 
@@ -126,6 +137,8 @@ void game_draw() {
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
+
+	// draw_healthbar(&healthbar);
 
 	canvas_end();
 
