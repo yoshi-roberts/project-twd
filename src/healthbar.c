@@ -36,11 +36,23 @@ void restore_health(Healthbar *healthbar, float amount) {
 void draw_healthbar(Healthbar *healthbar) {
     if (!healthbar->active || healthbar->currentHealth == healthbar->maxHealth) return;
 
+    // Calculate the width of the current health
     float healthWidth = (healthbar->currentHealth / healthbar->maxHealth) * healthbar->width;
+
+    // Draw the background (gray) for the full health bar
     DrawRectangle(healthbar->position.x, healthbar->position.y, healthbar->width, healthbar->height, GRAY);
+
+    // Draw the current health (red)
     DrawRectangle(healthbar->position.x, healthbar->position.y, healthWidth, healthbar->height, RED);
-    DrawRectangleLines(healthbar->position.x, healthbar->position.y, healthbar->width, healthbar->height, BLACK);
+
+    // Ensure a clean black border around the health bar
+    DrawRectangleLinesEx(
+        (Rectangle){healthbar->position.x, healthbar->position.y, healthbar->width, healthbar->height}, 
+        1,  // Thickness of the border
+        BLACK
+    );
 }
+
 
 void update_healthbar_position(Healthbar *healthbar, Vector2 newPosition) {
     healthbar->position = newPosition;
