@@ -5,8 +5,14 @@
 #include "wordlist.h"
 #include "scene_builder.h"
 #include "tilemap.h"
+#include "projectile.h"
+#include "healthbar.h"
 
 #define GAME_MAX_SCENES 128
+
+// static Projectile projectiles[MAX_PROJECTILES];
+// static Healthbar healthbars[MAX_HEALTHBARS];
+static Healthbar healthbar;
 
 typedef struct {
 	Scene scene;

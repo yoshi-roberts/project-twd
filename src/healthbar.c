@@ -38,7 +38,7 @@ void draw_healthbar(Healthbar *healthbar) {
 
     float healthWidth = (healthbar->currentHealth / healthbar->maxHealth) * healthbar->width;
     DrawRectangle(healthbar->position.x, healthbar->position.y, healthbar->width, healthbar->height, GRAY);
-    DrawRectangle(healthbar->position.x, healthbar->position.y, healthWidth, healthbar->height, GREEN);
+    DrawRectangle(healthbar->position.x, healthbar->position.y, healthWidth, healthbar->height, RED);
     DrawRectangleLines(healthbar->position.x, healthbar->position.y, healthbar->width, healthbar->height, BLACK);
 }
 
