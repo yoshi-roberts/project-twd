@@ -5,6 +5,8 @@
 #include "wordlist.h"
 #include "scene_builder.h"
 #include "tilemap.h"
+#include "projectile.h"
+#include "healthbar.h"
 
 #define GAME_MAX_SCENES 128
 

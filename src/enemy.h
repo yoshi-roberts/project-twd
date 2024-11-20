@@ -3,6 +3,7 @@
 
 #include "../lib/raylib/src/raylib.h"
 #include "assets.h"
+#include "healthbar.h"
 
 typedef enum {
 	ENEMY_SLIME,
@@ -18,6 +19,7 @@ typedef struct {
 	int next_waypoint_index;
 	Vector2 next_waypoint;
 	Asset *asset;
+	Healthbar healthbar;
 } Enemy;
 
 Enemy enemy_new(ENEMY_TYPE type);
