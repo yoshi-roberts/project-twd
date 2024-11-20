@@ -11,7 +11,7 @@
 
 //==================================================================================================================================
 void gen_random_path(Scene *scene) {
-    int anchor[2] = {8, 1};  // Initial anchor position
+    int anchor[2] = {8, 2};  // Initial anchor position
     char last = 'S'; // S = Sideways, D = Down, U = Up
     char new_direction;
 	int index = 0;
@@ -142,7 +142,6 @@ int anchor_turn(char *last, char *new) {
 
 
 int save_waypoint(Scene *scene, int *anchor, int index) {
-	printf("Save Waypoint!\n");
     float x = (anchor[1] * 16);
     float y = (anchor[0] * 16);
 
@@ -151,7 +150,6 @@ int save_waypoint(Scene *scene, int *anchor, int index) {
     {
     scene->tilemap_layer1.waypoints[index].x = x; //Add the x waypoint
     scene->tilemap_layer1.waypoints[index].y = y; //Add the y waypoint
-    printf("Index: %d ---- Waypoint: %f , %f\n",index,x,y);
     index++;
     }
     scene->tilemap_layer1.last_waypoint_index = index;

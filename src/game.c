@@ -4,7 +4,6 @@
 #include "assets.h"
 #include "animation.h"
 #include "log.h"
-#include "scene_path.h"
 #include "text_input.h"
 #include "scene_builder.h"
 #include "placement.h"
@@ -16,6 +15,7 @@ static bool initialized = false;
 
 static TextInput input;
 static Animation anim;
+static Asset *tower;
 
 void game_init() {
 
@@ -37,6 +37,8 @@ void game_init() {
 	game.scene = scene_init(1, "assets/images/tiles.png");
 
 	anim = animation_new("assets/animations/test-anim.png", 6);
+	tower = assets_get("assets/images/tower-wizard.png");
+
 	placement_init();
 
 	game.list = wordlist_init();
@@ -116,6 +118,8 @@ void game_draw() {
 	canvas_begin(&game.canvas);
 
 	scene_draw(&game.scene);
+
+	DrawTexture(tower->data.sprite.texture, 0, 6 * 16, WHITE);
 
 	placement_draw();
 
