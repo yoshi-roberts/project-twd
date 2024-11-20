@@ -15,7 +15,7 @@ typedef struct Healthbar {
 
 Healthbar create_healthbar(Vector2 position, int width, int height, float maxHealth);
 void remove_health(Healthbar *healthbar, float amount);
-void draw_healthbar(Healthbar *healthbar);
+void draw_healthbar(Healthbar *healthbar, int x, int y);
 void update_healthbar_position(Healthbar *healthbar, Vector2 newPosition);
 
 

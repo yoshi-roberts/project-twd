@@ -4,14 +4,11 @@
 #include "assets.h"
 #include "animation.h"
 #include "log.h"
-#include "scene_path.h"
 #include "text_input.h"
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
 #include "enemy.h"
-#include "projectile.h"
-#include "healthbar.h"
 
 static Game game = {};
 static bool initialized = false;
@@ -43,8 +40,6 @@ void game_init() {
 
 	game.list = wordlist_init();
 	input = text_input_init(game.list.easy);
-
-	healthbar = create_healthbar((Vector2){50, 50}, 200, 20, 100);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -100,12 +95,6 @@ void game_update() {
 			}
 		}
 
-		if (IsKeyPressed(KEY_R)) {
-			for(int i=0; i<=game.scene.last_enemy; i++){
-            remove_health(&game.scene.enemies[i].healthbar, 10);
-			}
-        }
-
 		canvas_update(&game.canvas);
 		game_draw();
 
@@ -136,8 +125,6 @@ void game_draw() {
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
-
-	draw_healthbar(&healthbar);
 
 	canvas_end();
 

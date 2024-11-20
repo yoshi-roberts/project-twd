@@ -46,13 +46,11 @@ void enemy_update(Enemy *enemy) {
 		enemy->x += enemy->xdir;
 		enemy->y += enemy->ydir;
 	}
-
-	update_healthbar_position(&enemy->healthbar, (Vector2){enemy->x, enemy->y - 10});
 }
 
 void enemy_draw(Enemy *enemy) {
 	asset_draw_tile(enemy->asset, enemy->type, enemy->x, enemy->y - 4);
-	draw_healthbar(&enemy->healthbar);
+	draw_healthbar(&enemy->healthbar, enemy->x + 8, enemy->y - 8);
 }
 
 void enemy_get_waypoint(Enemy *enemy) {

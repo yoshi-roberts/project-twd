@@ -1,6 +1,4 @@
 #include <stdbool.h>
-#include <stdio.h>
-#include "projectile.h"
 #include "healthbar.h"
 
 Healthbar create_healthbar(Vector2 position, int width, int height, float maxHealth) {
@@ -33,21 +31,23 @@ void restore_health(Healthbar *healthbar, float amount) {
     }
 }
 
-void draw_healthbar(Healthbar *healthbar) {
-    if (!healthbar->active || healthbar->currentHealth == healthbar->maxHealth) return;
+void draw_healthbar(Healthbar *healthbar, int x, int y) {
+    if (!healthbar->active) return;
 
     // Calculate the width of the current health
     float healthWidth = (healthbar->currentHealth / healthbar->maxHealth) * healthbar->width;
 
+	int xp = x - (healthbar->width / 2);
+
     // Draw the background (gray) for the full health bar
-    DrawRectangle(healthbar->position.x, healthbar->position.y, healthbar->width, healthbar->height, GRAY);
+    DrawRectangle(xp, y, healthbar->width, healthbar->height, GRAY);
 
     // Draw the current health (red)
-    DrawRectangle(healthbar->position.x, healthbar->position.y, healthWidth, healthbar->height, RED);
+    DrawRectangle(xp, y, healthWidth, healthbar->height, RED);
 
     // Ensure a clean black border around the health bar
     DrawRectangleLinesEx(
-        (Rectangle){healthbar->position.x, healthbar->position.y, healthbar->width, healthbar->height}, 
+        (Rectangle){xp, y, healthbar->width, healthbar->height}, 
         1,  // Thickness of the border
         BLACK
     );

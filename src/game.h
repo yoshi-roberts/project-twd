@@ -10,10 +10,6 @@
 
 #define GAME_MAX_SCENES 128
 
-// static Projectile projectiles[MAX_PROJECTILES];
-// static Healthbar healthbars[MAX_HEALTHBARS];
-static Healthbar healthbar;
-
 typedef struct {
 	Scene scene;
 	float dt;	// Delta Time.
