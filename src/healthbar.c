@@ -1,13 +1,13 @@
 #include <stdbool.h>
 #include "healthbar.h"
 
-Healthbar create_healthbar(Vector2 position, int width, int height, float maxHealth) {
+Healthbar create_healthbar(Vector2 position, int width, int height, int *health) {
     Healthbar healthbar;
     healthbar.position = position;
     healthbar.width = width;
     healthbar.height = height;
-    healthbar.maxHealth = maxHealth;
-    healthbar.currentHealth = maxHealth;
+    healthbar.currentHealth = health;
+    healthbar.maxHealth = *health;
     healthbar.active = true;
     return healthbar;
 }
@@ -15,9 +15,9 @@ Healthbar create_healthbar(Vector2 position, int width, int height, float maxHea
 void remove_health(Healthbar *healthbar, float amount) {
     if (!healthbar->active) return;
 
-    healthbar->currentHealth -= amount;
+    *healthbar->currentHealth -= amount;
     if (healthbar->currentHealth <= 0) {
-        healthbar->currentHealth = 0;
+        *healthbar->currentHealth = 0;
         healthbar->active = false; // Deactivate if health reaches zero
     }
 }
@@ -25,9 +25,9 @@ void remove_health(Healthbar *healthbar, float amount) {
 void restore_health(Healthbar *healthbar, float amount) {
     if (!healthbar->active) return;
 
-    healthbar->currentHealth += amount;
-    if (healthbar->currentHealth > healthbar->maxHealth) {
-        healthbar->currentHealth = healthbar->maxHealth;
+    *healthbar->currentHealth += amount;
+    if (*healthbar->currentHealth > healthbar->maxHealth) {
+        *healthbar->currentHealth = healthbar->maxHealth;
     }
 }
 
@@ -35,7 +35,7 @@ void draw_healthbar(Healthbar *healthbar, int x, int y) {
     if (!healthbar->active) return;
 
     // Calculate the width of the current health
-    float healthWidth = (healthbar->currentHealth / healthbar->maxHealth) * healthbar->width;
+    int healthWidth = (*healthbar->currentHealth / healthbar->maxHealth) * healthbar->width;
 
 	int xp = x - (healthbar->width / 2);
 
@@ -51,9 +51,4 @@ void draw_healthbar(Healthbar *healthbar, int x, int y) {
         1,  // Thickness of the border
         BLACK
     );
-}
-
-
-void update_healthbar_position(Healthbar *healthbar, Vector2 newPosition) {
-    healthbar->position = newPosition;
 }
