@@ -20,7 +20,8 @@ Enemy enemy_new(ENEMY_TYPE type) {
 	enemy.x = (int)enemy.next_waypoint.x;
 	enemy.y = (int)enemy.next_waypoint.y;
 
-	enemy.healthbar = create_healthbar((Vector2){enemy.x, enemy.y - 10}, 20, 4, 100);
+	enemy.hp = 100;
+	enemy.healthbar = create_healthbar((Vector2){enemy.x, enemy.y - 10}, 20, 4, &enemy.hp);
 	return enemy;
 }
 

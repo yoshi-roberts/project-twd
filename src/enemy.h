@@ -14,6 +14,7 @@ typedef enum {
 // Enemy-specific components
 typedef struct {
 	ENEMY_TYPE type;
+	int hp;
 	int x; int y;
 	int xdir; int ydir;
 	int next_waypoint_index;
