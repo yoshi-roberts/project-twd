@@ -23,7 +23,7 @@ typedef struct {
 	Healthbar healthbar;
 } Enemy;
 
-Enemy enemy_new(ENEMY_TYPE type);
+void enemy_new(ENEMY_TYPE type);
 void enemy_update(Enemy *enemy);
 void enemy_draw(Enemy *enemy);
 void enemy_get_waypoint(Enemy *enemy);

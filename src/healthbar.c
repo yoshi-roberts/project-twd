@@ -1,23 +1,25 @@
 #include <stdbool.h>
 #include "healthbar.h"
 
-Healthbar create_healthbar(Vector2 position, int width, int height, int *health) {
+Healthbar create_healthbar(int *hp, int width, int height) {
+
     Healthbar healthbar;
-    healthbar.position = position;
+
+	healthbar.hp = hp;
+	healthbar.hp_max = *hp;
     healthbar.width = width;
     healthbar.height = height;
-    healthbar.currentHealth = health;
-    healthbar.maxHealth = *health;
     healthbar.active = true;
+
     return healthbar;
 }
 
 void remove_health(Healthbar *healthbar, float amount) {
     if (!healthbar->active) return;
 
-    *healthbar->currentHealth -= amount;
-    if (healthbar->currentHealth <= 0) {
-        *healthbar->currentHealth = 0;
+    *healthbar->hp -= amount;
+    if (*healthbar->hp <= 0) {
+        *healthbar->hp = 0;
         healthbar->active = false; // Deactivate if health reaches zero
     }
 }
@@ -25,30 +27,18 @@ void remove_health(Healthbar *healthbar, float amount) {
 void restore_health(Healthbar *healthbar, float amount) {
     if (!healthbar->active) return;
 
-    *healthbar->currentHealth += amount;
-    if (*healthbar->currentHealth > healthbar->maxHealth) {
-        *healthbar->currentHealth = healthbar->maxHealth;
+    *healthbar->hp += amount;
+    if (*healthbar->hp > healthbar->hp_max) {
+        *healthbar->hp = healthbar->hp_max;
     }
 }
 
 void draw_healthbar(Healthbar *healthbar, int x, int y) {
     if (!healthbar->active) return;
 
-    // Calculate the width of the current health
-    int healthWidth = (*healthbar->currentHealth / healthbar->maxHealth) * healthbar->width;
-
 	int xp = x - (healthbar->width / 2);
+	float width = ((float)*healthbar->hp / (float)healthbar->hp_max) * healthbar->width;
 
-    // Draw the background (gray) for the full health bar
-    DrawRectangle(xp, y, healthbar->width, healthbar->height, GRAY);
-
-    // Draw the current health (red)
-    DrawRectangle(xp, y, healthWidth, healthbar->height, RED);
-
-    // Ensure a clean black border around the health bar
-    DrawRectangleLinesEx(
-        (Rectangle){xp, y, healthbar->width, healthbar->height}, 
-        1,  // Thickness of the border
-        BLACK
-    );
+	DrawRectangle(xp - 1, y - 1, healthbar->width + 2, healthbar->height + 2, BLACK);
+	DrawRectangle(xp, y, width, healthbar->height, GREEN);
 }

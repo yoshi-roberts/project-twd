@@ -5,15 +5,13 @@
 #define MAX_HEALTHBARS 50
 
 typedef struct Healthbar {
-    Vector2 position;
+	int *hp; int hp_max;
     int width;
     int height;
-    int *currentHealth;
-    int maxHealth;
     bool active;
 } Healthbar;
 
-Healthbar create_healthbar(Vector2 position, int width, int height, int *health);
+Healthbar create_healthbar(int *hp, int width, int height);
 void remove_health(Healthbar *healthbar, float amount);
 void draw_healthbar(Healthbar *healthbar, int x, int y);
 

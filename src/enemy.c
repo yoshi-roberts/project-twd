@@ -3,26 +3,30 @@
 #include "game.h"
 #include "scene_path.h"
 #include "healthbar.h"
+#include <stdlib.h>
 
-Enemy enemy_new(ENEMY_TYPE type) {
-
-	Enemy enemy = {};
-
-	enemy.type = type;
-	enemy.xdir = 0;
-	enemy.ydir = 0;
-	enemy.asset = assets_get("assets/images/enemies.png");
+void enemy_new(ENEMY_TYPE type) {
 
 	Scene *scn = game_get_scene();
-	enemy.next_waypoint_index = get_last_waypoint(scn);
-	enemy_get_waypoint(&enemy);
 
-	enemy.x = (int)enemy.next_waypoint.x;
-	enemy.y = (int)enemy.next_waypoint.y;
+	scn->enemies[scn->last_enemy] = malloc(sizeof(Enemy));
 
-	enemy.hp = 100;
-	enemy.healthbar = create_healthbar((Vector2){enemy.x, enemy.y - 10}, 20, 4, &enemy.hp);
-	return enemy;
+	Enemy *enemy = scn->enemies[scn->last_enemy];
+	scn->last_enemy++;
+
+	enemy->type = type;
+	enemy->hp = 50;
+	enemy->xdir = 0;
+	enemy->ydir = 0;
+	enemy->asset = assets_get("assets/images/enemies.png");
+
+	enemy->next_waypoint_index = get_last_waypoint(scn);
+	enemy_get_waypoint(enemy);
+
+	enemy->x = (int)enemy->next_waypoint.x;
+	enemy->y = (int)enemy->next_waypoint.y;
+
+	enemy->healthbar = create_healthbar(&enemy->hp, 20, 3);
 }
 
 void enemy_update(Enemy *enemy) {
