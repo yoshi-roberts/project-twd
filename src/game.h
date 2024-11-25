@@ -20,9 +20,7 @@ typedef struct {
 	int money;
 } Game;
 
-// Initializes the game struct.
 void game_init();
-// Deinitializes the game struct and frees any allocated memory.
 void game_shutdown();
 void game_update();
 void game_draw();

@@ -15,7 +15,6 @@ void scene_destroy(Scene *scene) {
 	for (int i = 0; i < scene->last_enemy; i++) {
 		free(scene->enemies[i]);
 	}
-
 	free(scene->enemies);
 }
 
@@ -80,8 +79,12 @@ Scene scene_init(int difficulty, const char* path) {
 	scene.difficulty = difficulty;
     scene.scene_state = STATE_BUILD;
 	scene.last_enemy = 0;
+    scene.projectile_count = 0;
 
-	memset(scene.units, 0, sizeof(scene.units));
+    memset(scene.units, 0, sizeof(scene.units));
+    memset(scene.tilemap_layer1.tiles, 0, sizeof(scene.tilemap_layer1.tiles));
+    memset(scene.tilemap_layer2.tiles, 0, sizeof(scene.tilemap_layer2.tiles));
+    memset(scene.tilemap_layer3.tiles, 0, sizeof(scene.tilemap_layer3.tiles));
 	scene.enemies = malloc(128 * sizeof(Enemy*));
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);
@@ -148,13 +151,14 @@ void gen_treeline(Scene *scene) {
 void build_tree(Scene *scene, int anchor[], int layer) {
     int base_row = anchor[0];
     int base_col = anchor[1];
-    int (*tiles)[TILEMAP_WIDTH];
+    int (*tiles)[TILEMAP_WIDTH] = NULL;
+
     if (layer == 2) {
         tiles = scene->tilemap_layer2.tiles;
     } else if (layer == 3) {
         tiles = scene->tilemap_layer3.tiles;
     }
-    // Place tree tiles on the selected layer
+
     if (base_row >= 0 && base_row < TILEMAP_HEIGHT && base_col >= 0 && base_col < TILEMAP_WIDTH) {
         tiles[base_row][base_col] = TILE_TREE_1;  // Top-right part of the tree
     }

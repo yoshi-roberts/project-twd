@@ -27,7 +27,7 @@ void enemy_new(ENEMY_TYPE type) {
 	enemy->x = (int)enemy->next_waypoint.x;
 	enemy->y = (int)enemy->next_waypoint.y;
 
-	enemy->healthbar = create_healthbar(&enemy->hp, 20, 3);
+	enemy->healthbar = create_healthbar(&enemy->hp, 20, 3, RED);
 }
 
 void enemy_update(Enemy *enemy) {
@@ -57,7 +57,7 @@ void enemy_update(Enemy *enemy) {
 void enemy_draw(Enemy *enemy) {
 	if (!enemy->healthbar.active) return;
 	asset_draw_tile(enemy->asset, enemy->type, enemy->x, enemy->y - 4);
-	draw_healthbar(&enemy->healthbar, enemy->x + 8, enemy->y - 8);
+	draw_healthbar(&enemy->healthbar, enemy->x + 8, enemy->y - 8, RED);
 }
 
 void enemy_get_waypoint(Enemy *enemy) {
@@ -69,6 +69,8 @@ void enemy_get_waypoint(Enemy *enemy) {
 	}
 	else{
 	enemy->healthbar.active = false;
+	scn = game_get_scene();
+	remove_health(&scn->tower_healthbar, 25);
 	//REMOVE HEALTH FROM WIZARD TOWER/ GAMESTATE ETC..
 	}
 }

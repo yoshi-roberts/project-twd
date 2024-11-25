@@ -5,6 +5,7 @@
 #include "tilemap.h"
 #include "assets.h"
 #include "unit.h"
+#include "projectile.h"
 
 enum GameState {
 	STATE_BUILD = 0,
@@ -19,8 +20,12 @@ typedef struct {
 	int waves;
 	int scene_state;
 	int last_enemy;
+	int projectile_count;
 	Enemy **enemies;
 	Unit units[TILEMAP_HEIGHT][TILEMAP_WIDTH];
+	Projectile projectiles[MAX_PROJECTILES];
+	int tower_hp;
+	Healthbar tower_healthbar;
 	Tilemap tilemap_layer1;
     Tilemap tilemap_layer2;
 	Tilemap tilemap_layer3;
