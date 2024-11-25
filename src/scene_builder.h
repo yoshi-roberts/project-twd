@@ -25,6 +25,7 @@ typedef struct {
 	Unit units[TILEMAP_HEIGHT][TILEMAP_WIDTH];
 	Tilemap tilemap_layer1;
     Tilemap tilemap_layer2;
+	Tilemap tilemap_layer3;
 } Scene;
 
 Scene scene_init(int difficulty, const char* path);
@@ -33,7 +34,7 @@ void scene_update(Scene *scene);
 void scene_draw(Scene *scene);
 void scene_randomize(Scene *scene);
 void gen_treeline(Scene *scene);
-void build_tree(Scene *scene, int anchor[]);
+void build_tree(Scene *scene, int anchor[], int layer);
 void scene_state_set(Scene *scene, int state);
 int scene_state_get(Scene *scene);
 

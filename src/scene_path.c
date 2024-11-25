@@ -29,6 +29,8 @@ void gen_random_path(Scene *scene) {
         int remaining_distance = TILEMAP_WIDTH - 1 - anchor[1];
         path_right(scene, anchor, remaining_distance, &last, &new_direction);
     }
+    anchor[1] = anchor[1]+1;
+    index = save_waypoint(scene, anchor, index);
 }
 //==================================================================================================================================
 void gen_section(Scene *scene, int *anchor, char *last, char *new) {

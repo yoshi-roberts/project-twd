@@ -21,6 +21,7 @@ typedef struct {
 	Vector2 next_waypoint;
 	Asset *asset;
 	Healthbar healthbar;
+	bool active;
 } Enemy;
 
 void enemy_new(ENEMY_TYPE type);
