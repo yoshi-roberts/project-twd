@@ -3,6 +3,7 @@
 #include "game.h"
 #include "assets.h"
 #include "animation.h"
+#include "healthbar.h"
 #include "log.h"
 #include "text_input.h"
 #include "scene_builder.h"
@@ -55,6 +56,7 @@ void game_shutdown() {
 		return;
 	}
 
+	scene_destroy(&game.scene);
 	canvas_destroy(&game.canvas);
 
 	assets_destory();
@@ -92,9 +94,14 @@ void game_update() {
 			if (game.scene.last_enemy < 128) {
 
 				int type = GetRandomValue(0, 2);
+				enemy_new(type);
+			}
+		}
 
-				game.scene.enemies[game.scene.last_enemy] = enemy_new(type);
-				game.scene.last_enemy++;
+		if (IsKeyPressed(KEY_R)) {
+			for (int i = 0; i < game.scene.last_enemy; i++) {
+				Enemy *enemy = game.scene.enemies[i];
+				remove_health(&enemy->healthbar, 10);
 			}
 		}
 

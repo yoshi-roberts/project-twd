@@ -10,6 +10,15 @@
 #include "unit.h"
 #include "tilemap.h"
 
+void scene_destroy(Scene *scene) {
+
+	for (int i = 0; i < scene->last_enemy; i++) {
+		free(scene->enemies[i]);
+	}
+
+	free(scene->enemies);
+}
+
 void scene_draw(Scene *scene) {
 
 	for(int y=0; y<TILEMAP_HEIGHT; y++) {
@@ -38,7 +47,7 @@ void scene_draw(Scene *scene) {
 	}
 
 	for (int i = 0; i < scene->last_enemy; i++) {
-		Enemy *enemy = &scene->enemies[i];
+		Enemy *enemy = scene->enemies[i];
 		enemy_draw(enemy);
 	}
 }
@@ -46,7 +55,7 @@ void scene_draw(Scene *scene) {
 void scene_update(Scene *scene) {
 
 	for (int i = 0; i < scene->last_enemy; i++) {
-		Enemy *enemy = &scene->enemies[i];
+		Enemy *enemy = scene->enemies[i];
 		enemy_update(enemy);
 	}
 }
@@ -59,6 +68,7 @@ Scene scene_init(int difficulty, const char* path) {
 	scene.last_enemy = 0;
 
 	memset(scene.units, 0, sizeof(scene.units));
+	scene.enemies = malloc(128 * sizeof(Enemy*));
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);
     scene.tilemap_layer2.asset_ptr = assets_get(path);
