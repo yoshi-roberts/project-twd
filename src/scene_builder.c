@@ -26,12 +26,10 @@ void scene_draw(Scene *scene) {
 		for(int x=0; x<TILEMAP_WIDTH; x++) {
 
             int tile1 = scene->tilemap_layer1.tiles[y][x];
-            int tile2 = scene->tilemap_layer2.tiles[y][x];
 			int xp = x * TILESIZE;
 			int yp = y * TILESIZE;
 
             asset_draw_tile(scene->tilemap_layer1.asset_ptr, tile1, xp, yp);  // Draw layer 1
-            asset_draw_tile(scene->tilemap_layer2.asset_ptr, tile2, xp, yp);  // Draw layer 2 (trees)
 		}
 	}
 
@@ -49,6 +47,17 @@ void scene_draw(Scene *scene) {
 	for (int i = 0; i < scene->last_enemy; i++) {
 		Enemy *enemy = scene->enemies[i];
 		enemy_draw(enemy);
+	}
+
+    for(int y=0; y<TILEMAP_HEIGHT; y++) {
+
+		for(int x=0; x<TILEMAP_WIDTH; x++) {
+
+            int tile2 = scene->tilemap_layer2.tiles[y][x];
+			int xp = x * TILESIZE;
+			int yp = y * TILESIZE;
+            asset_draw_tile(scene->tilemap_layer2.asset_ptr, tile2, xp, yp);  // Draw layer 2 (trees)
+		}
 	}
 }
 
@@ -75,7 +84,7 @@ Scene scene_init(int difficulty, const char* path) {
     
     for (int y = 0; y < TILEMAP_HEIGHT; y++) {
         for (int x = 0; x < TILEMAP_WIDTH; x++) {
-            scene.tilemap_layer2.tiles[y][x] = -1;  // Replace TILE_EMPTY with your empty tile value
+            scene.tilemap_layer2.tiles[y][x] = -1; 
         }
     }
 
@@ -100,8 +109,6 @@ void scene_randomize(Scene *scene) {
 				} else if (r > 99 && r <= 100) {
 					scene->tilemap_layer1.tiles[y][x] = TILE_ROCK;
 				}
-			//}
-
 		}
 	}
     gen_treeline(scene);
