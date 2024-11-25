@@ -31,6 +31,7 @@ void enemy_new(ENEMY_TYPE type) {
 }
 
 void enemy_update(Enemy *enemy) {
+	if (!enemy->healthbar.active) return;
 
 	if (enemy->x == (int)enemy->next_waypoint.x && enemy->y == (int)enemy->next_waypoint.y) {
 		enemy_get_waypoint(enemy);
@@ -48,19 +49,18 @@ void enemy_update(Enemy *enemy) {
 		}
 
 	} else {
-
 		enemy->x += enemy->xdir;
 		enemy->y += enemy->ydir;
 	}
 }
 
 void enemy_draw(Enemy *enemy) {
+	if (!enemy->healthbar.active) return;
 	asset_draw_tile(enemy->asset, enemy->type, enemy->x, enemy->y - 4);
 	draw_healthbar(&enemy->healthbar, enemy->x + 8, enemy->y - 8);
 }
 
 void enemy_get_waypoint(Enemy *enemy) {
-
 	Scene *scn = game_get_scene();
 
 	if (enemy->next_waypoint_index > 0) {
