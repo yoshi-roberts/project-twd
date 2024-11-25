@@ -2,6 +2,7 @@
 #define SCENE_BUILDER_H
 
 #include "enemy.h"
+#include "spawner.h"
 #include "tilemap.h"
 #include "assets.h"
 #include "unit.h"
@@ -19,6 +20,7 @@ typedef struct {
 	int waves;
 	int scene_state;
 	int last_enemy;
+	Spawner spawner;
 	Enemy **enemies;
 	Unit units[TILEMAP_HEIGHT][TILEMAP_WIDTH];
 	Tilemap tilemap_layer1;

@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "scene_path.h"
 #include "assets.h"
+#include "spawner.h"
 #include "unit.h"
 #include "tilemap.h"
 
@@ -54,7 +55,10 @@ void scene_draw(Scene *scene) {
 
 void scene_update(Scene *scene) {
 
+	spawner_update(&scene->spawner);
+
 	for (int i = 0; i < scene->last_enemy; i++) {
+
 		Enemy *enemy = scene->enemies[i];
 		enemy_update(enemy);
 	}
@@ -67,6 +71,8 @@ Scene scene_init(int difficulty, const char* path) {
     scene.scene_state = STATE_BUILD;
 	scene.last_enemy = 0;
 
+	scene.spawner = spawner_new(2, 0, 0);
+
 	memset(scene.units, 0, sizeof(scene.units));
 	scene.enemies = malloc(128 * sizeof(Enemy*));
 
@@ -75,7 +81,13 @@ Scene scene_init(int difficulty, const char* path) {
     
     for (int y = 0; y < TILEMAP_HEIGHT; y++) {
         for (int x = 0; x < TILEMAP_WIDTH; x++) {
+<<<<<<< Updated upstream
             scene.tilemap_layer2.tiles[y][x] = -1;  // Replace TILE_EMPTY with your empty tile value
+=======
+
+            scene.tilemap_layer2.tiles[y][x] = -1; 
+            scene.tilemap_layer3.tiles[y][x] = -1;
+>>>>>>> Stashed changes
         }
     }
 
