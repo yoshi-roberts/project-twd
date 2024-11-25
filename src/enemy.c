@@ -19,6 +19,7 @@ void enemy_new(ENEMY_TYPE type) {
 	enemy->xdir = 0;
 	enemy->ydir = 0;
 	enemy->asset = assets_get("assets/images/enemies.png");
+	enemy->active = true;
 
 	enemy->next_waypoint_index = get_last_waypoint(scn);
 	enemy_get_waypoint(enemy);
