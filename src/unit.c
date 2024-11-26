@@ -1,5 +1,8 @@
 #include "unit.h"
 #include "assets.h"
+#include "enemy.h"
+#include "game.h"
+#include "scene_builder.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -27,6 +30,25 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	}
 
 	return unit;
+}
+
+void unit_update(Unit *unit) {
+
+	Scene *scn = game_get_scene();
+
+	for (int i = 0; i < scn->last_enemy; i++) {
+	
+		Enemy *enemy = scn->enemies[i];
+
+		int cx = (unit->x * 16) + 8;
+		int cy = (unit->y * 16) + 8;
+		int rad = unit->range * 16;
+		int dist = (enemy->x - cx)*(enemy->x - cx) + (enemy->y - cy)*(enemy->y - cy);
+
+		if (dist <= rad * rad) {
+			printf("Enemy!\n");
+		}
+	}
 }
 
 void unit_draw(Unit *unit) {
