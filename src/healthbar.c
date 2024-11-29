@@ -11,13 +11,11 @@ Healthbar create_healthbar(int *hp, int width, int height, Color color) {
     healthbar.height = height;
     healthbar.color = color;
     healthbar.active = true;
-
     return healthbar;
 }
 
 void remove_health(Healthbar *healthbar, float amount) {
     if (!healthbar->active) return;
-
     *healthbar->hp -= amount;
     if (*healthbar->hp <= 0) {
         *healthbar->hp = 0;

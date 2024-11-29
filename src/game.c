@@ -10,6 +10,7 @@
 #include "placement.h"
 #include "scene_builder.h"
 #include "enemy.h"
+#include "projectile.h"
 
 static Game game = {};
 static bool initialized = false;
@@ -31,7 +32,6 @@ void game_init() {
 
 	game.dt = 0.0f;
 	game.difficulty = 0;
-	game.scene.tower_hp = 100;
 	game.money = 1000;
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
@@ -41,6 +41,7 @@ void game_init() {
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	tower = assets_get("assets/images/tower-wizard.png");
 
+	game.scene.tower_hp = 200;
 	game.scene.tower_healthbar = create_healthbar(&game.scene.tower_hp, 20, 4, GREEN);
 	placement_init();
 
@@ -159,6 +160,19 @@ void game_draw() {
 	EndDrawing();
 }
 
+void game_check_state(Scene *scene){
+	if (*scene->tower_healthbar.hp <= 0){
+		for (int i = 0; i < scene->last_enemy; i++) {
+			Enemy *enemy = scene->enemies[i];
+			remove_health(&enemy->healthbar, 500);
+		}
+		//scene->last_enemy = 128;
+	}
+}
+
+
+
+
 Scene* game_get_scene() {
 	return &game.scene;
 }
@@ -182,3 +196,4 @@ int game_get_mouse_x() {
 int game_get_mouse_y() {
 	return game.canvas.mouse.y;
 }
+

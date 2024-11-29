@@ -69,8 +69,7 @@ void enemy_get_waypoint(Enemy *enemy) {
 	}
 	else{
 	enemy->healthbar.active = false;
-	scn = game_get_scene();
-	remove_health(&scn->tower_healthbar, 25);
-	//REMOVE HEALTH FROM WIZARD TOWER/ GAMESTATE ETC..
+	remove_health(&scn->tower_healthbar, enemy->healthbar.hp_max);
+	game_check_state(scn);
 	}
 }
