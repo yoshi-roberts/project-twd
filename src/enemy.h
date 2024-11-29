@@ -11,7 +11,6 @@ typedef enum {
 	ENEMY_SPIDER,
 } ENEMY_TYPE;
 
-// Enemy-specific components
 typedef struct {
 	ENEMY_TYPE type;
 	int hp;

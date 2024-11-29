@@ -10,6 +10,7 @@
 #include "placement.h"
 #include "scene_builder.h"
 #include "enemy.h"
+#include "projectile.h"
 
 static Game game = {};
 static bool initialized = false;
@@ -40,6 +41,8 @@ void game_init() {
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	tower = assets_get("assets/images/tower-wizard.png");
 
+	game.scene.tower_hp = 200;
+	game.scene.tower_healthbar = create_healthbar(&game.scene.tower_hp, 20, 4, GREEN);
 	placement_init();
 
 	game.list = wordlist_init();
@@ -105,6 +108,16 @@ void game_update() {
 			}
 		}
 
+		if (IsKeyPressed(KEY_S)) {
+			if (game.scene.projectile_count < MAX_PROJECTILES) {
+				Vector2 start_position = (Vector2){100, 200};
+				Vector2 end_position = (Vector2){300, 200};
+
+				game.scene.projectiles[game.scene.projectile_count] = new_projectile(start_position, end_position, 5, 10, 0);
+				game.scene.projectile_count++;
+			}
+		}
+		update_all_projectile(game.scene.projectiles, &game.scene.projectile_count);
 		canvas_update(&game.canvas);
 		game_draw();
 
@@ -123,17 +136,20 @@ void game_draw() {
 	ClearBackground(BLACK);
 
 	canvas_begin(&game.canvas);
-
 	scene_draw(&game.scene);
 
 	DrawTexture(tower->data.sprite.texture, 0, 6 * 16, WHITE);
-
-	placement_draw();
+	draw_healthbar(&game.scene.tower_healthbar, 16, 145, GREEN);
 
 	char money_str[128];
 	sprintf(money_str, "Money: $%d", game.money);
 	DrawText(money_str, 4, 4, 10, WHITE);
 
+	for (int i = 0; i < game.scene.projectile_count; i++) {
+    	draw_projectile(&game.scene.projectiles[i]);
+	}
+
+	placement_draw();
 	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
@@ -143,6 +159,19 @@ void game_draw() {
 	canvas_draw(&game.canvas);
 	EndDrawing();
 }
+
+void game_check_state(Scene *scene){
+	if (*scene->tower_healthbar.hp <= 0){
+		for (int i = 0; i < scene->last_enemy; i++) {
+			Enemy *enemy = scene->enemies[i];
+			remove_health(&enemy->healthbar, 500);
+		}
+		//scene->last_enemy = 128;
+	}
+}
+
+
+
 
 Scene* game_get_scene() {
 	return &game.scene;
@@ -167,3 +196,4 @@ int game_get_mouse_x() {
 int game_get_mouse_y() {
 	return game.canvas.mouse.y;
 }
+

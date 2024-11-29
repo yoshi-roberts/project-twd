@@ -20,12 +20,11 @@ typedef struct {
 	int money;
 } Game;
 
-// Initializes the game struct.
 void game_init();
-// Deinitializes the game struct and frees any allocated memory.
 void game_shutdown();
 void game_update();
 void game_draw();
+void game_check_state(Scene *scene);
 
 Scene* game_get_scene();
 int game_get_difficulty();
@@ -35,4 +34,4 @@ int game_get_mouse_y();
 
 void game_set_money(int amount);
 
-#endif // GAME_H
+#endif
