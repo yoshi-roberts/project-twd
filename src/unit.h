@@ -2,6 +2,7 @@
 #define UNIT_H
 
 #include "assets.h"
+#include "enemy.h"
 
 typedef enum {
 	UNIT_VILLAGER,
@@ -25,7 +26,7 @@ typedef struct {
 Unit unit_new(UNIT_TYPE type, int x, int y);
 void unit_update(Unit *unit);
 void unit_draw(Unit *unit);
-bool unit_is_enemy_in_range(Unit *unit);
+Enemy* unit_enemy_in_range(Unit *unit);
 int unit_get_cost(UNIT_TYPE type);
 
 #endif // UNIT_H

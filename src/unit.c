@@ -2,6 +2,7 @@
 #include "assets.h"
 #include "enemy.h"
 #include "game.h"
+#include "healthbar.h"
 #include "scene_builder.h"
 #include <math.h>
 #include <stdio.h>
@@ -38,10 +39,14 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 void unit_update(Unit *unit) {
 
-	if (unit->can_attack && unit_is_enemy_in_range(unit)) {
+	if (unit->can_attack) {
+		
+		Enemy *target = unit_enemy_in_range(unit);
 
-		printf("Attacking!\n");
-		unit->can_attack = false;
+		if (target) {
+			remove_health(&target->healthbar, 10);
+			unit->can_attack = false;
+		}
 	}
 
 	if (!unit->can_attack) {
@@ -56,7 +61,7 @@ void unit_update(Unit *unit) {
 	}
 }
 
-bool unit_is_enemy_in_range(Unit *unit) {
+Enemy* unit_enemy_in_range(Unit *unit) {
 
 	Scene *scn = game_get_scene();
 
@@ -70,12 +75,11 @@ bool unit_is_enemy_in_range(Unit *unit) {
 		int dist = (enemy->x - cx)*(enemy->x - cx) + (enemy->y - cy)*(enemy->y - cy);
 
 		if (dist <= rad * rad) {
-			printf("Enemy!\n");
-			return true;
+			return enemy;
 		}
 	}
 
-	return false;
+	return NULL;
 }
 
 void unit_draw(Unit *unit) {
