@@ -18,6 +18,10 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.hp = 100;
 	unit.cost = unit_get_cost(type);
 
+	unit.attack_cooldown = 60;
+	unit.attack_timer = unit.attack_cooldown; 
+	unit.can_attack = true;
+
 	switch (type) {
 		case UNIT_KNIGHT:
 			unit.range = 2;
@@ -34,6 +38,26 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 void unit_update(Unit *unit) {
 
+	if (unit->can_attack && unit_is_enemy_in_range(unit)) {
+
+		printf("Attacking!\n");
+		unit->can_attack = false;
+	}
+
+	if (!unit->can_attack) {
+
+		unit->attack_timer--;
+
+		if (unit->attack_timer <= 0) {
+
+			unit->attack_timer = unit->attack_cooldown;
+			unit->can_attack = true;
+		}
+	}
+}
+
+bool unit_is_enemy_in_range(Unit *unit) {
+
 	Scene *scn = game_get_scene();
 
 	for (int i = 0; i < scn->last_enemy; i++) {
@@ -47,8 +71,11 @@ void unit_update(Unit *unit) {
 
 		if (dist <= rad * rad) {
 			printf("Enemy!\n");
+			return true;
 		}
 	}
+
+	return false;
 }
 
 void unit_draw(Unit *unit) {
