@@ -4,6 +4,7 @@
 #include "game.h"
 #include "healthbar.h"
 #include "scene_builder.h"
+#include "text_input.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -18,10 +19,13 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.range = 32;
 	unit.hp = 100;
 	unit.cost = unit_get_cost(type);
+	unit.energy = 100;
 
 	unit.attack_cooldown = 60;
 	unit.attack_timer = unit.attack_cooldown; 
 	unit.can_attack = true;
+
+	unit.text_input = text_input_new(game_get_wordlist()->easy);
 
 	switch (type) {
 		case UNIT_KNIGHT:
@@ -39,12 +43,13 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 void unit_update(Unit *unit) {
 
-	if (unit->can_attack) {
+	if (unit->can_attack && unit->energy > 0) {
 		
 		Enemy *target = unit_enemy_in_range(unit);
 
 		if (target) {
 			remove_health(&target->healthbar, 10);
+			unit->energy -= 10;
 			unit->can_attack = false;
 		}
 	}
@@ -59,6 +64,8 @@ void unit_update(Unit *unit) {
 			unit->can_attack = true;
 		}
 	}
+
+	text_input_update(&unit->text_input);
 }
 
 Enemy* unit_enemy_in_range(Unit *unit) {
@@ -111,6 +118,8 @@ void unit_draw(Unit *unit) {
 		DrawText(hp, hp_pos.x, hp_pos.y, 10, WHITE);
 		DrawText(defense, defense_pos.x, defense_pos.y, 10, WHITE);
 	}
+
+	text_input_draw(&unit->text_input, (unit->x * 16) + 8, (unit->y * 16) - 6);
 }
 
 int unit_get_cost(UNIT_TYPE type) {

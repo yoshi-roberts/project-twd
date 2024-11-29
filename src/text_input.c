@@ -1,12 +1,10 @@
-#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include "text_input.h"
 #include "../lib/raylib/src/raylib.h"
-#include "assets.h"
 #include "wordlist.h"
 
-TextInput text_input_init(char (*list)[WORD_MAX_LEN]) {
+TextInput text_input_new(char (*list)[WORD_MAX_LEN]) {
 
 	TextInput text_input;
 	memset(text_input.buff, 0, sizeof(char) * WORD_MAX_LEN);
@@ -51,15 +49,13 @@ void text_input_update(TextInput *text_input) {
 	}
 }
 
-void text_input_draw(TextInput *text_input) {
+void text_input_draw(TextInput *text_input, int x, int y) {
 
 	int size = MeasureText(text_input->target, 10);
 
-	Vector2 pos = {
-   		floor((480 / 2.0f) - ((float)size / 2)),
-		floor((270 / 3.0f) - ((float)10 / 2)),
-	};
+	int xp = x - (size / 2);
+	int yp = y - (10 / 2);
 
-	DrawText(text_input->target, pos.x, pos.y, 10, WHITE);
-	DrawText( text_input->buff, pos.x, pos.y, 10, DARKPURPLE);
+	DrawText(text_input->target, xp, yp, 10, WHITE);
+	DrawText( text_input->buff, xp, yp, 10, DARKPURPLE);
 }

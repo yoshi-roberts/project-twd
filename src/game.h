@@ -28,6 +28,7 @@ void game_update();
 void game_draw();
 
 Scene* game_get_scene();
+WordList* game_get_wordlist();
 int game_get_difficulty();
 int game_get_money();
 int game_get_mouse_x();

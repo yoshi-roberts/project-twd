@@ -3,6 +3,7 @@
 
 #include "assets.h"
 #include "enemy.h"
+#include "text_input.h"
 
 typedef enum {
 	UNIT_VILLAGER,
@@ -12,11 +13,13 @@ typedef enum {
 typedef struct {
 	UNIT_TYPE type;
 	Asset *asset;
+	TextInput text_input;
 	int x; int y;
 	int range;
 	int hp;
 	int defense;
 	int cost;
+	int energy;
 	int attack_timer;
 	int attack_cooldown;
 	bool can_attack;
