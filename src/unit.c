@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 Unit unit_new(UNIT_TYPE type, int x, int y) {
+
 	Unit unit = {};
 
 	unit.type = type;
@@ -20,6 +21,7 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.hp = 100;
 	unit.cost = unit_get_cost(type);
 	unit.energy = 100;
+	unit.target = NULL;
 
 	unit.attack_cooldown = 60;
 	unit.attack_timer = unit.attack_cooldown; 
@@ -38,34 +40,60 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 			break;
 	}
 
+	unit.state = UNIT_STATE_IDLE;
+
 	return unit;
 }
 
 void unit_update(Unit *unit) {
 
-	if (unit->can_attack && unit->energy > 0) {
-		
-		Enemy *target = unit_enemy_in_range(unit);
+	unit->target = unit_enemy_in_range(unit);
 
-		if (target) {
-			remove_health(&target->healthbar, 10);
-			unit->energy -= 10;
-			unit->can_attack = false;
-		}
+	switch (unit->state) {
+	
+		case UNIT_STATE_IDLE:
+
+			if (unit->target) {
+				unit->state = UNIT_STATE_ATTACK;
+			}
+
+			break;
+
+		case  UNIT_STATE_ATTACK:
+
+			if (unit->target && unit->can_attack && unit->energy > 0) {
+
+				remove_health(&unit->target->healthbar, 10);
+				unit->energy -= 10;
+				unit->can_attack = false;
+			}
+
+			unit->attack_timer--;
+
+			if (unit->attack_timer <= 0) {
+
+				unit->attack_timer = unit->attack_cooldown;
+				unit->can_attack = true;
+			}
+
+			if (unit->energy <= 0 && !game_get_text_input_active()) {
+				game_set_text_input_active(true);
+				unit->state = UNIT_STATE_TYPE;
+			}
+
+			break;
+
+		case UNIT_STATE_TYPE:
+
+			if (text_input_update(&unit->text_input)) {
+				unit->energy = 100;
+				text_input_reset(&unit->text_input);
+				game_set_text_input_active(false);
+				unit->state = UNIT_STATE_IDLE;
+			}
+
+			break;
 	}
-
-	if (!unit->can_attack) {
-
-		unit->attack_timer--;
-
-		if (unit->attack_timer <= 0) {
-
-			unit->attack_timer = unit->attack_cooldown;
-			unit->can_attack = true;
-		}
-	}
-
-	text_input_update(&unit->text_input);
 }
 
 Enemy* unit_enemy_in_range(Unit *unit) {
@@ -119,7 +147,22 @@ void unit_draw(Unit *unit) {
 		DrawText(defense, defense_pos.x, defense_pos.y, 10, WHITE);
 	}
 
-	text_input_draw(&unit->text_input, (unit->x * 16) + 8, (unit->y * 16) - 6);
+	switch (unit->state) {
+	
+		case UNIT_STATE_IDLE:
+
+			break;
+
+		case UNIT_STATE_ATTACK:
+
+			break;
+
+		case UNIT_STATE_TYPE:
+
+			text_input_draw(&unit->text_input, (unit->x * 16) + 8, (unit->y * 16) - 6);
+
+			break;
+	}
 }
 
 int unit_get_cost(UNIT_TYPE type) {

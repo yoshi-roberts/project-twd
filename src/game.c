@@ -164,3 +164,11 @@ int game_get_mouse_x() {
 int game_get_mouse_y() {
 	return game.canvas.mouse.y;
 }
+
+bool game_get_text_input_active() {
+	return game.text_input_active;
+}
+
+void game_set_text_input_active(bool active) {
+	game.text_input_active = active;
+}

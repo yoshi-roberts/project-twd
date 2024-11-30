@@ -1,5 +1,5 @@
+#include <stdio.h>
 #include <string.h>
-#include <math.h>
 #include "text_input.h"
 #include "../lib/raylib/src/raylib.h"
 #include "wordlist.h"
@@ -12,17 +12,19 @@ TextInput text_input_new(char (*list)[WORD_MAX_LEN]) {
 	text_input.target = wordlist_get(list);
 	text_input.buff[WORD_MAX_LEN] = '\0';
 	text_input.count = 0;
+	text_input.list = list;
 
 	return text_input;
 }
 
 void text_input_reset(TextInput *text_input) {
 	memset(text_input->buff, 0, sizeof(char) * WORD_MAX_LEN);
+	text_input->target = wordlist_get(text_input->list);
 	text_input->buff[WORD_MAX_LEN] = '\0';
 	text_input->count = 0;
 }
 
-void text_input_update(TextInput *text_input) {
+bool text_input_update(TextInput *text_input) {
 
 	int key = GetCharPressed();
 
@@ -47,6 +49,12 @@ void text_input_update(TextInput *text_input) {
 		if (text_input->count < 0) text_input->count = 0;
 		text_input->buff[text_input->count] = '\0';
 	}
+
+	if (text_input->count == strlen(text_input->target) - 1) {
+		return true;
+	}
+
+	return false;
 }
 
 void text_input_draw(TextInput *text_input, int x, int y) {

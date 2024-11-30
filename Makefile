@@ -36,7 +36,7 @@ $(BIN_DIR)/$(BIN): $(addprefix $(OBJ_DIR)/,$(OBJS))
 
 # Create object files.
 $(addprefix $(OBJ_DIR),/%.o):src/%.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) -c -o $@ $^ -g
 
 clean:
 	-$(RM) bin

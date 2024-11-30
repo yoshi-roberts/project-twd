@@ -10,10 +10,18 @@ typedef enum {
 	UNIT_KNIGHT,
 } UNIT_TYPE;
 
+typedef enum {
+	UNIT_STATE_IDLE,
+	UNIT_STATE_ATTACK,
+	UNIT_STATE_TYPE,
+} UNIT_STATE;
+
 typedef struct {
 	UNIT_TYPE type;
+	UNIT_STATE state;
 	Asset *asset;
 	TextInput text_input;
+	Enemy *target;
 	int x; int y;
 	int range;
 	int hp;
