@@ -5,17 +5,16 @@
 #include "animation.h"
 #include "healthbar.h"
 #include "log.h"
-#include "text_input.h"
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
 #include "enemy.h"
 #include "projectile.h"
+#include "wordlist.h"
 
 static Game game = {};
 static bool initialized = false;
 
-static TextInput input;
 static Animation anim;
 static Asset *tower;
 
@@ -46,7 +45,6 @@ void game_init() {
 	placement_init();
 
 	game.list = wordlist_init();
-	input = text_input_init(game.list.easy);
 
 	initialized = true;
 	log_info("Game initialized.");
@@ -80,15 +78,11 @@ void game_update() {
 		game.dt = GetFrameTime();	// Update delta time.
 		
 		scene_update(&game.scene);
-		
-		text_input_update(&input);
 
 		animation_update(&anim);
 		placement_update(game.canvas.mouse.x, game.canvas.mouse.y);
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
-			text_input_reset(&input);
-			input.target = wordlist_get(game.list.easy);
 			scene_randomize(&game.scene);
 		}
 
@@ -150,7 +144,6 @@ void game_draw() {
 	}
 
 	placement_draw();
-	text_input_draw(&input);
 
 	animation_draw(&anim, 64, 64);
 
@@ -177,6 +170,10 @@ Scene* game_get_scene() {
 	return &game.scene;
 }
 
+WordList* game_get_wordlist() {
+	return &game.list;
+}
+
 int game_get_difficulty() {
 	return game.difficulty;
 }
@@ -197,3 +194,10 @@ int game_get_mouse_y() {
 	return game.canvas.mouse.y;
 }
 
+bool game_get_text_input_active() {
+	return game.text_input_active;
+}
+
+void game_set_text_input_active(bool active) {
+	game.text_input_active = active;
+}

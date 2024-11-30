@@ -16,6 +16,7 @@ typedef struct {
 	Canvas canvas;
 	Canvas ui_canvas;
 	WordList list;
+	bool text_input_active;
 	int difficulty;
 	int money;
 } Game;
@@ -27,11 +28,14 @@ void game_draw();
 void game_check_state(Scene *scene);
 
 Scene* game_get_scene();
+WordList* game_get_wordlist();
+bool game_get_text_input_active();
 int game_get_difficulty();
 int game_get_money();
 int game_get_mouse_x();
 int game_get_mouse_y();
 
 void game_set_money(int amount);
+void game_set_text_input_active(bool active);
 
 #endif

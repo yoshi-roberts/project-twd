@@ -75,6 +75,15 @@ void scene_update(Scene *scene) {
 		Enemy *enemy = scene->enemies[i];
 		enemy_update(enemy);
 	}
+
+	for(int y=0; y<TILEMAP_HEIGHT; y++) {   // Draw all units
+		for(int x=0; x<TILEMAP_WIDTH; x++) {
+			Unit *unit = &scene->units[y][x];
+			if (unit->asset != NULL) {
+				unit_update(unit);
+			}
+		}
+	}
 }
 
 Scene scene_init(int difficulty, const char* path) {
