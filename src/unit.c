@@ -1,4 +1,5 @@
 #include "unit.h"
+#include "animation.h"
 #include "assets.h"
 #include "enemy.h"
 #include "game.h"
@@ -17,6 +18,7 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.x = x;
 	unit.y = y;
 	unit.asset = assets_get("assets/images/units.png");
+	unit.sword_swipe = animation_new("assets/animations/sword-anim.png", 15);
 	unit.range = 32;
 	unit.hp = 100;
 	unit.cost = unit_get_cost(type);
@@ -49,6 +51,8 @@ void unit_update(Unit *unit) {
 
 	unit->target = unit_enemy_in_range(unit);
 
+	animation_update(&unit->sword_swipe);
+
 	switch (unit->state) {
 	
 		case UNIT_STATE_IDLE:
@@ -63,6 +67,7 @@ void unit_update(Unit *unit) {
 
 			if (unit->target && unit->can_attack && unit->energy > 0) {
 
+				animation_play(&unit->sword_swipe);
 				remove_health(&unit->target->healthbar, 10);
 				unit->energy -= 10;
 				unit->can_attack = false;
@@ -76,7 +81,16 @@ void unit_update(Unit *unit) {
 				unit->can_attack = true;
 			}
 
-			if (unit->energy <= 0 && !game_get_text_input_active()) {
+			if (unit->energy <= 0) {
+				unit->state = UNIT_STATE_INACTIVE;
+			}
+
+			break;
+
+		case UNIT_STATE_INACTIVE:
+
+			if (!game_get_text_input_active()) {
+
 				game_set_text_input_active(true);
 				unit->state = UNIT_STATE_TYPE;
 			}
@@ -157,12 +171,18 @@ void unit_draw(Unit *unit) {
 
 			break;
 
+		case UNIT_STATE_INACTIVE:
+
+			break;
+
 		case UNIT_STATE_TYPE:
 
 			text_input_draw(&unit->text_input, (unit->x * 16) + 8, (unit->y * 16) - 6);
 
 			break;
 	}
+
+	animation_draw(&unit->sword_swipe, (unit->x * 16), (unit->y * 16) + 8);
 }
 
 int unit_get_cost(UNIT_TYPE type) {

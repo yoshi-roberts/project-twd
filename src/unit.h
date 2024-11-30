@@ -1,6 +1,7 @@
 #ifndef UNIT_H
 #define UNIT_H
 
+#include "animation.h"
 #include "assets.h"
 #include "enemy.h"
 #include "text_input.h"
@@ -13,6 +14,7 @@ typedef enum {
 typedef enum {
 	UNIT_STATE_IDLE,
 	UNIT_STATE_ATTACK,
+	UNIT_STATE_INACTIVE,
 	UNIT_STATE_TYPE,
 } UNIT_STATE;
 
@@ -20,6 +22,7 @@ typedef struct {
 	UNIT_TYPE type;
 	UNIT_STATE state;
 	Asset *asset;
+	Animation sword_swipe;
 	TextInput text_input;
 	Enemy *target;
 	int x; int y;
