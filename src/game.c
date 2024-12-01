@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "game.h"
 #include "assets.h"
-#include "animation.h"
 #include "healthbar.h"
 #include "log.h"
 #include "scene_builder.h"
@@ -11,12 +10,10 @@
 #include "enemy.h"
 #include "projectile.h"
 #include "wordlist.h"
+#include "tower.h"
 
 static Game game = {};
 static bool initialized = false;
-
-static Animation anim;
-static Asset *tower;
 
 void game_init() {
 
@@ -37,11 +34,7 @@ void game_init() {
 	assets_init();
 	game.scene = scene_init(1, "assets/images/tiles.png");
 
-	anim = animation_new("assets/animations/test-anim.png", 6);
-	tower = assets_get("assets/images/tower-wizard.png");
-
-	game.scene.tower_hp = 200;
-	game.scene.tower_healthbar = create_healthbar(&game.scene.tower_hp, 20, 4, GREEN);
+	tower_init();
 	placement_init();
 
 	game.list = wordlist_init();
@@ -79,7 +72,6 @@ void game_update() {
 		
 		scene_update(&game.scene);
 
-		animation_update(&anim);
 		placement_update(game.canvas.mouse.x, game.canvas.mouse.y);
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
@@ -122,8 +114,7 @@ void game_draw() {
 	canvas_begin(&game.canvas);
 	scene_draw(&game.scene);
 
-	DrawTexture(tower->data.sprite.texture, 0, 6 * 16, WHITE);
-	draw_healthbar(&game.scene.tower_healthbar, 16, 145, GREEN);
+	tower_draw(0, 5 * 16);
 
 	char money_str[128];
 	sprintf(money_str, "Money: $%d", game.money);
@@ -134,8 +125,6 @@ void game_draw() {
 	}
 
 	placement_draw();
-
-	animation_draw(&anim, 64, 64);
 
 	canvas_end();
 
