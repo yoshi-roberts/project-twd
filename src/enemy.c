@@ -64,12 +64,14 @@ void enemy_get_waypoint(Enemy *enemy) {
 	Scene *scn = game_get_scene();
 
 	if (enemy->next_waypoint_index > 0) {
+
 		enemy->next_waypoint_index--;
 		enemy->next_waypoint = scn->tilemap_layer1.waypoints[enemy->next_waypoint_index];
-	}
-	else{
-	enemy->healthbar.active = false;
-	remove_health(&scn->tower_healthbar, enemy->healthbar.hp_max);
-	game_check_state(scn);
+
+	} else {
+
+		enemy->healthbar.active = false;
+		remove_health(&scn->tower_healthbar, enemy->healthbar.hp_max);
+		game_check_state(scn);
 	}
 }

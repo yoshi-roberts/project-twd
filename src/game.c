@@ -86,15 +86,6 @@ void game_update() {
 			scene_randomize(&game.scene);
 		}
 
-		if (IsKeyPressed(KEY_SPACE)) {
-
-			if (game.scene.last_enemy < 128) {
-
-				int type = GetRandomValue(0, 2);
-				enemy_new(type);
-			}
-		}
-
 		if (IsKeyPressed(KEY_R)) {
 			for (int i = 0; i < game.scene.last_enemy; i++) {
 				Enemy *enemy = game.scene.enemies[i];
@@ -111,12 +102,11 @@ void game_update() {
 				game.scene.projectile_count++;
 			}
 		}
+
 		update_all_projectile(game.scene.projectiles, &game.scene.projectile_count);
 		canvas_update(&game.canvas);
 		game_draw();
-
 	}
-
 }
 
 void game_draw() {
@@ -162,9 +152,6 @@ void game_check_state(Scene *scene){
 		//scene->last_enemy = 128;
 	}
 }
-
-
-
 
 Scene* game_get_scene() {
 	return &game.scene;
