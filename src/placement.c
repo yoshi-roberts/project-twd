@@ -100,7 +100,7 @@ void placement_update(float mx, float my) {
 			if (unit->asset) {
 				placement.selected_unit = unit;
 				if (unit->x == placement.gx && unit->y == placement.gy) {
-					if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+					if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && scn->scene_state == STATE_BUILD) {
 
 						placement.unit_menu.x = placement.x + 17;
 						placement.unit_menu.y = placement.y;

@@ -200,6 +200,7 @@ void scene_check_state(){
     Scene *scn = game_get_scene();
 	if (*scn->tower_healthbar.hp <= 0){
         scene_state_set(STATE_LOSE);
+        memset(scn->units, 0, sizeof(scn->units));
 		for (int i = 0; i < scn->last_enemy; i++) {
 			Enemy *enemy = scn->enemies[i];
 			remove_health(&enemy->healthbar, 500);

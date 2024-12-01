@@ -84,18 +84,13 @@ void game_update() {
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			scene_randomize(&game.scene);
+			scene_state_set(STATE_BUILD);
 		}
 
 		if (IsKeyPressed(KEY_SPACE)) {
 			scene_state_set(STATE_PLAY);
 		}
 
-		if (IsKeyPressed(KEY_R)) {
-			for (int i = 0; i < game.scene.last_enemy; i++) {
-				Enemy *enemy = game.scene.enemies[i];
-				remove_health(&enemy->healthbar, 10);
-			}
-		}
 
 		if (IsKeyPressed(KEY_S)) {
 			if (game.scene.projectile_count < MAX_PROJECTILES) {
