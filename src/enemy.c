@@ -70,6 +70,6 @@ void enemy_get_waypoint(Enemy *enemy) {
 	else{
 	enemy->healthbar.active = false;
 	remove_health(&scn->tower_healthbar, enemy->healthbar.hp_max);
-	game_check_state(scn);
+	scene_check_state();
 	}
 }

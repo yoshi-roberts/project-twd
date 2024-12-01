@@ -25,7 +25,6 @@ void game_init();
 void game_shutdown();
 void game_update();
 void game_draw();
-void game_check_state(Scene *scene);
 
 Scene* game_get_scene();
 WordList* game_get_wordlist();

@@ -10,6 +10,7 @@
 #include "spawner.h"
 #include "unit.h"
 #include "tilemap.h"
+#include "game.h"
 
 void scene_destroy(Scene *scene) {
 
@@ -195,12 +196,24 @@ void build_tree(Scene *scene, int anchor[], int layer) {
     }
 }
 
-
-void scene_state_set(Scene *scene, int state){
-    scene->scene_state = state;
+void scene_check_state(){
+    Scene *scn = game_get_scene();
+	if (*scn->tower_healthbar.hp <= 0){
+        scene_state_set(STATE_LOSE);
+		for (int i = 0; i < scn->last_enemy; i++) {
+			Enemy *enemy = scn->enemies[i];
+			remove_health(&enemy->healthbar, 500);
+		}
+	}
 }
 
-int scene_state_get(Scene *scene){
-    int scene_state = scene->scene_state;
+void scene_state_set(SceneState state){
+    Scene *scn = game_get_scene();
+    scn->scene_state = state;
+}
+
+int scene_state_get(){
+    Scene *scn = game_get_scene();
+    int scene_state = scn->scene_state;
     return scene_state;
 }

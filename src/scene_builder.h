@@ -8,13 +8,13 @@
 #include "unit.h"
 #include "projectile.h"
 
-enum GameState {
+typedef enum {
 	STATE_BUILD = 0,
 	STATE_PLAY = 1,
 	STATE_COMPLETE = 2,
 	STATE_LOSE = 3,
 	STATE_WIN = 4 
-};
+} SceneState;
 
 typedef struct {
 	int difficulty;
@@ -40,7 +40,8 @@ void scene_draw(Scene *scene);
 void scene_randomize(Scene *scene);
 void gen_treeline(Scene *scene);
 void build_tree(Scene *scene, int anchor[], int layer);
-void scene_state_set(Scene *scene, int state);
-int scene_state_get(Scene *scene);
+void scene_check_state();
+void scene_state_set(SceneState state);
+int scene_state_get();
 
 #endif

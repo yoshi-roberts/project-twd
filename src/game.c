@@ -87,12 +87,7 @@ void game_update() {
 		}
 
 		if (IsKeyPressed(KEY_SPACE)) {
-
-			if (game.scene.last_enemy < 128) {
-
-				int type = GetRandomValue(0, 2);
-				enemy_new(type);
-			}
+			scene_state_set(STATE_PLAY);
 		}
 
 		if (IsKeyPressed(KEY_R)) {
@@ -151,16 +146,6 @@ void game_draw() {
 
 	canvas_draw(&game.canvas);
 	EndDrawing();
-}
-
-void game_check_state(Scene *scene){
-	if (*scene->tower_healthbar.hp <= 0){
-		for (int i = 0; i < scene->last_enemy; i++) {
-			Enemy *enemy = scene->enemies[i];
-			remove_health(&enemy->healthbar, 500);
-		}
-		//scene->last_enemy = 128;
-	}
 }
 
 

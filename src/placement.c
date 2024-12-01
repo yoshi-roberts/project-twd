@@ -112,7 +112,7 @@ void placement_update(float mx, float my) {
 				} 
 			}
 
-			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place()) {
+			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && placement_can_place() && scn->scene_state == STATE_BUILD) {
 
 				placement.build_menu.x = placement.x + 17;
 				placement.build_menu.y = placement.y;
