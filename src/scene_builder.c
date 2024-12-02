@@ -11,6 +11,7 @@
 #include "unit.h"
 #include "tilemap.h"
 #include "game.h"
+#include "ui.h"
 
 void scene_destroy(Scene *scene) {
 
@@ -18,6 +19,10 @@ void scene_destroy(Scene *scene) {
 		free(scene->enemies[i]);
 	}
 	free(scene->enemies);
+}
+
+void play_button_callback(void *data) {
+    scene_state_set(STATE_PLAY);
 }
 
 void scene_draw(Scene *scene) {
@@ -65,6 +70,12 @@ void scene_draw(Scene *scene) {
 		}
 	}
 
+    if (scene_state_get() == STATE_BUILD) {
+        UI_Panel play_button_panel = ui_panel_new(400, 10);
+        ui_panel_add_button(&play_button_panel, "Play", play_button_callback, NULL);
+        ui_panel_draw(&play_button_panel);
+    }
+
 }
 
 void scene_update(Scene *scene) {
@@ -94,6 +105,7 @@ Scene scene_init(int difficulty, const char* path) {
     scene.scene_state = STATE_BUILD;
 	scene.last_enemy = 0;
     scene.projectile_count = 0;
+
 
 	scene.spawner = spawner_new(2, 0, 0);
 
@@ -194,6 +206,23 @@ void build_tree(Scene *scene, int anchor[], int layer) {
     if (base_row + 2 >= 0 && base_row + 2 < TILEMAP_HEIGHT && base_col - 1 >= 0 && base_col - 1 < TILEMAP_WIDTH) {
         tiles[base_row + 2][base_col - 1] = TILE_TREE_6;  // Bottom row, left
     }
+}
+
+void scene_ui_gameover(){
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    UI_Panel gameover_panel = ui_panel_new(0, 0);
+    gameover_panel.x = screenWidth / 8;
+    gameover_panel.y = screenHeight / 10;
+    gameover_panel.w = screenWidth / 12;
+    gameover_panel.h = screenHeight / 12;
+
+    ui_panel_add_label(&gameover_panel, "GAME OVER");
+    ui_panel_add_button(&gameover_panel, "Restart", game_restart, NULL);
+    ui_panel_add_button(&gameover_panel, "Quit", game_quit, NULL);
+        ui_panel_draw(&gameover_panel);
 }
 
 void scene_check_state(){

@@ -36,12 +36,13 @@ typedef struct {
 Scene scene_init(int difficulty, const char* path);
 void scene_destroy(Scene *scene);
 void scene_update(Scene *scene);
-void scene_draw(Scene *scene);
+void scene_draw(Scene *scene);  
 void scene_randomize(Scene *scene);
 void gen_treeline(Scene *scene);
 void build_tree(Scene *scene, int anchor[], int layer);
 void scene_check_state();
 void scene_state_set(SceneState state);
 int scene_state_get();
+void play_button_callback(void *data);
 
 #endif

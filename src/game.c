@@ -36,12 +36,12 @@ void game_init() {
 
 	assets_init();
 	game.scene = scene_init(1, "assets/images/tiles.png");
-
 	anim = animation_new("assets/animations/test-anim.png", 6);
 	tower = assets_get("assets/images/tower-wizard.png");
 
 	game.scene.tower_hp = 200;
 	game.scene.tower_healthbar = create_healthbar(&game.scene.tower_hp, 20, 4, GREEN);
+
 	placement_init();
 
 	game.list = wordlist_init();
@@ -88,9 +88,9 @@ void game_update() {
 		}
 
 		if (IsKeyPressed(KEY_SPACE)) {
-			scene_state_set(STATE_PLAY);
+			scene_state_set(STATE_LOSE);
 		}
-
+   
 
 		if (IsKeyPressed(KEY_S)) {
 			if (game.scene.projectile_count < MAX_PROJECTILES) {
@@ -120,6 +120,11 @@ void game_draw() {
 	ClearBackground(BLACK);
 
 	canvas_begin(&game.canvas);
+
+	if (scene_state_get() == STATE_LOSE) {
+        scene_ui_gameover();
+	}
+	else{
 	scene_draw(&game.scene);
 
 	DrawTexture(tower->data.sprite.texture, 0, 6 * 16, WHITE);
@@ -136,13 +141,31 @@ void game_draw() {
 	placement_draw();
 
 	animation_draw(&anim, 64, 64);
-
+	}
 	canvas_end();
-
 	canvas_draw(&game.canvas);
 	EndDrawing();
+	
 }
 
+
+void game_restart(void *data) {
+    Scene *scene = game_get_scene();
+    scene->tower_hp = 200;
+    scene->tower_healthbar = create_healthbar(&scene->tower_hp, 20, 4, GREEN);
+    game_set_money(1000);
+    for (int i = 0; i < scene->last_enemy; i++) {
+        free(scene->enemies[i]);
+        scene->enemies[i] = NULL;
+    }
+    scene->last_enemy = 0;
+    scene_randomize(scene);
+    scene_state_set(STATE_BUILD);
+}
+
+void game_quit(void *data) {
+    CloseWindow();
+}
 
 
 
