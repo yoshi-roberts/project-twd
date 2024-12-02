@@ -94,7 +94,7 @@ Scene scene_init(int difficulty, const char* path) {
 	scene.last_enemy = 0;
     scene.projectile_count = 0;
 
-	scene.spawner = spawner_new(2, 0, 0);
+	scene.spawner = spawner_new(5, 0, 0);
 
     memset(scene.units, 0, sizeof(scene.units));
     memset(scene.tilemap_layer1.tiles, 0, sizeof(scene.tilemap_layer1.tiles));

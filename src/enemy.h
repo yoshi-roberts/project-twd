@@ -14,6 +14,7 @@ typedef enum {
 typedef struct {
 	ENEMY_TYPE type;
 	int hp;
+	int damage;
 	int x; int y;
 	int xdir; int ydir;
 	int next_waypoint_index;

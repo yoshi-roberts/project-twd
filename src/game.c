@@ -73,26 +73,10 @@ void game_update() {
 		scene_update(&game.scene);
 
 		placement_update(game.canvas.mouse.x, game.canvas.mouse.y);
+		tower_update();
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			scene_randomize(&game.scene);
-		}
-
-		if (IsKeyPressed(KEY_R)) {
-			for (int i = 0; i < game.scene.last_enemy; i++) {
-				Enemy *enemy = game.scene.enemies[i];
-				remove_health(&enemy->healthbar, 10);
-			}
-		}
-
-		if (IsKeyPressed(KEY_S)) {
-			if (game.scene.projectile_count < MAX_PROJECTILES) {
-				Vector2 start_position = (Vector2){100, 200};
-				Vector2 end_position = (Vector2){300, 200};
-
-				game.scene.projectiles[game.scene.projectile_count] = new_projectile(start_position, end_position, 5, 10, 0);
-				game.scene.projectile_count++;
-			}
 		}
 
 		update_all_projectile(game.scene.projectiles, &game.scene.projectile_count);
@@ -133,13 +117,13 @@ void game_draw() {
 }
 
 void game_check_state(Scene *scene){
-	if (*scene->tower_healthbar.hp <= 0){
-		for (int i = 0; i < scene->last_enemy; i++) {
-			Enemy *enemy = scene->enemies[i];
-			remove_health(&enemy->healthbar, 500);
-		}
-		//scene->last_enemy = 128;
-	}
+	// if (*scene->tower_healthbar.hp <= 0){
+	// 	for (int i = 0; i < scene->last_enemy; i++) {
+	// 		Enemy *enemy = scene->enemies[i];
+	// 		remove_health(&enemy->healthbar, 500);
+	// 	}
+	// 	//scene->last_enemy = 128;
+	// }
 }
 
 Scene* game_get_scene() {

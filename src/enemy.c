@@ -3,6 +3,7 @@
 #include "game.h"
 #include "scene_path.h"
 #include "healthbar.h"
+#include "tower.h"
 #include <stdlib.h>
 
 void enemy_new(ENEMY_TYPE type) {
@@ -14,8 +15,22 @@ void enemy_new(ENEMY_TYPE type) {
 	Enemy *enemy = scn->enemies[scn->last_enemy];
 	scn->last_enemy++;
 
+	switch (type) {
+		case ENEMY_SLIME:
+			enemy->hp = 20;
+			enemy->damage = 5;
+			break;
+		case ENEMY_SPIDER:
+			enemy->hp = 50;
+			enemy->damage = 15;
+			break;
+		case ENEMY_SKELETON:
+			enemy->hp = 35;
+			enemy->damage = 20;
+			break;
+	}
+
 	enemy->type = type;
-	enemy->hp = 50;
 	enemy->xdir = 0;
 	enemy->ydir = 0;
 	enemy->asset = assets_get("assets/images/enemies.png");
@@ -71,7 +86,7 @@ void enemy_get_waypoint(Enemy *enemy) {
 	} else {
 
 		enemy->healthbar.active = false;
-		remove_health(&scn->tower_healthbar, enemy->healthbar.hp_max);
+		tower_damage(enemy->damage);
 		game_check_state(scn);
 	}
 }
