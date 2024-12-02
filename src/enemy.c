@@ -85,6 +85,7 @@ void enemy_get_waypoint(Enemy *enemy) {
 
 	} else {
 
+		scn->first_enemy++;
 		enemy->healthbar.active = false;
 		tower_damage(enemy->damage);
 		game_check_state(scn);

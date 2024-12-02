@@ -20,6 +20,7 @@ typedef struct {
 	int difficulty;
 	int waves;
 	int scene_state;
+	int first_enemy;
 	int last_enemy;
 	Spawner spawner;
 	int projectile_count;

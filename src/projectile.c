@@ -3,11 +3,11 @@
 #include "projectile.h"
 
 
-Projectile new_projectile(Vector2 position, Vector2 end_position, int speed, int damage, int type) {
+Projectile new_projectile(Vector2 position, Enemy *target, int speed, int damage, int type) {
     Projectile proj;
     proj.type = type;
     proj.position = position;
-    proj.end_position = end_position;
+	proj.target = target;
     proj.speed = speed;
     proj.damage = damage;
     proj.active = true;
@@ -17,7 +17,7 @@ Projectile new_projectile(Vector2 position, Vector2 end_position, int speed, int
 
 void update_projectile(Projectile *proj) {
     if (proj->active) {
-        Vector2 direction = (Vector2){proj->end_position.x - proj->position.x, proj->end_position.y - proj->position.y};
+        Vector2 direction = (Vector2){proj->target->x - proj->position.x, proj->target->y - proj->position.y};
 
         float distance = sqrtf(direction.x * direction.x + direction.y * direction.y);
 

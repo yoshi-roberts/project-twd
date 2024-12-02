@@ -2,12 +2,10 @@
 #include <stdio.h>
 #include "game.h"
 #include "assets.h"
-#include "healthbar.h"
 #include "log.h"
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
-#include "enemy.h"
 #include "projectile.h"
 #include "wordlist.h"
 #include "tower.h"

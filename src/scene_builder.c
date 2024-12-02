@@ -91,6 +91,7 @@ Scene scene_init(int difficulty, const char* path) {
 	Scene scene;
 	scene.difficulty = difficulty;
     scene.scene_state = STATE_BUILD;
+	scene.first_enemy = 0;
 	scene.last_enemy = 0;
     scene.projectile_count = 0;
 
