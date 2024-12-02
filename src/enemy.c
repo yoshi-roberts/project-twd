@@ -85,9 +85,23 @@ void enemy_get_waypoint(Enemy *enemy) {
 
 	} else {
 
-		scn->first_enemy++;
-		enemy->healthbar.active = false;
+		enemy_damage(enemy, 100);
+		// scn->first_enemy++;
+		// enemy->healthbar.active = false;
 		tower_damage(enemy->damage);
 		game_check_state(scn);
+	}
+}
+
+void enemy_damage(Enemy *enemy, int amount) {
+
+	if (enemy->hp > 0) {
+
+		enemy->hp -= amount;
+	} else {
+
+		Scene *scn = game_get_scene();
+		scn->first_enemy++;
+		enemy->healthbar.active = false;
 	}
 }

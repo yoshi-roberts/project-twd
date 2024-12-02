@@ -1,7 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "projectile.h"
-
+#include "enemy.h"
+#include "healthbar.h"
 
 Projectile new_projectile(Vector2 position, Enemy *target, int speed, int damage, int type) {
     Projectile proj;
@@ -13,7 +14,6 @@ Projectile new_projectile(Vector2 position, Enemy *target, int speed, int damage
     proj.active = true;
     return proj;
 }
-
 
 void update_projectile(Projectile *proj) {
     if (proj->active) {
@@ -29,6 +29,7 @@ void update_projectile(Projectile *proj) {
             proj->position.y += direction.y * proj->speed;
 
             if (distance <= proj->speed) {
+				enemy_damage(proj->target, 10);
                 proj->position = proj->end_position;
                 proj->active = false;
             }

@@ -27,6 +27,7 @@ typedef struct {
 void enemy_new(ENEMY_TYPE type);
 void enemy_update(Enemy *enemy);
 void enemy_draw(Enemy *enemy);
+void enemy_damage(Enemy *enemy, int amount);
 void enemy_get_waypoint(Enemy *enemy);
 
 #endif // ENEMIES_H
