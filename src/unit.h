@@ -28,6 +28,7 @@ typedef struct {
 	int x; int y;
 	int range;
 	int hp;
+	int damage;
 	int defense;
 	int cost;
 	int energy;
