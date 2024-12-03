@@ -4,16 +4,15 @@
 #include "scene_path.h"
 #include "healthbar.h"
 #include "tower.h"
-#include <stdlib.h>
+#include "vec.h"
+#include <stdio.h>
 
 void enemy_new(ENEMY_TYPE type) {
 
 	Scene *scn = game_get_scene();
+	Enemy *enemy = vector_add_dst(&scn->enemies);
 
-	scn->enemies[scn->last_enemy] = malloc(sizeof(Enemy));
-
-	Enemy *enemy = scn->enemies[scn->last_enemy];
-	scn->last_enemy++;
+	enemy->index = vector_size(scn->enemies) - 1;
 
 	switch (type) {
 		case ENEMY_SLIME:
@@ -43,10 +42,10 @@ void enemy_new(ENEMY_TYPE type) {
 	enemy->y = (int)enemy->next_waypoint.y;
 
 	enemy->healthbar = create_healthbar(&enemy->hp, 20, 3, RED);
+	enemy = NULL;
 }
 
 void enemy_update(Enemy *enemy) {
-	if (!enemy->healthbar.active) return;
 
 	if (enemy->x == (int)enemy->next_waypoint.x && enemy->y == (int)enemy->next_waypoint.y) {
 		enemy_get_waypoint(enemy);
@@ -70,7 +69,7 @@ void enemy_update(Enemy *enemy) {
 }
 
 void enemy_draw(Enemy *enemy) {
-	if (!enemy->healthbar.active) return;
+
 	asset_draw_tile(enemy->asset, enemy->type, enemy->x, enemy->y - 4);
 	draw_healthbar(&enemy->healthbar, enemy->x + 8, enemy->y - 8, RED);
 }
@@ -85,23 +84,19 @@ void enemy_get_waypoint(Enemy *enemy) {
 
 	} else {
 
-		enemy_damage(enemy, 100);
-		// scn->first_enemy++;
-		// enemy->healthbar.active = false;
 		tower_damage(enemy->damage);
 		game_check_state(scn);
+		enemy_damage(enemy, 100);
 	}
 }
 
 void enemy_damage(Enemy *enemy, int amount) {
 
-	if (enemy->hp > 0) {
+	enemy->hp -= amount;
 
-		enemy->hp -= amount;
-	} else {
+	if (enemy->hp <= 0) {
 
 		Scene *scn = game_get_scene();
-		scn->first_enemy++;
-		enemy->healthbar.active = false;
+		vector_remove(scn->enemies, enemy->index);
 	}
 }

@@ -75,7 +75,7 @@ void unit_update(Unit *unit) {
 			if (unit->target && unit->can_attack && unit->energy > 0) {
 
 				animation_play(&unit->sword_swipe);
-				remove_health(&unit->target->healthbar, unit->damage);
+				enemy_damage(unit->target, unit->damage);
 				unit->energy -= 10;
 				unit->can_attack = false;
 			}
@@ -121,9 +121,9 @@ Enemy* unit_enemy_in_range(Unit *unit) {
 
 	Scene *scn = game_get_scene();
 
-	for (int i = 0; i < scn->last_enemy; i++) {
+	for (int i = 0; i < vector_size(scn->enemies); i++) {
 	
-		Enemy *enemy = scn->enemies[i];
+		Enemy *enemy = &scn->enemies[i];
 
 		if (enemy->hp <= 0) continue;
 

@@ -1,6 +1,6 @@
 CC = gcc
 OPT = -O1
-CFLAGS = -Wall -Wextra -std=c99 $(OPT) -I include/ -DLOG_USE_COLOR
+CFLAGS = -Wall -Wextra -std=c2x $(OPT) -I include/ -DLOG_USE_COLOR
 
 ifeq ($(OS), Windows_NT)
 	BUILD_RAYLIB = cd lib/raylib/src/ && mingw32-make PLATFORM=PLATFORM_DESKTOP

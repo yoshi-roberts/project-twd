@@ -4,6 +4,8 @@
 #include "../lib/raylib/src/raylib.h"
 #include "assets.h"
 #include "healthbar.h"
+#include "vec.h"
+
 
 typedef enum {
 	ENEMY_SLIME,
@@ -13,6 +15,7 @@ typedef enum {
 
 typedef struct {
 	ENEMY_TYPE type;
+	int index;
 	int hp;
 	int damage;
 	int x; int y;

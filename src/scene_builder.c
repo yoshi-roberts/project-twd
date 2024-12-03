@@ -10,13 +10,15 @@
 #include "spawner.h"
 #include "unit.h"
 #include "tilemap.h"
+#include "vec.h"
 
 void scene_destroy(Scene *scene) {
 
-	for (int i = 0; i < scene->last_enemy; i++) {
-		free(scene->enemies[i]);
-	}
-	free(scene->enemies);
+	// for (int i = 0; i < scene->last_enemy; i++) {
+	// 	free(scene->enemies[i]);
+	// }
+	// free(scene->enemies);
+	vector_free(scene->enemies);
 }
 
 void scene_draw(Scene *scene) {
@@ -49,8 +51,8 @@ void scene_draw(Scene *scene) {
 		}
 	}
 
-	for (int i = 0; i < scene->last_enemy; i++) {   //Draw all enemys
-		Enemy *enemy = scene->enemies[i];
+	for (int i = 0; i < vector_size(scene->enemies); i++) {   //Draw all enemys
+		Enemy *enemy = &scene->enemies[i];
 		enemy_draw(enemy);
 	}
 
@@ -70,9 +72,8 @@ void scene_update(Scene *scene) {
 
 	spawner_update(&scene->spawner);
 
-	for (int i = 0; i < scene->last_enemy; i++) {
-
-		Enemy *enemy = scene->enemies[i];
+	for (int i = 0; i < vector_size(scene->enemies); i++) {   //Draw all enemys
+		Enemy *enemy = &scene->enemies[i];
 		enemy_update(enemy);
 	}
 
@@ -95,14 +96,14 @@ Scene scene_init(int difficulty, const char* path) {
 	scene.last_enemy = 0;
     scene.projectile_count = 0;
 
-	scene.spawner = spawner_new(5, 0, 0);
-
     memset(scene.units, 0, sizeof(scene.units));
     memset(scene.tilemap_layer1.tiles, 0, sizeof(scene.tilemap_layer1.tiles));
     memset(scene.tilemap_layer2.tiles, 0, sizeof(scene.tilemap_layer2.tiles));
     memset(scene.tilemap_layer3.tiles, 0, sizeof(scene.tilemap_layer3.tiles));
 
-	scene.enemies = malloc(128 * sizeof(Enemy*));
+	scene.enemies = vector_create();
+	vector_reserve(&scene.enemies, 255);
+	scene.spawner = spawner_new(5, 0, 0);
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);
     scene.tilemap_layer2.asset_ptr = assets_get(path);
