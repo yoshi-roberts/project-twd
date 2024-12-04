@@ -46,4 +46,16 @@ void scene_state_set(SceneState state);
 int scene_state_get();
 void play_button_callback(void *data);
 
+void ui_start_init();
+void ui_start_draw();
+void ui_start_handle_input();
+void ui_game_over_init();
+void ui_game_over_draw(); 
+void ui_game_over_handle_input(); 
+
+void on_open_github(void *data);
+void scene_on_start_game(void *data);
+void scene_on_restart_game(void *data); 
+void scene_on_exit_game(void *data);
+
 #endif

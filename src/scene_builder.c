@@ -13,6 +13,10 @@
 #include "game.h"
 #include "ui.h"
 #include "vec.h"
+#include "log.h"
+
+static UI_Panel game_over_panel;
+static UI_Panel start_panel;
 
 Scene scene_init(int difficulty, const char* path) {
 
@@ -107,13 +111,6 @@ void scene_draw(Scene *scene) {
             asset_draw_tile(scene->tilemap_layer2.asset_ptr, tile2, xp, yp);
 		}
 	}
-
-    if (scene_state_get() == STATE_BUILD) {
-        UI_Panel play_button_panel = ui_panel_new(400, 10);
-        ui_panel_add_button(&play_button_panel, "Play", play_button_callback, NULL);
-        ui_panel_draw(&play_button_panel);
-    }
-
 }
 
 void scene_update(Scene *scene) {
@@ -214,21 +211,117 @@ void build_tree(Scene *scene, int anchor[], int layer) {
     }
 }
 
-void scene_ui_gameover(){
+void on_open_github(void *data) {
+    (void)data;
+#if defined(_WIN32)
+    system("start https://github.com/yoshi-roberts/project-twd");
+#elif defined(__APPLE__)
+    system("open https://github.com/yoshi-roberts/project-twd");
+#elif defined(__linux__)
+    (void)system("xdg-open https://github.com/yoshi-roberts/project-twd");
+#else
+    log_error("Cannot open URL: Unsupported platform");
+#endif
+    log_info("GitHub repository opened.");
+}
 
-    int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
+void scene_on_start_game(void *data) {
+    (void)data;
+    scene_state_set(STATE_PLAY);
+    log_info("Game started.");
+}
 
-    UI_Panel gameover_panel = ui_panel_new(0, 0);
-    gameover_panel.x = screenWidth / 8;
-    gameover_panel.y = screenHeight / 10;
-    gameover_panel.w = screenWidth / 12;
-    gameover_panel.h = screenHeight / 12;
+void scene_on_restart_game(void *data) {
+    (void)data;
+    game_restart(NULL);
+    scene_state_set(STATE_BUILD);
+    log_info("Game restarted.");
+}
 
-    ui_panel_add_label(&gameover_panel, "GAME OVER");
-    ui_panel_add_button(&gameover_panel, "Restart", game_restart, NULL);
-    ui_panel_add_button(&gameover_panel, "Quit", game_quit, NULL);
-        ui_panel_draw(&gameover_panel);
+
+void scene_on_exit_game(void *data) {
+    (void)data; 
+    log_info("Game exiting...");
+    game_shutdown();
+    scene_state_set(STATE_LOSE);
+    exit(0);
+}
+
+void ui_start_init() {
+    GetScreenHeight();
+    GetScreenWidth();
+
+    start_panel = ui_panel_new(150, 150);
+    ui_panel_add_label(&start_panel, "Project Tower Defense v0.0.0");
+    ui_panel_add_label(&start_panel, "by Yoshi R, Nathan C, and Will H.");
+    ui_panel_add_button(&start_panel, "<> Start Game <>", scene_on_start_game, NULL);
+    ui_panel_add_button(&start_panel, "<-> Github <->", on_open_github, NULL);
+}
+
+void ui_start_draw() {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(UI_BLACK, 0.7f));
+    ui_panel_draw(&start_panel);
+}
+
+void ui_start_handle_input() {
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        int mx = GetMouseX();
+        int my = GetMouseY();
+        for (int i = 0; i < start_panel.label_count; i++) {
+            UI_Element *element = &start_panel.labels[i];
+            if (element->button) {
+                int button_x = start_panel.x + 20;
+                int button_y = start_panel.y + i * 50;
+                int button_w = start_panel.w - 40;
+                int button_h = 40;
+
+                if (mx >= button_x && mx <= button_x + button_w &&
+                    my >= button_y && my <= button_y + button_h) {
+                    if (element->callback) {
+                        element->callback(element->data);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ui_game_over_init() {
+    GetScreenHeight();
+    GetScreenWidth();
+
+    game_over_panel = ui_panel_new(150, 150);
+    ui_panel_add_label(&game_over_panel, "Game Over");
+    ui_panel_add_button(&game_over_panel, "Restart Game", scene_on_restart_game, NULL);
+    ui_panel_add_button(&game_over_panel, "Exit Game", scene_on_exit_game, NULL);
+}
+
+void ui_game_over_draw() {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(UI_BLACK, 0.7f));
+    ui_panel_draw(&game_over_panel);
+}
+
+void ui_game_over_handle_input() {
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        int mx = GetMouseX();
+        int my = GetMouseY();
+        for (int i = 0; i < game_over_panel.label_count; i++) {
+            UI_Element *element = &game_over_panel.labels[i];
+            if (element->button) { 
+                int button_x = game_over_panel.x + 20;
+                int button_y = game_over_panel.y + i * 50;
+                int button_w = game_over_panel.w - 40;
+                int button_h = 40;
+
+                if (mx >= button_x && mx <= button_x + button_w &&
+                    my >= button_y && my <= button_y + button_h) {
+                    if (element->callback) {
+                        element->callback(element->data);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void scene_check_state(){

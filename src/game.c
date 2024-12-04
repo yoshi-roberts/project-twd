@@ -34,6 +34,9 @@ void game_init() {
 	audio_init();
 	game.scene = scene_init(1, "assets/images/tiles.png");
 
+	ui_start_init();
+	ui_game_over_init();
+
 	tower_init();
 
 	game.scene.tower_hp = 200;
@@ -88,11 +91,13 @@ void game_update() {
         if (IsKeyPressed(KEY_DOWN)) audio_decrease_volume();
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
+			audio_shutdown();
 			scene_randomize(&game.scene);
 			scene_state_set(STATE_BUILD);
 		}
 
 		if (IsKeyPressed(KEY_SPACE)) {
+			audio_shutdown();
 			scene_state_set(STATE_LOSE);
 		}
 
@@ -113,9 +118,12 @@ void game_draw() {
 	ClearBackground(BLACK);
 
 	canvas_begin(&game.canvas);
-
 	if (scene_state_get() == STATE_LOSE) {
-        scene_ui_gameover();
+        ui_game_over_draw();
+		ui_game_over_handle_input();
+	} else if (scene_state_get() == STATE_BUILD) {
+		ui_start_draw();
+		ui_start_handle_input();
 	} else{
 
 		scene_draw(&game.scene);
