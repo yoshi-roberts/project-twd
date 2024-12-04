@@ -18,8 +18,7 @@ void spawner_update(Spawner *spawner) {
 	spawner->time--;
 
 	Scene *scn = game_get_scene();
-
-	if (spawner->time <= 0 && scn->last_enemy < 128) {
+	if (spawner->time <= 0 && scn->last_enemy < 128 && scn->scene_state == STATE_PLAY) {
 
 		int type = GetRandomValue(0, 2);
 		enemy_new(type);

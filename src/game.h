@@ -7,6 +7,7 @@
 #include "tilemap.h"
 #include "projectile.h"
 #include "healthbar.h"
+#include "ui.h"
 
 #define GAME_MAX_SCENES 128
 
@@ -25,7 +26,9 @@ void game_init();
 void game_shutdown();
 void game_update();
 void game_draw();
-void game_check_state(Scene *scene);
+
+void game_restart(void *data);
+void game_quit(void *data);
 
 Scene* game_get_scene();
 WordList* game_get_wordlist();

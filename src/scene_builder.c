@@ -10,6 +10,8 @@
 #include "spawner.h"
 #include "unit.h"
 #include "tilemap.h"
+#include "game.h"
+#include "ui.h"
 
 void scene_destroy(Scene *scene) {
 
@@ -17,6 +19,10 @@ void scene_destroy(Scene *scene) {
 		free(scene->enemies[i]);
 	}
 	free(scene->enemies);
+}
+
+void play_button_callback(void *data) {
+    scene_state_set(STATE_PLAY);
 }
 
 void scene_draw(Scene *scene) {
@@ -64,6 +70,12 @@ void scene_draw(Scene *scene) {
 		}
 	}
 
+    if (scene_state_get() == STATE_BUILD) {
+        UI_Panel play_button_panel = ui_panel_new(400, 10);
+        ui_panel_add_button(&play_button_panel, "Play", play_button_callback, NULL);
+        ui_panel_draw(&play_button_panel);
+    }
+
 }
 
 void scene_update(Scene *scene) {
@@ -93,6 +105,7 @@ Scene scene_init(int difficulty, const char* path) {
     scene.scene_state = STATE_BUILD;
 	scene.last_enemy = 0;
     scene.projectile_count = 0;
+
 
 	scene.spawner = spawner_new(2, 0, 0);
 
@@ -195,12 +208,42 @@ void build_tree(Scene *scene, int anchor[], int layer) {
     }
 }
 
+void scene_ui_gameover(){
 
-void scene_state_set(Scene *scene, int state){
-    scene->scene_state = state;
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    UI_Panel gameover_panel = ui_panel_new(0, 0);
+    gameover_panel.x = screenWidth / 8;
+    gameover_panel.y = screenHeight / 10;
+    gameover_panel.w = screenWidth / 12;
+    gameover_panel.h = screenHeight / 12;
+
+    ui_panel_add_label(&gameover_panel, "GAME OVER");
+    ui_panel_add_button(&gameover_panel, "Restart", game_restart, NULL);
+    ui_panel_add_button(&gameover_panel, "Quit", game_quit, NULL);
+        ui_panel_draw(&gameover_panel);
 }
 
-int scene_state_get(Scene *scene){
-    int scene_state = scene->scene_state;
+void scene_check_state(){
+    Scene *scn = game_get_scene();
+	if (*scn->tower_healthbar.hp <= 0){
+        scene_state_set(STATE_LOSE);
+        memset(scn->units, 0, sizeof(scn->units));
+		for (int i = 0; i < scn->last_enemy; i++) {
+			Enemy *enemy = scn->enemies[i];
+			remove_health(&enemy->healthbar, 500);
+		}
+	}
+}
+
+void scene_state_set(SceneState state){
+    Scene *scn = game_get_scene();
+    scn->scene_state = state;
+}
+
+int scene_state_get(){
+    Scene *scn = game_get_scene();
+    int scene_state = scn->scene_state;
     return scene_state;
 }

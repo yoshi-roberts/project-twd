@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "healthbar.h"
+#include "game.h"
 
 Healthbar create_healthbar(int *hp, int width, int height, Color color) {
 
@@ -20,6 +21,7 @@ void remove_health(Healthbar *healthbar, float amount) {
     if (*healthbar->hp <= 0) {
         *healthbar->hp = 0;
         healthbar->active = false; // Deactivate if health reaches zero
+        scene_check_state();
     }
 }
 

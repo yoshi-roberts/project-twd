@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "game.h"
 #include "assets.h"
 #include "healthbar.h"
@@ -7,7 +8,6 @@
 #include "scene_builder.h"
 #include "placement.h"
 #include "scene_builder.h"
-#include "enemy.h"
 #include "projectile.h"
 #include "wordlist.h"
 #include "tower.h"
@@ -35,6 +35,10 @@ void game_init() {
 	game.scene = scene_init(1, "assets/images/tiles.png");
 
 	tower_init();
+
+	game.scene.tower_hp = 200;
+	game.scene.tower_healthbar = create_healthbar(&game.scene.tower_hp, 20, 4, GREEN);
+
 	placement_init();
 
 	game.list = wordlist_init();
@@ -76,13 +80,11 @@ void game_update() {
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			scene_randomize(&game.scene);
+			scene_state_set(STATE_BUILD);
 		}
 
-		if (IsKeyPressed(KEY_R)) {
-			for (int i = 0; i < game.scene.last_enemy; i++) {
-				Enemy *enemy = game.scene.enemies[i];
-				remove_health(&enemy->healthbar, 10);
-			}
+		if (IsKeyPressed(KEY_SPACE)) {
+			scene_state_set(STATE_LOSE);
 		}
 
 		if (IsKeyPressed(KEY_S)) {
@@ -112,34 +114,49 @@ void game_draw() {
 	ClearBackground(BLACK);
 
 	canvas_begin(&game.canvas);
-	scene_draw(&game.scene);
 
-	tower_draw(0, 5 * 16);
+	if (scene_state_get() == STATE_LOSE) {
+        scene_ui_gameover();
+	} else{
 
-	char money_str[128];
-	sprintf(money_str, "Money: $%d", game.money);
-	DrawText(money_str, 4, 4, 10, WHITE);
+		scene_draw(&game.scene);
 
-	for (int i = 0; i < game.scene.projectile_count; i++) {
-    	draw_projectile(&game.scene.projectiles[i]);
+		tower_draw(0, 5 * 16);
+
+		char money_str[128];
+		sprintf(money_str, "Money: $%d", game.money);
+		DrawText(money_str, 4, 4, 10, WHITE);
+
+		for (int i = 0; i < game.scene.projectile_count; i++) {
+			draw_projectile(&game.scene.projectiles[i]);
+		}
+
+		placement_draw();
 	}
-
-	placement_draw();
 
 	canvas_end();
-
 	canvas_draw(&game.canvas);
 	EndDrawing();
+	
 }
 
-void game_check_state(Scene *scene){
-	if (*scene->tower_healthbar.hp <= 0){
-		for (int i = 0; i < scene->last_enemy; i++) {
-			Enemy *enemy = scene->enemies[i];
-			remove_health(&enemy->healthbar, 500);
-		}
-		//scene->last_enemy = 128;
-	}
+
+void game_restart(void *data) {
+    Scene *scene = game_get_scene();
+    scene->tower_hp = 200;
+    scene->tower_healthbar = create_healthbar(&scene->tower_hp, 20, 4, GREEN);
+    game_set_money(1000);
+    for (int i = 0; i < scene->last_enemy; i++) {
+        free(scene->enemies[i]);
+        scene->enemies[i] = NULL;
+    }
+    scene->last_enemy = 0;
+    scene_randomize(scene);
+    scene_state_set(STATE_BUILD);
+}
+
+void game_quit(void *data) {
+    CloseWindow();
 }
 
 Scene* game_get_scene() {
