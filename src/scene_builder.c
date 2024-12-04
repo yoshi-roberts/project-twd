@@ -114,7 +114,7 @@ Scene scene_init(int difficulty, const char* path) {
     memset(scene.tilemap_layer2.tiles, 0, sizeof(scene.tilemap_layer2.tiles));
     memset(scene.tilemap_layer3.tiles, 0, sizeof(scene.tilemap_layer3.tiles));
 
-	scene.enemies = malloc(128 * sizeof(Enemy*));
+	scene.enemies = malloc(MAX_ENEMY * sizeof(Enemy*));
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);
     scene.tilemap_layer2.asset_ptr = assets_get(path);
@@ -219,7 +219,12 @@ void scene_ui_gameover(){
     gameover_panel.w = screenWidth / 12;
     gameover_panel.h = screenHeight / 12;
 
-    ui_panel_add_label(&gameover_panel, "GAME OVER");
+    if (scene_state_get()== STATE_LOSE){
+        ui_panel_add_label(&gameover_panel, "GAME OVER");
+    }
+        if (scene_state_get()== STATE_WIN){
+        ui_panel_add_label(&gameover_panel, "YOU WIN!!");
+    }
     ui_panel_add_button(&gameover_panel, "Restart", game_restart, NULL);
     ui_panel_add_button(&gameover_panel, "Quit", game_quit, NULL);
         ui_panel_draw(&gameover_panel);
@@ -229,6 +234,14 @@ void scene_check_state(){
     Scene *scn = game_get_scene();
 	if (*scn->tower_healthbar.hp <= 0){
         scene_state_set(STATE_LOSE);
+        memset(scn->units, 0, sizeof(scn->units));
+		for (int i = 0; i < scn->last_enemy; i++) {
+			Enemy *enemy = scn->enemies[i];
+			remove_health(&enemy->healthbar, 500);
+		}
+	}
+    if (*scn->tower_healthbar.hp > 0 && scn->last_enemy > 10){
+        scene_state_set(STATE_WIN);
         memset(scn->units, 0, sizeof(scn->units));
 		for (int i = 0; i < scn->last_enemy; i++) {
 			Enemy *enemy = scn->enemies[i];

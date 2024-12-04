@@ -31,7 +31,7 @@ void game_init() {
 
 	game.dt = 0.0f;
 	game.difficulty = 0;
-	game.money = 1000;
+	game.money = START_MONEY;
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
 	assets_init();
@@ -82,25 +82,33 @@ void game_update() {
 		animation_update(&anim);
 		placement_update(game.canvas.mouse.x, game.canvas.mouse.y);
 
-		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
-			scene_randomize(&game.scene);
-			scene_state_set(STATE_BUILD);
-		}
+		// if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
+		// 	scene_randomize(&game.scene);
+		// 	scene_state_set(STATE_BUILD);
+		// }
 
 		if (IsKeyPressed(KEY_SPACE)) {
-			scene_state_set(STATE_LOSE);
+			if (scene_state_get() == STATE_BUILD){
+				scene_state_set(STATE_PLAY);
+			}
 		}
    
 
-		if (IsKeyPressed(KEY_S)) {
-			if (game.scene.projectile_count < MAX_PROJECTILES) {
-				Vector2 start_position = (Vector2){100, 200};
-				Vector2 end_position = (Vector2){300, 200};
+		// if (IsKeyPressed(KEY_S)) {
+			// if (game.scene.projectile_count < MAX_PROJECTILES) {
+			// 	Vector2 start_position = (Vector2){100, 200};
+			// 	Vector2 end_position = (Vector2){300, 200};
 
-				game.scene.projectiles[game.scene.projectile_count] = new_projectile(start_position, end_position, 5, 10, 0);
-				game.scene.projectile_count++;
-			}
-		}
+			// 	game.scene.projectiles[game.scene.projectile_count] = new_projectile(start_position, end_position, 5, 10, 0);
+			// 	game.scene.projectile_count++;
+			//}
+		// 		Scene *scn = game_get_scene();
+		// 		for (int i = 0; i < scn->last_enemy; i++) {
+		// 		Enemy *enemy = scn->enemies[i];
+		// 		remove_health(&enemy->healthbar, 500);
+		// 		}
+		// }
+
 		update_all_projectile(game.scene.projectiles, &game.scene.projectile_count);
 		canvas_update(&game.canvas);
 		game_draw();
@@ -122,6 +130,9 @@ void game_draw() {
 	canvas_begin(&game.canvas);
 
 	if (scene_state_get() == STATE_LOSE) {
+        scene_ui_gameover();
+	}
+	else if (scene_state_get() == STATE_WIN) {
         scene_ui_gameover();
 	}
 	else{
@@ -153,7 +164,7 @@ void game_restart(void *data) {
     Scene *scene = game_get_scene();
     scene->tower_hp = 200;
     scene->tower_healthbar = create_healthbar(&scene->tower_hp, 20, 4, GREEN);
-    game_set_money(1000);
+    game_set_money(START_MONEY);
     for (int i = 0; i < scene->last_enemy; i++) {
         free(scene->enemies[i]);
         scene->enemies[i] = NULL;

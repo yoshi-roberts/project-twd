@@ -8,6 +8,9 @@
 #include "unit.h"
 #include "projectile.h"
 
+#define MAX_ENEMY 128
+#define WIN_KILLS 15
+
 typedef enum {
 	STATE_BUILD = 0,
 	STATE_PLAY = 1,

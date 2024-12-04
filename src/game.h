@@ -10,6 +10,7 @@
 #include "ui.h"
 
 #define GAME_MAX_SCENES 128
+#define START_MONEY 400
 
 typedef struct {
 	Scene scene;
