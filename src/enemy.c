@@ -94,6 +94,7 @@ void enemy_damage(Enemy *enemy, int amount, int index) {
 	if (enemy->hp <= 0) {
 
 		Scene *scn = game_get_scene();
+		game_set_money(game_get_money() + 10);
 		vec_remove(&scn->enemies, enemy);
 	}
 }
