@@ -60,6 +60,8 @@ void unit_update(Unit *unit) {
 	if (target_index != -1) {
 		Scene *scn = game_get_scene();
 		unit->target = scn->enemies.data[target_index];
+	} else {
+		unit->target = NULL;
 	}
 
 	animation_update(&unit->sword_swipe);

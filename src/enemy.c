@@ -89,10 +89,11 @@ void enemy_get_waypoint(Enemy *enemy) {
 
 void enemy_damage(Enemy *enemy, int amount, int index) {
 
-	if (enemy->hp > 0) {
-		enemy->hp -= amount;
-	} else {
+	enemy->hp -= amount;
+
+	if (enemy->hp <= 0) {
+
 		Scene *scn = game_get_scene();
-		vec_splice(&scn->enemies, index, 1);
+		vec_remove(&scn->enemies, enemy);
 	}
 }
