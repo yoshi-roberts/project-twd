@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include "game.h"
 #include "assets.h"
-#include "healthbar.h"
 #include "log.h"
 #include "scene_builder.h"
 #include "placement.h"
@@ -77,6 +76,7 @@ void game_update() {
 		scene_update(&game.scene);
 
 		placement_update(game.canvas.mouse.x, game.canvas.mouse.y);
+		tower_update();
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			scene_randomize(&game.scene);
@@ -85,16 +85,6 @@ void game_update() {
 
 		if (IsKeyPressed(KEY_SPACE)) {
 			scene_state_set(STATE_LOSE);
-		}
-
-		if (IsKeyPressed(KEY_S)) {
-			if (game.scene.projectile_count < MAX_PROJECTILES) {
-				Vector2 start_position = (Vector2){100, 200};
-				Vector2 end_position = (Vector2){300, 200};
-
-				game.scene.projectiles[game.scene.projectile_count] = new_projectile(start_position, end_position, 5, 10, 0);
-				game.scene.projectile_count++;
-			}
 		}
 
 		update_all_projectile(game.scene.projectiles, &game.scene.projectile_count);
@@ -139,7 +129,6 @@ void game_draw() {
 	EndDrawing();
 	
 }
-
 
 void game_restart(void *data) {
     Scene *scene = game_get_scene();

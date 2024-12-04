@@ -37,6 +37,7 @@ int game_get_difficulty();
 int game_get_money();
 int game_get_mouse_x();
 int game_get_mouse_y();
+Asset* game_get_projectile_image();
 
 void game_set_money(int amount);
 void game_set_text_input_active(bool active);

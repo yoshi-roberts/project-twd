@@ -1,6 +1,6 @@
 CC = gcc
 OPT = -O1
-CFLAGS = -Wall -Wextra -std=c99 $(OPT) -I include/ -DLOG_USE_COLOR
+CFLAGS = -Wall -Wextra -std=c2x $(OPT) -I include/ -DLOG_USE_COLOR
 
 ifeq ($(OS), Windows_NT)
 	BUILD_RAYLIB = cd lib/raylib/src/ && mingw32-make PLATFORM=PLATFORM_DESKTOP
@@ -19,7 +19,7 @@ endif
 BIN_DIR = bin
 OBJ_DIR = obj
 
-OBJS = main.o log.o game.o canvas.o map.o assets.o animation.o scene_builder.o scene_path.o wordlist.o text_input.o placement.o unit.o ui.o enemy.o healthbar.o spawner.o projectile.o tower.o
+OBJS = main.o log.o game.o canvas.o vec.o map.o assets.o animation.o scene_builder.o scene_path.o wordlist.o text_input.o placement.o unit.o ui.o enemy.o healthbar.o spawner.o projectile.o tower.o
 
 all: build_raylib create_dir $(BIN_DIR)/$(BIN)
 

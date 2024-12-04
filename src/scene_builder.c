@@ -12,13 +12,17 @@
 #include "tilemap.h"
 #include "game.h"
 #include "ui.h"
+#include "vec.h"
 
 void scene_destroy(Scene *scene) {
 
-	for (int i = 0; i < scene->last_enemy; i++) {
-		free(scene->enemies[i]);
+	for (int i = 0; i < scene->enemies.length; i++) {
+
+		Enemy *enemy = scene->enemies.data[i];
+		free(enemy);
+		scene->enemies.data[i] = NULL;
 	}
-	free(scene->enemies);
+	vec_deinit(&scene->enemies);
 }
 
 void play_button_callback(void *data) {
@@ -55,9 +59,10 @@ void scene_draw(Scene *scene) {
 		}
 	}
 
-	for (int i = 0; i < scene->last_enemy; i++) {   //Draw all enemys
-		Enemy *enemy = scene->enemies[i];
-		enemy_draw(enemy);
+	for (int i = 0; i < scene->enemies.length; i++) {
+
+		Enemy *enemy = scene->enemies.data[i];
+		if (enemy) enemy_draw(enemy);
 	}
 
     for(int y=0; y<TILEMAP_HEIGHT; y++) {  // Draw layer 3 (trees bottom)
@@ -82,11 +87,13 @@ void scene_update(Scene *scene) {
 
 	spawner_update(&scene->spawner);
 
-	for (int i = 0; i < scene->last_enemy; i++) {
+	for (int i = 0; i < scene->enemies.length; i++) {
 
-		Enemy *enemy = scene->enemies[i];
-		enemy_update(enemy);
+		Enemy *enemy = scene->enemies.data[i];
+		if (enemy) enemy_update(enemy);
 	}
+	// vec_foreach_ptr(&scene->enemies, enemy, i) {
+	// }
 
 	for(int y=0; y<TILEMAP_HEIGHT; y++) {   // Draw all units
 		for(int x=0; x<TILEMAP_WIDTH; x++) {
@@ -103,18 +110,18 @@ Scene scene_init(int difficulty, const char* path) {
 	Scene scene;
 	scene.difficulty = difficulty;
     scene.scene_state = STATE_BUILD;
+	scene.first_enemy = 0;
 	scene.last_enemy = 0;
     scene.projectile_count = 0;
-
-
-	scene.spawner = spawner_new(2, 0, 0);
 
     memset(scene.units, 0, sizeof(scene.units));
     memset(scene.tilemap_layer1.tiles, 0, sizeof(scene.tilemap_layer1.tiles));
     memset(scene.tilemap_layer2.tiles, 0, sizeof(scene.tilemap_layer2.tiles));
     memset(scene.tilemap_layer3.tiles, 0, sizeof(scene.tilemap_layer3.tiles));
 
-	scene.enemies = malloc(128 * sizeof(Enemy*));
+	vec_init(&scene.enemies);
+	vec_reserve(&scene.enemies, 128);
+	scene.spawner = spawner_new(5, 0, 0);
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);
     scene.tilemap_layer2.asset_ptr = assets_get(path);

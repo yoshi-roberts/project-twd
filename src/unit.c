@@ -3,11 +3,12 @@
 #include "assets.h"
 #include "enemy.h"
 #include "game.h"
-#include "healthbar.h"
 #include "scene_builder.h"
 #include "text_input.h"
 #include <math.h>
 #include <stdio.h>
+
+static Asset *warning;
 
 Unit unit_new(UNIT_TYPE type, int x, int y) {
 
@@ -19,7 +20,6 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 	unit.y = y;
 	unit.asset = assets_get("assets/images/units.png");
 	unit.sword_swipe = animation_new("assets/animations/sword-anim.png", 15);
-	unit.range = 32;
 	unit.hp = 100;
 	unit.cost = unit_get_cost(type);
 	unit.energy = 100;
@@ -31,14 +31,20 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 	unit.text_input = text_input_new(game_get_wordlist()->easy);
 
+	if (!warning) {
+		warning = assets_get("assets/images/warning.png");
+	}
+
 	switch (type) {
 		case UNIT_KNIGHT:
 			unit.range = 2;
 			unit.defense = 10;
+			unit.damage = 15;
 			break;
 		case UNIT_VILLAGER:
 			unit.range = 1;
 			unit.defense = 5;
+			unit.damage = 10;
 			break;
 	}
 
@@ -49,7 +55,14 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 void unit_update(Unit *unit) {
 
-	unit->target = unit_enemy_in_range(unit);
+	int target_index = unit_enemy_in_range(unit);
+
+	if (target_index != -1) {
+		Scene *scn = game_get_scene();
+		unit->target = scn->enemies.data[target_index];
+	} else {
+		unit->target = NULL;
+	}
 
 	animation_update(&unit->sword_swipe);
 
@@ -68,7 +81,8 @@ void unit_update(Unit *unit) {
 			if (unit->target && unit->can_attack && unit->energy > 0) {
 
 				animation_play(&unit->sword_swipe);
-				remove_health(&unit->target->healthbar, 10);
+				enemy_damage(unit->target, unit->damage, target_index);
+
 				unit->energy -= 10;
 				unit->can_attack = false;
 			}
@@ -110,30 +124,57 @@ void unit_update(Unit *unit) {
 	}
 }
 
-Enemy* unit_enemy_in_range(Unit *unit) {
+int unit_enemy_in_range(Unit *unit) {
 
 	Scene *scn = game_get_scene();
 
-	for (int i = 0; i < scn->last_enemy; i++) {
-	
-		Enemy *enemy = scn->enemies[i];
+	for (int i = 0; i < scn->enemies.length; i++) {
 
+		Enemy *enemy = scn->enemies.data[i];
+	
 		int cx = (unit->x * 16) + 8;
 		int cy = (unit->y * 16) + 8;
 		int rad = unit->range * 16;
 		int dist = (enemy->x - cx)*(enemy->x - cx) + (enemy->y - cy)*(enemy->y - cy);
 
 		if (dist <= rad * rad) {
-			return enemy;
+			return i;
 		}
 	}
 
-	return NULL;
+	return -1;
 }
 
 void unit_draw(Unit *unit) {
 
-	asset_draw_tile(unit->asset, unit->type, unit->x * 16, unit->y * 16);
+	int ux = (unit->x * 16);
+	int uy = (unit->y * 16);
+
+	asset_draw_tile(unit->asset, unit->type, ux, uy);
+
+	switch (unit->state) {
+	
+		case UNIT_STATE_IDLE:
+
+			break;
+
+		case UNIT_STATE_ATTACK:
+
+			break;
+
+		case UNIT_STATE_INACTIVE:
+
+			DrawTexture(warning->data.sprite.texture, ux, uy - 16, WHITE);
+			break;
+
+		case UNIT_STATE_TYPE:
+
+			text_input_draw(&unit->text_input, ux + 8, uy - 6);
+
+			break;
+	}
+
+	animation_draw(&unit->sword_swipe, ux, uy + 8);
 
 	if (unit->selected) {
 		Color color = (Color){255, 75, 75, 128};
@@ -161,28 +202,10 @@ void unit_draw(Unit *unit) {
 		DrawText(defense, defense_pos.x, defense_pos.y, 10, WHITE);
 	}
 
-	switch (unit->state) {
-	
-		case UNIT_STATE_IDLE:
+	if (unit->target) {
 
-			break;
-
-		case UNIT_STATE_ATTACK:
-
-			break;
-
-		case UNIT_STATE_INACTIVE:
-
-			break;
-
-		case UNIT_STATE_TYPE:
-
-			text_input_draw(&unit->text_input, (unit->x * 16) + 8, (unit->y * 16) - 6);
-
-			break;
+		DrawCircle(unit->target->x + 8, unit->target->y + 8, 8, RED);
 	}
-
-	animation_draw(&unit->sword_swipe, (unit->x * 16), (unit->y * 16) + 8);
 }
 
 int unit_get_cost(UNIT_TYPE type) {
