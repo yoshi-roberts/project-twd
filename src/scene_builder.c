@@ -14,6 +14,39 @@
 #include "ui.h"
 #include "vec.h"
 
+Scene scene_init(int difficulty, const char* path) {
+
+	Scene scene;
+	scene.difficulty = difficulty;
+    scene.scene_state = STATE_BUILD;
+	scene.first_enemy = 0;
+	scene.last_enemy = 0;
+    scene.projectile_count = 0;
+
+    memset(scene.units, 0, sizeof(scene.units));
+    memset(scene.tilemap_layer1.tiles, 0, sizeof(scene.tilemap_layer1.tiles));
+    memset(scene.tilemap_layer2.tiles, 0, sizeof(scene.tilemap_layer2.tiles));
+    memset(scene.tilemap_layer3.tiles, 0, sizeof(scene.tilemap_layer3.tiles));
+
+	vec_init(&scene.enemies);
+	vec_reserve(&scene.enemies, 128);
+	scene.spawner = spawner_new(5, 0, 0);
+
+	scene.tilemap_layer1.asset_ptr = assets_get(path);
+    scene.tilemap_layer2.asset_ptr = assets_get(path);
+    scene.tilemap_layer3.asset_ptr = assets_get(path);
+    
+    for (int y = 0; y < TILEMAP_HEIGHT; y++) {
+        for (int x = 0; x < TILEMAP_WIDTH; x++) {
+            scene.tilemap_layer2.tiles[y][x] = -1; 
+            scene.tilemap_layer3.tiles[y][x] = -1;
+        }
+    }
+
+	scene_randomize(&scene);
+	return scene;
+}
+
 void scene_destroy(Scene *scene) {
 
 	for (int i = 0; i < scene->enemies.length; i++) {
@@ -92,8 +125,6 @@ void scene_update(Scene *scene) {
 		Enemy *enemy = scene->enemies.data[i];
 		if (enemy) enemy_update(enemy);
 	}
-	// vec_foreach_ptr(&scene->enemies, enemy, i) {
-	// }
 
 	for(int y=0; y<TILEMAP_HEIGHT; y++) {   // Draw all units
 		for(int x=0; x<TILEMAP_WIDTH; x++) {
@@ -105,38 +136,6 @@ void scene_update(Scene *scene) {
 	}
 }
 
-Scene scene_init(int difficulty, const char* path) {
-
-	Scene scene;
-	scene.difficulty = difficulty;
-    scene.scene_state = STATE_BUILD;
-	scene.first_enemy = 0;
-	scene.last_enemy = 0;
-    scene.projectile_count = 0;
-
-    memset(scene.units, 0, sizeof(scene.units));
-    memset(scene.tilemap_layer1.tiles, 0, sizeof(scene.tilemap_layer1.tiles));
-    memset(scene.tilemap_layer2.tiles, 0, sizeof(scene.tilemap_layer2.tiles));
-    memset(scene.tilemap_layer3.tiles, 0, sizeof(scene.tilemap_layer3.tiles));
-
-	vec_init(&scene.enemies);
-	vec_reserve(&scene.enemies, 128);
-	scene.spawner = spawner_new(5, 0, 0);
-
-	scene.tilemap_layer1.asset_ptr = assets_get(path);
-    scene.tilemap_layer2.asset_ptr = assets_get(path);
-    scene.tilemap_layer3.asset_ptr = assets_get(path);
-    
-    for (int y = 0; y < TILEMAP_HEIGHT; y++) {
-        for (int x = 0; x < TILEMAP_WIDTH; x++) {
-            scene.tilemap_layer2.tiles[y][x] = -1; 
-            scene.tilemap_layer3.tiles[y][x] = -1;
-        }
-    }
-
-	scene_randomize(&scene);
-	return scene;
-}
 
 void scene_randomize(Scene *scene) {
 
@@ -233,15 +232,15 @@ void scene_ui_gameover(){
 }
 
 void scene_check_state(){
-    Scene *scn = game_get_scene();
-	if (*scn->tower_healthbar.hp <= 0){
-        scene_state_set(STATE_LOSE);
-        memset(scn->units, 0, sizeof(scn->units));
-		for (int i = 0; i < scn->last_enemy; i++) {
-			Enemy *enemy = scn->enemies[i];
-			remove_health(&enemy->healthbar, 500);
-		}
-	}
+ //    Scene *scn = game_get_scene();
+	// if (*scn->tower_healthbar.hp <= 0){
+ //        scene_state_set(STATE_LOSE);
+ //        memset(scn->units, 0, sizeof(scn->units));
+	// 	for (int i = 0; i < scn->last_enemy; i++) {
+	// 		Enemy *enemy = scn->enemies[i];
+	// 		remove_health(&enemy->healthbar, 500);
+	// 	}
+	// }
 }
 
 void scene_state_set(SceneState state){

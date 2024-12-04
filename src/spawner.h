@@ -4,6 +4,7 @@
 typedef struct {
 	int x; int y;
 	int interval;
+	int amount;
 	int time;
 } Spawner;
 

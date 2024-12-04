@@ -20,6 +20,7 @@ typedef struct {
 	bool text_input_active;
 	int difficulty;
 	int money;
+	int time;
 } Game;
 
 void game_init();

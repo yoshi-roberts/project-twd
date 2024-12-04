@@ -27,7 +27,7 @@ void game_init() {
 
 	game.dt = 0.0f;
 	game.difficulty = 0;
-	game.money = 1000;
+	game.money = 100;
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
 	assets_init();
@@ -132,14 +132,13 @@ void game_draw() {
 
 void game_restart(void *data) {
     Scene *scene = game_get_scene();
-    scene->tower_hp = 200;
-    scene->tower_healthbar = create_healthbar(&scene->tower_hp, 20, 4, GREEN);
+    scene->tower_hp = 100;
+    // scene->tower_healthbar = create_healthbar(&scene->tower_hp, 20, 4, GREEN);
     game_set_money(1000);
-    for (int i = 0; i < scene->last_enemy; i++) {
-        free(scene->enemies[i]);
-        scene->enemies[i] = NULL;
+    for (int i = 0; i < scene->enemies.length; i++) {
+        free(scene->enemies.data[i]);
+        scene->enemies.data[i] = NULL;
     }
-    scene->last_enemy = 0;
     scene_randomize(scene);
     scene_state_set(STATE_BUILD);
 }
