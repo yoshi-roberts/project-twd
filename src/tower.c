@@ -4,6 +4,7 @@
 #include "healthbar.h"
 #include "projectile.h"
 #include "text_input.h"
+#include "vec.h"
 
 static Tower tower = {};
 
@@ -29,7 +30,7 @@ void tower_update() {
 			if (tower.last_projectile < TOWER_MAX_PROJECTILES) {
 
 				Scene *scn = game_get_scene();
-				Enemy *target = &scn->enemies[0];
+				Enemy *target = &vec_first(&scn->enemies);
 
 				tower.projectiles[tower.last_projectile] = 
 					new_projectile((Vector2){16, 5 * 16}, target, 2, 5, 0);

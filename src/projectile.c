@@ -29,7 +29,7 @@ void update_projectile(Projectile *proj) {
             proj->position.y += direction.y * proj->speed;
 
             if (distance <= proj->speed) {
-				enemy_damage(proj->target, 10);
+				enemy_damage(proj->target, 10, 0);
                 proj->position = proj->end_position;
                 proj->active = false;
             }

@@ -14,11 +14,13 @@
 
 void scene_destroy(Scene *scene) {
 
-	// for (int i = 0; i < scene->last_enemy; i++) {
-	// 	free(scene->enemies[i]);
-	// }
-	// free(scene->enemies);
-	vector_free(scene->enemies);
+	for (int i = 0; i < scene->enemies.length; i++) {
+
+		Enemy *enemy = scene->enemies.data[i];
+		free(enemy);
+		scene->enemies.data[i] = NULL;
+	}
+	vec_deinit(&scene->enemies);
 }
 
 void scene_draw(Scene *scene) {
@@ -51,9 +53,10 @@ void scene_draw(Scene *scene) {
 		}
 	}
 
-	for (int i = 0; i < vector_size(scene->enemies); i++) {   //Draw all enemys
-		Enemy *enemy = &scene->enemies[i];
-		enemy_draw(enemy);
+	for (int i = 0; i < scene->enemies.length; i++) {
+
+		Enemy *enemy = scene->enemies.data[i];
+		if (enemy) enemy_draw(enemy);
 	}
 
     for(int y=0; y<TILEMAP_HEIGHT; y++) {  // Draw layer 3 (trees bottom)
@@ -72,10 +75,13 @@ void scene_update(Scene *scene) {
 
 	spawner_update(&scene->spawner);
 
-	for (int i = 0; i < vector_size(scene->enemies); i++) {   //Draw all enemys
-		Enemy *enemy = &scene->enemies[i];
-		enemy_update(enemy);
+	for (int i = 0; i < scene->enemies.length; i++) {
+
+		Enemy *enemy = scene->enemies.data[i];
+		if (enemy) enemy_update(enemy);
 	}
+	// vec_foreach_ptr(&scene->enemies, enemy, i) {
+	// }
 
 	for(int y=0; y<TILEMAP_HEIGHT; y++) {   // Draw all units
 		for(int x=0; x<TILEMAP_WIDTH; x++) {
@@ -101,8 +107,8 @@ Scene scene_init(int difficulty, const char* path) {
     memset(scene.tilemap_layer2.tiles, 0, sizeof(scene.tilemap_layer2.tiles));
     memset(scene.tilemap_layer3.tiles, 0, sizeof(scene.tilemap_layer3.tiles));
 
-	scene.enemies = vector_create();
-	vector_reserve(&scene.enemies, 255);
+	vec_init(&scene.enemies);
+	vec_reserve(&scene.enemies, 128);
 	scene.spawner = spawner_new(5, 0, 0);
 
 	scene.tilemap_layer1.asset_ptr = assets_get(path);

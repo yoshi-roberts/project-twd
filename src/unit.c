@@ -3,7 +3,6 @@
 #include "assets.h"
 #include "enemy.h"
 #include "game.h"
-#include "healthbar.h"
 #include "scene_builder.h"
 #include "text_input.h"
 #include <math.h>
@@ -56,7 +55,12 @@ Unit unit_new(UNIT_TYPE type, int x, int y) {
 
 void unit_update(Unit *unit) {
 
-	unit->target = unit_enemy_in_range(unit);
+	int target_index = unit_enemy_in_range(unit);
+
+	if (target_index != -1) {
+		Scene *scn = game_get_scene();
+		unit->target = scn->enemies.data[target_index];
+	}
 
 	animation_update(&unit->sword_swipe);
 
@@ -75,7 +79,8 @@ void unit_update(Unit *unit) {
 			if (unit->target && unit->can_attack && unit->energy > 0) {
 
 				animation_play(&unit->sword_swipe);
-				enemy_damage(unit->target, unit->damage);
+				enemy_damage(unit->target, unit->damage, target_index);
+
 				unit->energy -= 10;
 				unit->can_attack = false;
 			}
@@ -117,27 +122,25 @@ void unit_update(Unit *unit) {
 	}
 }
 
-Enemy* unit_enemy_in_range(Unit *unit) {
+int unit_enemy_in_range(Unit *unit) {
 
 	Scene *scn = game_get_scene();
 
-	for (int i = 0; i < vector_size(scn->enemies); i++) {
+	for (int i = 0; i < scn->enemies.length; i++) {
+
+		Enemy *enemy = scn->enemies.data[i];
 	
-		Enemy *enemy = &scn->enemies[i];
-
-		if (enemy->hp <= 0) continue;
-
 		int cx = (unit->x * 16) + 8;
 		int cy = (unit->y * 16) + 8;
 		int rad = unit->range * 16;
 		int dist = (enemy->x - cx)*(enemy->x - cx) + (enemy->y - cy)*(enemy->y - cy);
 
 		if (dist <= rad * rad) {
-			return enemy;
+			return i;
 		}
 	}
 
-	return NULL;
+	return -1;
 }
 
 void unit_draw(Unit *unit) {

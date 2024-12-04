@@ -24,7 +24,7 @@ typedef struct {
 	int last_enemy;
 	Spawner spawner;
 	int projectile_count;
-	Enemy* enemies;
+	EnemyVec enemies;
 	Unit units[TILEMAP_HEIGHT][TILEMAP_WIDTH];
 	Projectile projectiles[MAX_PROJECTILES];
 	int tower_hp;

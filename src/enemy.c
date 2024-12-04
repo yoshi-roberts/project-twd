@@ -3,16 +3,13 @@
 #include "game.h"
 #include "scene_path.h"
 #include "healthbar.h"
-#include "tower.h"
 #include "vec.h"
-#include <stdio.h>
 
 void enemy_new(ENEMY_TYPE type) {
 
 	Scene *scn = game_get_scene();
-	Enemy *enemy = vector_add_dst(&scn->enemies);
 
-	enemy->index = vector_size(scn->enemies) - 1;
+	Enemy *enemy = malloc(sizeof(Enemy));
 
 	switch (type) {
 		case ENEMY_SLIME:
@@ -42,7 +39,8 @@ void enemy_new(ENEMY_TYPE type) {
 	enemy->y = (int)enemy->next_waypoint.y;
 
 	enemy->healthbar = create_healthbar(&enemy->hp, 20, 3, RED);
-	enemy = NULL;
+
+	vec_push(&scn->enemies, enemy);
 }
 
 void enemy_update(Enemy *enemy) {
@@ -84,19 +82,17 @@ void enemy_get_waypoint(Enemy *enemy) {
 
 	} else {
 
-		tower_damage(enemy->damage);
-		game_check_state(scn);
-		enemy_damage(enemy, 100);
+		// tower_damage(enemy->damage);
+		enemy_damage(enemy, enemy->hp, 0);
 	}
 }
 
-void enemy_damage(Enemy *enemy, int amount) {
+void enemy_damage(Enemy *enemy, int amount, int index) {
 
-	enemy->hp -= amount;
-
-	if (enemy->hp <= 0) {
-
+	if (enemy->hp > 0) {
+		enemy->hp -= amount;
+	} else {
 		Scene *scn = game_get_scene();
-		vector_remove(scn->enemies, enemy->index);
+		vec_splice(&scn->enemies, index, 1);
 	}
 }
