@@ -4,6 +4,7 @@
 #include "scene_path.h"
 #include "healthbar.h"
 #include "vec.h"
+#include "tower.h"
 
 void enemy_new(ENEMY_TYPE type) {
 

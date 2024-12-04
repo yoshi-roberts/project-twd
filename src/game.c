@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include "game.h"
 #include "assets.h"
+#include "audio.h"
 #include "log.h"
 #include "scene_builder.h"
 #include "placement.h"
-#include "scene_builder.h"
 #include "projectile.h"
 #include "wordlist.h"
 #include "tower.h"
@@ -31,6 +31,7 @@ void game_init() {
 	game.canvas = canvas_init(480, 270, TEXTURE_FILTER_POINT);
 
 	assets_init();
+	audio_init();
 	game.scene = scene_init(1, "assets/images/tiles.png");
 
 	tower_init();
@@ -55,8 +56,10 @@ void game_shutdown() {
 
 	scene_destroy(&game.scene);
 	canvas_destroy(&game.canvas);
-
+	
+	audio_shutdown();
 	assets_destory();
+	
 	CloseWindow();
 
 	initialized = false;
@@ -73,10 +76,16 @@ void game_update() {
 	while (!WindowShouldClose()) {
 		game.dt = GetFrameTime();	// Update delta time.
 		
+		audio_update();
+
 		scene_update(&game.scene);
 
 		placement_update(game.canvas.mouse.x, game.canvas.mouse.y);
 		tower_update();
+
+		if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_M)) audio_toggle_mute();
+        if (IsKeyPressed(KEY_UP)) audio_increase_volume();
+        if (IsKeyPressed(KEY_DOWN)) audio_decrease_volume();
 
 		if (IsKeyDown(KEY_LEFT_ALT) && IsKeyPressed(KEY_R)) {
 			scene_randomize(&game.scene);
@@ -117,10 +126,12 @@ void game_draw() {
 		sprintf(money_str, "Money: $%d", game.money);
 		DrawText(money_str, 4, 4, 10, WHITE);
 
+		audio_draw_ui();
+
 		for (int i = 0; i < game.scene.projectile_count; i++) {
 			draw_projectile(&game.scene.projectiles[i]);
 		}
-
+		
 		placement_draw();
 	}
 
@@ -135,6 +146,10 @@ void game_restart(void *data) {
     scene->tower_hp = 100;
     // scene->tower_healthbar = create_healthbar(&scene->tower_hp, 20, 4, GREEN);
     game_set_money(1000);
+	
+	audio_shutdown();
+	audio_init();
+
     for (int i = 0; i < scene->enemies.length; i++) {
         free(scene->enemies.data[i]);
         scene->enemies.data[i] = NULL;

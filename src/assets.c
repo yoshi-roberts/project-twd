@@ -7,6 +7,7 @@
 #include "assets.h"
 #include "map.h"
 #include "log.h"
+#include "audio.h"
 
 static Assets assets = {};
 static bool initialized = false;
@@ -45,6 +46,11 @@ void assets_destory() {
 			UnloadTexture(asset->data.sprite.texture);
 		} else if (asset->type == ASSET_IMAGE) {
 			UnloadFont(asset->data.font);
+		} else if (asset->type == ASSET_AUDIO) {
+    		if (IsMusicStreamPlaying(asset->data.audio)) {
+       		StopMusicStream(asset->data.audio);
+    		}
+    	UnloadMusicStream(asset->data.audio); 
 		}
 	}
 
@@ -69,10 +75,17 @@ void assets_load_resource(Asset *asset, const char *path) {
 		asset->data.font = LoadFontEx(path, 12 * 4, NULL, 0);
 		SetTextureFilter(asset->data.font.texture, TEXTURE_FILTER_POINT);
 	} else if (asset->type == ASSET_AUDIO) {
-		// Load audio data.
-	}
-	
+		asset->data.audio = LoadMusicStream(path);
+    	if (asset->data.audio.stream.buffer) { 
+        	log_info("Audio file loaded successfully: %s", path);
+        	SetMusicVolume(asset->data.audio, 1.0f);
+        	PlayMusicStream(asset->data.audio);
+        	log_info("Playback started for: %s", path);
+    	} else {
+        	log_error("Failed to load audio stream for: %s", path);
+		}
 	asset->resource_loaded = true;
+	}
 }
 
 void assets_add(const char *path) {
@@ -92,6 +105,8 @@ void assets_add(const char *path) {
 		asset.type = ASSET_IMAGE;
 	} else if (strcmp(ext, "ttf") == 0) {
 		asset.type = ASSET_FONT;
+	} else if (strcmp(ext, "ogg") == 0) {
+		asset.type = ASSET_AUDIO;
 	}
 
 	map_set(&assets.map, path, asset);

@@ -26,6 +26,7 @@ typedef struct {
 typedef union {
 	Sprite sprite;
 	Font font;
+	Music audio;
 } AssetData;
 
 typedef struct Asset {
