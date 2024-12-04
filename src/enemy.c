@@ -3,6 +3,7 @@
 #include "game.h"
 #include "scene_path.h"
 #include "healthbar.h"
+#include "tower.h"
 #include "vec.h"
 
 void enemy_new(ENEMY_TYPE type) {
@@ -82,7 +83,7 @@ void enemy_get_waypoint(Enemy *enemy) {
 
 	} else {
 
-		// tower_damage(enemy->damage);
+		tower_damage(enemy->damage);
 		enemy_damage(enemy, enemy->hp, 0);
 	}
 }
